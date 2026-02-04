@@ -1,0 +1,1 @@
+this is temp file used to export  folder structure from local device to remote repository. Each folder have this file. It will be duly deleted. 
