@@ -87,3 +87,95 @@ The main objective here is calculating handover probability - written as $P[H(t)
 \end{enumerate}
 
 \newpage
+
+% ========== SCRIBE QUESTION 2 ==========
+\section{Scribe Question 2: Key Random Variables and Uncertainty Modeling}
+
+\subsection{Key Random Variables}
+
+\subsubsection{1. Drone Positions - $\Phi_D(t)$}
+
+This tracks where all the drones are at time $t$. Initially at $t=0$, they're scattered according to a Poisson Point Process with density $\lambda_0$. On average, there might be $\lambda_0$ drones per square kilometer, but we don't know the exact spots and that's the random part.
+
+\vspace{0.3cm}
+
+\subsubsection{2. Direction - $\theta$}
+
+Each drone picks a direction $\theta$ to fly in. It's uniformly random anywhere from 0 to 360 degrees (or 0 to $2\pi$ in radians). The paper writes this as $\theta \sim U[0, 2\pi)$. So, here every direction has equal probability, making individual drone paths unpredictable.
+
+\vspace{0.3cm}
+
+\subsubsection{3. Speed - $V$}
+
+There are two scenarios here:
+\begin{itemize}
+    \item \textbf{SSM (Same Speed Model):} In this every drone goes the same speed $v$, so no randomness
+    \item \textbf{DSM (Different Speed Model):} In this speed $V$ varies randomly between drones using distributions like Rayleigh or Uniform
+\end{itemize}
+
+\vspace{0.3cm}
+
+\subsubsection{4. Distance to serving drone - $u^*(t)$}
+
+This tells how far the user is from serving drone at time $t$. As drones move around, this distance changes constantly. The uncertain part here is we can't predict which drone will be closest at any moment.
+
+\vspace{0.3cm}
+
+\subsubsection{5. User locations - $\Phi_U$}
+
+Where users are positioned on the ground, also modeled with a Poisson Point Process. But here mostly focuses on one user at the origin, so matters less overall.
+
+\vspace{0.4cm}
+
+\subsection{How They Model Uncertainty}
+
+The researchers use stochastic geometry as their framework.
+
+\vspace{0.3cm}
+
+\textbf{Poisson Point Process (PPP):}
+
+Used for random drone positions. The idea is simple that we know roughly how many drones per area on average ($\lambda_0$), but exact locations are random. Key assumption: each drone's position doesn't influence where other drones are.
+
+\vspace{0.3cm}
+
+\textbf{Uniform distributions:}
+
+For directions, since no direction should naturally be more likely than others when drones aren't coordinating.
+
+\vspace{0.3cm}
+
+\textbf{Speed distributions:}
+
+In DSM, they picked Rayleigh or Uniform distributions for speeds. We're not entirely sure yet why these specific distributions were chosen over others.
+
+\vspace{0.4cm}
+
+\subsection{What They're Assuming}
+
+\begin{enumerate}[label=\arabic*.]
+    \item \textbf{Even distribution} - Drones spread out evenly on average
+
+    \vspace{0.2cm}
+
+    \item \textbf{No coordination} - Each drone does its own thing, there is no coordination between drones
+
+    \vspace{0.2cm}
+
+    \item \textbf{Straight paths} - They move just in straight lines no u-turns or curves
+
+    \vspace{0.2cm}
+
+    \item \textbf{Same height} - All drones fly at height $h$. None higher, none lower. This makes the 3D problem into a 2D one
+
+    \vspace{0.2cm}
+
+    \item \textbf{Nearest connection} - Users connect to the closest drone. Makes sense since closer usually means stronger signal
+
+    \vspace{0.2cm}
+
+    \item \textbf{Stationary users} - People stay put on the ground. This simplifies the math by removing user mobility from the equation
+\end{enumerate}
+
+\newpage
+
