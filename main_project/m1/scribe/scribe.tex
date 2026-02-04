@@ -365,3 +365,180 @@ Three types of dependency show up in the analysis:
 
 \newpage
 
+% ========== SCRIBE QUESTION 4 ==========
+\section{Scribe Question 4: Model--Implementation Alignment}
+
+\subsection{How the Model Aligns with Implementation}
+
+The researchers didn't build actual drone networks. Instead, they ran Monte Carlo simulations, looking at average behavior across many random scenarios with different drone positions, directions, and speeds.
+
+\vspace{0.3cm}
+
+The mathematical model and simulation line up like this:
+
+\vspace{0.3cm}
+
+\textbf{Mathematical side:}
+
+PPP defines how drones are distributed. All movements are random. Performance is measured by averaging across random deployments of drones.
+
+\vspace{0.3cm}
+
+\textbf{Simulation side:}
+
+Drones get placed randomly based on PPP. Each time step updates positions using assigned speeds and directions. Simulation runs until all handover events are recorded.
+
+\vspace{0.4cm}
+
+\subsection{Key Assumptions}
+
+\subsubsection{Nearest-neighbor rule}
+
+Users always connect to the closest drone. While in real systems consider signal quality, interference, load balancing, but this assumption simplifies things for both math and simulation.
+
+\vspace{0.3cm}
+
+\subsubsection{Straight-line movement}
+
+Real drones turn, hover, avoid obstacles. The model assumes purely linear paths, which makes calculations easy.
+
+\vspace{0.3cm}
+
+\subsubsection{Single altitude}
+
+All drones at height $h$. This converts a 3D problem into 2D, dramatically simplifying calculations.
+
+\vspace{0.3cm}
+
+\subsubsection{Independent movement}
+
+No coordination between drones. Each can be simulated separately, which supports the independence assumption mathematically.
+
+\newpage
+
+% ========== SCRIBE QUESTION 5 ==========
+\section{Scribe Question 5: Cross-Milestone Consistency and Change}
+
+\subsection{Current Status}
+
+We're early in understanding this paper. Some parts are clearer than others. A lot is still tentative and needs more investigation.
+
+\vspace{0.4cm}
+
+\subsection{What's reasonably clear}
+
+\textbf{The problem:}
+
+Finding handover probability in drone-based networks.
+
+\vspace{0.3cm}
+
+\textbf{Two models:}
+\begin{itemize}
+    \item SSM (Same Speed Model)
+    \item DSM (Different Speed Model)
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Random variables involved:}
+\begin{itemize}
+    \item Drone locations
+    \item Movement directions
+    \item Speeds
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Association rule:}
+
+Users connect to nearest drone.
+
+\vspace{0.4cm}
+
+\subsection{What Needs More Work}
+
+Several concepts need deeper understanding:
+
+\begin{itemize}
+    \item Why use PPP specifically for drone locations?
+    \item How does the displacement theorem actually work here?
+    \item What does translation invariance really mean mathematically?
+    \item How does Theorem 1's equivalence actually hold?
+    \item How were Theorem 2's exact values derived?
+    \item Why does DSM only give bounds instead of exact answers?
+    \item What role of Theorem 3?
+\end{itemize}
+
+\vspace{0.4cm}
+
+\subsection{What We Expect to Learn}
+
+\begin{itemize}
+    \item The mathematical proofs will become clearer
+    \item We'll understand simulation implementation better
+    \item Model limitations will become more apparent
+\end{itemize}
+
+\newpage
+
+% ========== SCRIBE QUESTION 6 ==========
+\section{Scribe Question 6: Open Issues and Responsibility Attribution}
+
+\subsection{Unresolved Questions}
+
+\subsubsection{About PPP}
+
+\begin{itemize}
+    \item Why is this the right model for drone positions?
+    \item How would 3D movement change things?
+\end{itemize}
+
+\vspace{0.3cm}
+
+\subsubsection{About Theorem 1}
+
+\begin{itemize}
+    \item What makes mobile drones with static users equivalent to static towers with mobile users?
+\end{itemize}
+
+\vspace{0.3cm}
+
+\subsubsection{About DSM}
+
+\begin{itemize}
+    \item Why can't we get exact formulas like we can for SSM?
+    \item What does ``lower bound'' actually mean for handover probability?
+    \item How close is this bound to real values?
+\end{itemize}
+
+\vspace{0.3cm}
+
+\subsubsection{Real-world concerns}
+
+\begin{itemize}
+    \item Could actual drone networks use this model?
+    \item What physical constraints matter like battery life, obstacles, no-fly zones?
+    \item How do we choose between SSM and DSM in practice?
+\end{itemize}
+
+\vspace{0.4cm}
+
+\subsection{Next Steps}
+
+\begin{itemize}
+    \item Reread the paper, focusing on mathematical sections
+    \item Learn about Poisson Point Processes
+    \item Find additional resources for difficult concepts
+\end{itemize}
+
+\vspace{0.5cm}
+
+\bigskip
+\hrule
+\vspace{0.2cm}
+\begin{center}
+    \textit{End of Milestone 1 Scribe}
+\end{center}
+
+\end{document}
