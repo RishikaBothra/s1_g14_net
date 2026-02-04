@@ -24,7 +24,7 @@
 \title{
     \normalsize School of Engineering and Applied Science (SEAS), Ahmedabad University \\
     \vspace{0.2cm}
-    \textbf{CSE 400: Fundamentals of Probability in Computing} \\
+    \textbf{CSE 400: Fundamentals of Probability in Computing}\\
     \Large Milestone 1 Scribe Submission
 }
 \author{}
@@ -50,265 +50,40 @@
 
 \subsection{What is the probabilistic problem being addressed in your project?}
 
-So, the main problem which the paper is solving is about handovers in drone networks. Here the network in our phone is not coming from the towers but from the drones. Handovers happen when your phone switches from connecting to one drone to another drone.
+The paper tackles handover issues in drone-based wireless networks. Here, drones are used as base stations rather than traditional cell towers. When a user's device switches connection from one drone to another, this is called a handover.
 
 \vspace{0.3cm}
 
-The tricky part is that regular cell towers don't move, but drones do move around. So even if we are just standing still on the ground, our phone might need to switch between drones because they're flying around. The paper wants to find out what are the chances this switching or handover will happen in a certain amount of time.
+Traditional cellular networks have fixed base stations, but drones move constantly. Because of this moving, even stationary users on the ground will experience handovers as drones fly overhead and past them. The paper's goal is finding out how likely these handovers are within specific time periods.
 
 \subsection{System Objective}
 
-What they're actually trying to do is calculate handover probability. This is just the chance that our phone will switch to a different drone before some time $t$. Like let's suppose we start connected to one drone, what's the probability that 10 seconds later we will be connected to a different one? That's what the paper wants to figure out mathematically.
+The main objective here is calculating handover probability - written as $P[H(t)]$. Basically, if someone connects to a drone at time zero $t = 0$, what are the chances they'll be connected to a different drone by time $t$? For example, after 10 seconds, will the user still have the same drone, or will they have switched? That's what the researchers want to figure out mathematically.
 
 \subsection{Primary Sources of Uncertainty}
 
 \begin{enumerate}[label=\arabic*.]
-    \item \textbf{Where drones start} - Nobody knows the exact starting position of each drone. The paper uses something they call a Poisson Point Process (PPP) which just means the drones are placed randomly in the sky. Like if you threw a handful of drones up there without aiming, or like throwing a handful of rice on a plate which are further placed randomly.
+    \item \textbf{Where drones start}
+
+    Nobody knows exactly where each drone begins. The researchers use something called a Poisson Point Process (PPP) with density $\lambda_0$ to model this. Think of it like randomly throwing rice on a plate - the grains land wherever they land. Same idea is followed with drone positions.
 
     \vspace{0.2cm}
 
-    \item \textbf{Which way they go} - Each drone flies in a straight line but the direction is totally random. Could be north, south, east, west, or anything in between. So it's again uncertain to know which direction a specific drone picked.
+    \item \textbf{Flight directions}
+
+    Every drone flies straight, but which direction? That's completely random. North, south, northeast, whatever - any direction is equally possible. So there's no way to know which way a particular drone will go.
 
     \vspace{0.2cm}
 
-    \item \textbf{How fast they go} - In one of the models called DSM, different drones can fly at different speeds. Some might be going faster, some slower. They use probability distributions to handle this randomness.
+    \item \textbf{Speed variations}
+
+    The DSM (Different Speed Model) has drones flying at different speeds. Some drones will go faster, others slower. The paper uses probability distributions like Rayleigh or Uniform to handle this randomness.
 
     \vspace{0.2cm}
 
-    \item \textbf{Which drone you connect to} - Your phone always connects to whichever drone is closest. But since drones are moving and also in random directions, the closest one keeps changing and we can't predict exactly when a different drone will become the closest.
+    \item \textbf{Which drone serves the user}
+
+    Users connect to whichever drone is nearest. But drones are moving in random directions at potentially different speeds, so the nearest drone keeps changing. Predicting exactly when a new drone becomes closest is not possible.
 \end{enumerate}
 
 \newpage
-\documentclass[11pt]{article}
-
-%
-
-% ========== SCRIBE QUESTION 2 ==========
-\section{Scribe Question 2: Key Random Variables and Uncertainty Modeling}
-
-\subsection{Key Random Variables}
-
-\subsubsection{Where the drones are - $\Phi_D(t)$}
-
-\begin{itemize}
-    \item This is basically tracking where all the drones are at any time $t$
-    \item When things start at $t=0$, the drones are scattered around following this Poisson Point Process (PPP) thing with density $\lambda_0$
-    \item It's like if you randomly dropped drones on a map, you'd expect about $\lambda_0$ drones in each square kilometer on average
-    \item We don't know the exact spots, that's the uncertain part
-\end{itemize}
-
-\vspace{0.3cm}
-
-\subsubsection{Which direction they fly - $\theta$}
-
-\begin{itemize}
-    \item Each drone picks a direction $\theta$ to fly
-    \item It's completely random, any angle from 0 to 360 degrees
-    \item The paper states it as $\theta \sim U[0, 2\pi)$ which just means uniform random
-    \item So this makes it totally unpredictable
-\end{itemize}
-
-\vspace{0.3cm}
-
-\subsubsection{How fast drones fly - $V$}
-
-\begin{itemize}
-    \item In SSM (Same Speed Model): all drones go the same speed $v$, so no randomness here
-    \item In DSM (Different Speed Model): $V$ is random and changes for different drones
-    \item They tried Rayleigh distribution or uniform distribution for this
-    \item This captures how some drones might be faster or slower than others
-\end{itemize}
-
-\vspace{0.3cm}
-
-\subsubsection{Distance to your drone - $u^*(t)$}
-
-\begin{itemize}
-    \item This is how far you are from the drone serving you at time $t$
-    \item It keeps changing as drones fly around
-    \item The uncertain part is we don't know which drone will be closest at any moment
-\end{itemize}
-
-\vspace{0.3cm}
-
-\subsubsection{Where people are - $\Phi_U$}
-
-\begin{itemize}
-    \item This is where phones and devices on the ground are located
-    \item Also uses Poisson Point Process
-    \item But they mostly focus on one person at the center, so this matters less
-\end{itemize}
-
-\vspace{0.4cm}
-
-\subsection{How They Model Uncertainty}
-
-The paper uses something called stochastic geometry. We are still trying to understand what this fully means but:
-
-\vspace{0.2cm}
-
-\begin{itemize}
-    \item \textbf{Poisson Point Process:} They use this for random drone positions. It's basically saying ``we expect this many drones per area on average, but we don't know exactly where.'' One big assumption is that each drone's position doesn't affect others.
-
-    \vspace{0.2cm}
-
-    \item \textbf{Uniform distributions:} They use this for directions since no direction should be more likely than any other.
-
-    \vspace{0.2cm}
-
-    \item \textbf{Speed distributions:} In DSM, they pick either Rayleigh or uniform distributions to show that drones have different speeds. Not sure yet why they picked these specific distributions.
-\end{itemize}
-
-\vspace{0.4cm}
-
-\subsection{What They're Assuming}
-
-\begin{enumerate}[label=\arabic*.]
-    \item \textbf{Drones spread evenly} - On average the drones are spread out nicely, not all bunched up in one area
-
-    \vspace{0.2cm}
-
-    \item \textbf{Drones don't coordinate} - Each drone moves on its own without caring what other drones are doing
-
-    \vspace{0.2cm}
-
-    \item \textbf{Straight paths} - Drones fly straight and don't turn during the time we're watching
-
-    \vspace{0.2cm}
-
-    \item \textbf{Same altitude} - All drones fly at height $h$, none higher or lower
-
-    \vspace{0.2cm}
-
-    \item \textbf{Connect to nearest} - Your phone always connects to the closest drone, which makes sense
-
-    \vspace{0.2cm}
-
-    \item \textbf{People don't move} - The people on the ground stay put, which makes the math easier
-\end{enumerate}
-
-\newpage
-
-% ========== SCRIBE QUESTION 3 ==========
-\section{Scribe Question 3: Probabilistic Reasoning and Dependencies}
-
-\subsection{Independence and Dependence}
-
-It is assumed in the paper that all drones are independent of one another. Assuming independence is important because:
-
-\vspace{0.2cm}
-
-\begin{itemize}
-    \item They can then use the displacement theorem.
-    \item The displacement theorem holds that if all the drones are randomly placed in different locations and then fly (or ``move'') independently from each other, the position cells of each drone, after they are finished moving, will be in random relation to one another.
-    \item This reduces the complexity of performing mathematical analysis on the drones.
-\end{itemize}
-
-\vspace{0.3cm}
-
-However, it should also be noted that a single drone, over time, will display dependence:
-
-\vspace{0.2cm}
-
-\begin{itemize}
-    \item The location of a drone at a particular moment in time influences the location of the same drone at a future moment in time.
-    \item For example, if a drone travels on a straight line, its location will provide some indication as to where that drone will be located in the future.
-\end{itemize}
-
-\vspace{0.4cm}
-
-\subsection{Conditioning}
-
-Here they also make extensive use of Conditioning (meaning that the probabilities that were computed will be based on known information). We saw two major uses of Conditioning:
-
-\vspace{0.3cm}
-
-\begin{enumerate}[label=\arabic*.]
-    \item First, they calculated the handover probability derived from the initial location and direction using a known distance and direction when applying Theorem 2. They averaged the results of Handover probabilities derived from fixed values.
-
-    \vspace{0.2cm}
-
-    \item When we're connected to one drone (the serving drone), all the other drones (non-serving drones) can't be too close to us. Why? Because if another drone was closer, we'd be connected to that one instead.
-
-    \vspace{0.2cm}
-
-    So there's an area around us called an ``exclusion zone'' where no non-serving drones can be. Only the serving drone is in this zone.
-\end{enumerate}
-
-\vspace{0.4cm}
-
-\subsection{The Equivalence Result (Theorem 1)}
-
-This paper proposes an equivalence between two different types of networks (the ``equivalence result''). Drones will move (as described in this paper), while users remain stationary; and/or base stations will be stationary while users will be moving (as in any standard mobile cellular network).
-
-\vspace{0.3cm}
-
-The authors base their equivalence formulation on the concept of translation invariance for Poisson Point Processes (PPPs). Our understanding of this concept is that by relocating all points in a given area by the same amount (i.e., moving them all), the statistical properties of the PPP will not change, specifically, they will still ``look random'' before and after the relocation. We are still working toward a better understanding of this.
-
-\vspace{0.4cm}
-
-\subsection{Outcome}
-
-\subsubsection{Current Understanding}
-
-The paper has methods to calculate handover probability. If we know where a drone started and how much time has passed, we can find the probability of handover.
-
-\vspace{0.2cm}
-
-They can calculate handover probability using:
-
-\begin{itemize}
-    \item Starting position of drone
-    \item Time passed
-\end{itemize}
-
-\vspace{0.4cm}
-
-\subsubsection{Predicting How Handover Probability Changes Over Time}
-
-The paper predicts how handover probability changes as time goes on. Figure 2 shows this - as time increases, the chance of handover also increases.
-
-\vspace{0.2cm}
-
-\begin{center}
-    More time $\rightarrow$ Higher handover chance
-\end{center}
-
-\vspace{0.2cm}
-
-Figure 2 proves this pattern.
-
-\vspace{0.4cm}
-
-\subsubsection{Comparing Two Different Types of Mobility Models}
-
-This section will provide a comparison between the SSM and DSM mobility models, showing their advantages and disadvantages. It can be seen that the DSM mobility model has a lower probability of experiencing a handover than the SSM, but we do not yet know exactly what the intuitive reason(s) for this are.
-
-\vspace{0.4cm}
-
-\subsubsection{Obtaining a Lower Bound}
-
-For DSM (where drones have different speeds), the paper only gives us a lower bound for handover probability, not the exact value. We need to understand what ``lower bound'' means here and why they can't get the exact answer.
-
-\vspace{0.4cm}
-
-\subsection{Structure of Main Dependency Between Users and Drones}
-
-The overall analysis of a user's time and location, and the drone(s) available for that user, rely on the following three forms of interrelated dependency:
-
-\vspace{0.3cm}
-
-\begin{enumerate}[label=\arabic*.]
-    \item \textbf{Spatial Dependencies} - Each drone assigned to a given user can only be determined based on the relative positions of those drones.
-
-    \vspace{0.2cm}
-
-    \item \textbf{Temporal Dependencies} - The position of a drone at some point in time is determined by its initial position and calendar history.
-
-    \vspace{0.2cm}
-
-    \item \textbf{Independence} - The movements of individual drones are independent of the movements of other drones.
-\end{enumerate}
-
-\newpage
-
