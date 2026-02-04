@@ -188,3 +188,127 @@ The paper uses something called stochastic geometry. We are still trying to unde
 \end{enumerate}
 
 \newpage
+
+% ========== SCRIBE QUESTION 3 ==========
+\section{Scribe Question 3: Probabilistic Reasoning and Dependencies}
+
+\subsection{Independence and Dependence}
+
+It is assumed in the paper that all drones are independent of one another. Assuming independence is important because:
+
+\vspace{0.2cm}
+
+\begin{itemize}
+    \item They can then use the displacement theorem.
+    \item The displacement theorem holds that if all the drones are randomly placed in different locations and then fly (or ``move'') independently from each other, the position cells of each drone, after they are finished moving, will be in random relation to one another.
+    \item This reduces the complexity of performing mathematical analysis on the drones.
+\end{itemize}
+
+\vspace{0.3cm}
+
+However, it should also be noted that a single drone, over time, will display dependence:
+
+\vspace{0.2cm}
+
+\begin{itemize}
+    \item The location of a drone at a particular moment in time influences the location of the same drone at a future moment in time.
+    \item For example, if a drone travels on a straight line, its location will provide some indication as to where that drone will be located in the future.
+\end{itemize}
+
+\vspace{0.4cm}
+
+\subsection{Conditioning}
+
+Here they also make extensive use of Conditioning (meaning that the probabilities that were computed will be based on known information). We saw two major uses of Conditioning:
+
+\vspace{0.3cm}
+
+\begin{enumerate}[label=\arabic*.]
+    \item First, they calculated the handover probability derived from the initial location and direction using a known distance and direction when applying Theorem 2. They averaged the results of Handover probabilities derived from fixed values.
+
+    \vspace{0.2cm}
+
+    \item When we're connected to one drone (the serving drone), all the other drones (non-serving drones) can't be too close to us. Why? Because if another drone was closer, we'd be connected to that one instead.
+
+    \vspace{0.2cm}
+
+    So there's an area around us called an ``exclusion zone'' where no non-serving drones can be. Only the serving drone is in this zone.
+\end{enumerate}
+
+\vspace{0.4cm}
+
+\subsection{The Equivalence Result (Theorem 1)}
+
+This paper proposes an equivalence between two different types of networks (the ``equivalence result''). Drones will move (as described in this paper), while users remain stationary; and/or base stations will be stationary while users will be moving (as in any standard mobile cellular network).
+
+\vspace{0.3cm}
+
+The authors base their equivalence formulation on the concept of translation invariance for Poisson Point Processes (PPPs). Our understanding of this concept is that by relocating all points in a given area by the same amount (i.e., moving them all), the statistical properties of the PPP will not change, specifically, they will still ``look random'' before and after the relocation. We are still working toward a better understanding of this.
+
+\vspace{0.4cm}
+
+\subsection{Outcome}
+
+\subsubsection{Current Understanding}
+
+The paper has methods to calculate handover probability. If we know where a drone started and how much time has passed, we can find the probability of handover.
+
+\vspace{0.2cm}
+
+They can calculate handover probability using:
+
+\begin{itemize}
+    \item Starting position of drone
+    \item Time passed
+\end{itemize}
+
+\vspace{0.4cm}
+
+\subsubsection{Predicting How Handover Probability Changes Over Time}
+
+The paper predicts how handover probability changes as time goes on. Figure 2 shows this - as time increases, the chance of handover also increases.
+
+\vspace{0.2cm}
+
+\begin{center}
+    More time $\rightarrow$ Higher handover chance
+\end{center}
+
+\vspace{0.2cm}
+
+Figure 2 proves this pattern.
+
+\vspace{0.4cm}
+
+\subsubsection{Comparing Two Different Types of Mobility Models}
+
+This section will provide a comparison between the SSM and DSM mobility models, showing their advantages and disadvantages. It can be seen that the DSM mobility model has a lower probability of experiencing a handover than the SSM, but we do not yet know exactly what the intuitive reason(s) for this are.
+
+\vspace{0.4cm}
+
+\subsubsection{Obtaining a Lower Bound}
+
+For DSM (where drones have different speeds), the paper only gives us a lower bound for handover probability, not the exact value. We need to understand what ``lower bound'' means here and why they can't get the exact answer.
+
+\vspace{0.4cm}
+
+\subsection{Structure of Main Dependency Between Users and Drones}
+
+The overall analysis of a user's time and location, and the drone(s) available for that user, rely on the following three forms of interrelated dependency:
+
+\vspace{0.3cm}
+
+\begin{enumerate}[label=\arabic*.]
+    \item \textbf{Spatial Dependencies} - Each drone assigned to a given user can only be determined based on the relative positions of those drones.
+
+    \vspace{0.2cm}
+
+    \item \textbf{Temporal Dependencies} - The position of a drone at some point in time is determined by its initial position and calendar history.
+
+    \vspace{0.2cm}
+
+    \item \textbf{Independence} - The movements of individual drones are independent of the movements of other drones.
+\end{enumerate}
+
+\newpage
+
