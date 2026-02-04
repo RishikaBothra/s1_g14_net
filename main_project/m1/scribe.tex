@@ -1,0 +1,82 @@
+\documentclass[11pt]{article}
+
+% ===================== PACKAGES =====================
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{titlesec}
+
+% ===================== HEADER & FOOTER =====================
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{CSE 400: Fundamentals of Probability in Computing}
+\rhead{Milestone 1 Scribe}
+\cfoot{\thepage}
+
+% ===================== SECTION FORMATTING =====================
+\titleformat{\section}{\Large\bfseries}{}{0em}{}
+\titleformat{\subsection}{\large\bfseries}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{}{0em}{}
+
+% ===================== TITLE =====================
+\title{
+    \normalsize School of Engineering and Applied Science (SEAS), Ahmedabad University \\
+    \vspace{0.2cm}
+    \textbf{CSE 400: Fundamentals of Probability in Computing} \\
+    \Large Milestone 1 Scribe Submission
+}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\vspace{-2cm}
+\begin{center}
+    \begin{tabular}{ll}
+        \textbf{Group:} & {s1\_g14\_net\hspace{3.5in}} \\ [1.5ex]
+        \textbf{Project:} & {Handover Probability in Drone Cellular Networks \hspace{0.5in}} \\ [1.5ex]
+        \textbf{Date of Submission:} & {\today \hspace{2.5in}}
+    \end{tabular}
+\end{center}
+
+\hrule
+\vspace{0.5cm}
+
+% ========== SCRIBE QUESTION 1 ==========
+\section{Scribe Question 1: Project System and Objective}
+
+\subsection{What is the probabilistic problem being addressed in your project?}
+
+So, the main problem which the paper is solving is about handovers in drone networks. Here the network in our phone is not coming from the towers but from the drones. Handovers happen when your phone switches from connecting to one drone to another drone.
+
+\vspace{0.3cm}
+
+The tricky part is that regular cell towers don't move, but drones do move around. So even if we are just standing still on the ground, our phone might need to switch between drones because they're flying around. The paper wants to find out what are the chances this switching or handover will happen in a certain amount of time.
+
+\subsection{System Objective}
+
+What they're actually trying to do is calculate handover probability. This is just the chance that our phone will switch to a different drone before some time $t$. Like let's suppose we start connected to one drone, what's the probability that 10 seconds later we will be connected to a different one? That's what the paper wants to figure out mathematically.
+
+\subsection{Primary Sources of Uncertainty}
+
+\begin{enumerate}[label=\arabic*.]
+    \item \textbf{Where drones start} - Nobody knows the exact starting position of each drone. The paper uses something they call a Poisson Point Process (PPP) which just means the drones are placed randomly in the sky. Like if you threw a handful of drones up there without aiming, or like throwing a handful of rice on a plate which are further placed randomly.
+
+    \vspace{0.2cm}
+
+    \item \textbf{Which way they go} - Each drone flies in a straight line but the direction is totally random. Could be north, south, east, west, or anything in between. So it's again uncertain to know which direction a specific drone picked.
+
+    \vspace{0.2cm}
+
+    \item \textbf{How fast they go} - In one of the models called DSM, different drones can fly at different speeds. Some might be going faster, some slower. They use probability distributions to handle this randomness.
+
+    \vspace{0.2cm}
+
+    \item \textbf{Which drone you connect to} - Your phone always connects to whichever drone is closest. But since drones are moving and also in random directions, the closest one keeps changing and we can't predict exactly when a different drone will become the closest.
+\end{enumerate}
+
+\newpage
+
