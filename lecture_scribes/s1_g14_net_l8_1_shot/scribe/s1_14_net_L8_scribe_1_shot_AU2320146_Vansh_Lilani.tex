@@ -1,0 +1,116 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{enumitem}
+
+\title{Lecture 8: Gaussian, Uniform, Exponential, and Gamma Random Variables \\ 
+\large CSE 400: Fundamentals of Probability in Computing}
+\author{Vansh Lilani - AU2320146}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Definitions and Notation}
+
+\textbf{Continuous Random Variable (CRV):} Defined by its Probability Density Function (PDF) and Cumulative Distribution Function (CDF).
+
+\textbf{Gaussian Random Variable:} A random variable $X$ is Gaussian if its PDF is given by:
+\[
+f_{X}(x) = \frac{1}{\sqrt{2\pi\sigma^{2}}} \exp\left(-\frac{(x-m)^{2}}{2\sigma^{2}}\right)
+\]
+
+\textbf{Notation:} $X \sim \mathcal{N}(m, \sigma^{2})$, where $m$ is the mean ($\mu_X$) and $\sigma^2$ is the variance.
+
+\textbf{Standard Normal Distribution:} A Gaussian distribution where $m=0$ and $\sigma^2=1$.
+
+\textbf{$n^{th}$ order Central Moment:} Defined as $E[(X - \mu_X)^n]$.
+
+\textbf{Skewness ($C_s$):} A measure of the symmetry of the PDF, defined as:
+\[
+C_s = \frac{E[(X - \mu_X)^3]}{\sigma_X^3}
+\]
+
+\textbf{Kurtosis ($C_k$):} A measure of the "peakiness" of the PDF, defined as:
+\[
+C_k = E[(X - \mu_X)^4]
+\]
+
+\textbf{Error Function ($erf(x)$):} Defined as:
+\[
+erf(x) = \frac{2}{\sqrt{\pi}} \int_{0}^{x} \exp(-t^2) dt
+\]
+
+\textbf{Complementary Error Function ($erfc(x)$):} Defined as:
+\[
+erfc(x) = 1 - erf(x) = \frac{2}{\sqrt{\pi}} \int_{x}^{\infty} \exp(-t^2) dt
+\]
+
+\section{Assumptions / Conditions}
+
+\begin{itemize}
+    \item \textbf{PDF Normalization:} For any valid PDF, the total area under the curve must equal 1: $\int_{-\infty}^{\infty} f_X(x) dx = 1$.
+    \item \textbf{Constants in Expectation:} When calculating expectations, $a$ and $b$ are treated as constants.
+    \item \textbf{Linearity of Expectation:} Assumes that the expectation of a sum of functions is equal to the sum of their individual expectations.
+\end{itemize}
+
+\section{Main Results / Theorems}
+
+\textbf{Theorem on Linear Transformation of Expectation:} For any constant $a$ and $b$, 
+\[ E[ax + b] = a E[X] + b \]
+
+\textbf{Theorem on Sum of Functions:} For any function $g(x)$ that is a sum of several other functions $g_k(x)$, the expectation is: 
+\[ E\left[\sum_{k=1}^{N} g_k(x)\right] = \sum_{k=1}^{N} E[g_k(x)] \]
+
+\textbf{Symmetry and Skewness:}
+\begin{itemize}
+    \item If $C_s > 0$, the PDF is right-skewed.
+    \item If $C_s < 0$, the PDF is left-skewed.
+\end{itemize}
+
+\textbf{Kurtosis Significance:} A large value of Kurtosis indicates the random variable $X$ will have a large peak near the mean.
+
+\section{Proofs / Derivations}
+
+\subsection*{Derivation of Central Moments ($n=0, 1, 2$)}
+
+\textbf{For $n=0$:}
+\[ E[(X - \mu_X)^0] = E[1] = 1 \]
+
+\textbf{For $n=1$:}
+\begin{enumerate}
+    \item \textbf{Expand the expectation:} $E[X - \mu_X] = E[X] - \mu_X$.
+    \item \textbf{Substitute $\mu_X$ for $E[X]$:} $\mu_X - \mu_X = 0$.
+    \item \textbf{Result:} The first central moment is always 0.
+\end{enumerate}
+
+\textbf{For $n=2$ (Variance $\sigma_X^2$):}
+\begin{enumerate}
+    \item \textbf{Start with definition:} $\sigma_X^2 = E[(X - \mu_X)^2]$.
+    \item \textbf{Expand the square:} $E[X^2 - 2\mu_X X + \mu_X^2]$.
+    \item \textbf{Apply linearity:} $E[X^2] - 2\mu_X E[X] + \mu_X^2$.
+    \item \textbf{Substitute $E[X] = \mu_X$:} $E[X^2] - 2\mu_X^2 + \mu_X^2$.
+    \item \textbf{Simplify:} $\sigma_X^2 = E[X^2] - \mu_X^2$.
+\end{enumerate}
+
+\section{Worked Examples}
+
+\textbf{Example 1: Gaussian PDF and CDF Parameters} \\
+Consider a Gaussian Random Variable with mean $m=3$ and standard deviation $\sigma=2$.
+
+\textbf{PDF:} 
+\[ f_X(x) = \frac{1}{\sqrt{2\pi(2^2)}} \exp\left(-\frac{(x-3)^2}{2(2^2)}\right) = \frac{1}{\sqrt{8\pi}} \exp\left(-\frac{(x-3)^2}{8}\right) \]
+
+\textbf{CDF:} $F_X(x) = Pr(X \leq x)$, represented as an S-shaped curve centered at $x=3$.
+
+\vspace{1em}
+\textbf{Example 2: Linearity of Expectation with Constants} \\
+If $Y = aX + b$, find $E[Y]$.
+\begin{enumerate}
+    \item $E[Y] = E[aX + b]$.
+    \item Using the theorem $E[ax+b] = aE[X] + b$, the result is $a\mu_X + b$.
+\end{enumerate}
+
+\end{document}

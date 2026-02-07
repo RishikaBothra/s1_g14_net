@@ -1,0 +1,86 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+
+\title{Lecture Scribe: Joint Probability and Conditional Probability \\
+\large Course: CSE 400 — Fundamentals of Probability in Computing}
+\author{Vansh Lilani (ID: AU2320146)}
+\date{January 15, 2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Topic Title}
+Joint Probability and Conditional Probability
+
+\section{Definitions and Notation}
+\begin{itemize}
+    \item \textbf{Experiment ($E$):} A procedure performed that produces a specific result. \\
+    \textit{Example:} Tossing a coin five times ($E_{5}$).
+    
+    \item \textbf{Outcome ($\xi$):} A possible result of an experiment. \\
+    \textit{Example:} One possible outcome of $E_{5}$ is $\xi_{1} = HHTHT$.
+    
+    \item \textbf{Sample Space ($S$):} The set of all possible outcomes of an experiment.
+    
+    \item \textbf{Event:} A subset of the sample space.
+    
+    \item \textbf{Joint Probability:} The probability of two or more events occurring simultaneously.
+    
+    \item \textbf{Conditional Probability:} The probability of an event occurring given that another event has already occurred.
+\end{itemize}
+
+\section{Assumptions / Conditions}
+\textbf{Axioms of Probability:} All probability assignments must satisfy the fundamental axioms:
+\begin{enumerate}
+    \item \textbf{Non-negativity:} $P(A) \geq 0$ for any event $A$.
+    \item \textbf{Normalization:} $P(S) = 1$.
+    \item \textbf{Additivity:} For mutually exclusive events, the probability of their union is the sum of their individual probabilities.
+\end{enumerate}
+
+\noindent \textbf{Probability Assignment Approaches:}
+\begin{itemize}
+    \item \textbf{Classical Approach:} Assumes all outcomes in a finite sample space are equally likely.
+    \item \textbf{Relative Frequency Approach:} Based on the limit of the frequency of an outcome over many trials.
+\end{itemize}
+
+\section{Main Results / Theorems}
+\begin{itemize}
+    \item \textbf{Joint Probability Notation:} Represented as $P(A \cap B)$ or $P(A, B)$, indicating the probability that both Event A and Event B occur.
+    
+    \item \textbf{Conditional Probability Formula:} The probability of event $A$ given event $B$ is defined as:
+    \[ P(A|B) = \frac{P(A \cap B)}{P(B)}, \text{ where } P(B) > 0 \]
+\end{itemize}
+
+\section{Proofs / Derivations}
+\textit{Note: Focus is on conceptual motivation in engineering contexts (e.g., Speech Recognition, Radar Systems).}
+
+\subsection*{Derivation of Multiplication Rule}
+\begin{enumerate}
+    \item \textbf{Step 1:} Start with the definition of conditional probability: 
+    \[ P(A|B) = \frac{P(A \cap B)}{P(B)} \]
+    
+    \item \textbf{Step 2:} Rearrange the formula to solve for the joint probability by multiplying both sides by $P(B)$.
+    
+    \item \textbf{Step 3:} The resulting \textbf{Multiplication Rule} is: 
+    \[ P(A \cap B) = P(A|B)P(B) \]
+\end{enumerate}
+
+\section{Worked Examples}
+\begin{itemize}
+    \item \textbf{Example 1: Card Deck (Joint Probability):} Calculation of probabilities involving specific suits and ranks from a standard deck.
+    \item \textbf{Example 2: Costume Party (Joint Probability):} Determining the likelihood of overlapping characteristics among party guests.
+    \item \textbf{Example 3: Cards Without Replacement (Conditional Probability):} Calculating the probability of drawing a specific sequence of cards when the first card is not returned to the deck.
+    \item \textbf{Example 4: Game of Poker:} Applying conditional probability to determine the strength of a hand as more cards are revealed.
+    \item \textbf{Example 5: The Missing Key:} A logical probability problem determining the likelihood of finding a key in a specific location given it was not found in others.
+\end{itemize}
+
+\vfill
+\begin{flushleft}
+    \textbf{Reference:} Lecture 4 - Joint Probability and Conditional Probability by Dhaval Patel, PhD.
+\end{flushleft}
+
+\end{document}
