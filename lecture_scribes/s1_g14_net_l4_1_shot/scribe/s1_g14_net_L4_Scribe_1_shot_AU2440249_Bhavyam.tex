@@ -1,0 +1,167 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\usepackage{parskip}
+
+% Geometry settings for formal margin
+\geometry{left=1in, right=1in, top=1in, bottom=1in}
+
+\begin{document}
+
+% Title Section
+\begin{center}
+    \Large \textbf{Generic One-Shot Lecture Scribe Example (Structure Only)}
+\end{center}
+
+\noindent \textbf{Lecture Title:} Joint Probability and Conditional Probability \\
+\textbf{Course:} CSE400 - Fundamentals of Probability in Computing \\
+\textbf{Purpose:} Exam-oriented lecture scribe for revision
+
+% Section 1
+\section*{1. Overview}
+This lecture introduces the fundamental concepts of probability theory, including experiments, sample spaces, and events. It establishes the core Axioms of Probability and derives key propositions. The lecture progresses to define and calculate Joint Probability using classical and relative frequency approaches. Finally, it covers Conditional Probability, introducing the Product Rule and Chain Rule, supported by engineering applications such as Speech Recognition, Radar Systems, and Communication Networks.
+
+% Section 2
+\section*{2. Definitions and Notation}
+
+\textbf{Definition 2.1 (Experiment and Outcome):}
+\begin{itemize}
+    \item Experiment ($E$): A procedure performed that produces some result (e.g., Tossing a coin five times, $E_5$).
+    \item Outcome ($\xi$): A possible result of an experiment (e.g., $\xi_1 = HHTHT$).
+\end{itemize}
+
+\textbf{Definition 2.2 (Event):}
+An event (denoted by any letter) is a certain set of outcomes of an experiment.
+
+\textbf{Definition 2.3 (Sample Space):}
+The Sample Space ($S$) is the universal set or collection of "all possible" distinct outcomes of an experiment. The sample space can be Discrete, Countably infinite, or Continuous.
+
+\textbf{Definition 2.4 (Probability):}
+Probability is a measure of the likelihood of various events, or a function of an event that produces a numerical quantity measuring the likelihood of that event.
+
+\textbf{Definition 2.5 (Joint Probability):}
+The probability of the intersection of two events $A$ and $B$ (not mutually exclusive).
+\begin{itemize}
+    \item Notation: Denoted as $Pr(A, B)$ or $Pr(A \cap B)$.
+\end{itemize}
+
+\textbf{Definition 2.6 (Conditional Probability):}
+The probability of event $A$ conditioned on knowing event $B$ occurred.
+\begin{itemize}
+    \item Formula: $Pr(A|B) = \frac{Pr(A, B)}{Pr(B)}$ where $Pr(B) > 0$.
+\end{itemize}
+
+% Section 3
+\section*{3. Assumptions and Conditions}
+The following assumptions are established regarding sample spaces and probability calculation:
+
+\textbf{Assumption A (Sample Space Nature):} Outcomes in a sample space must be Mutually Exclusive (one can get heads or tails, not both) and Collectively Exhaustive (one cannot get anything other than the defined outcomes).
+
+\textbf{Assumption B (Classical Approach):} Both events $A$ and $B$ can be expressed in terms of atomic outcomes, allowing for the calculation of probabilities based on common atomic outcomes.
+
+\textbf{Assumption C (Relative Frequency Approach):} To get an exact measure of probability, an event must be repeated an infinite number of times ($n \rightarrow \infty$). This is noted as a drawback since many phenomena are not repeatable.
+
+% Section 4
+\section*{4. Main Result / Theorem}
+
+\textbf{Theorem 4.1 (Axioms of Probability):}
+These statements are taken as self-evident and require no proof:
+\begin{itemize}
+    \item For any event $A$, $0 \le Pr(A) \le 1$.
+    \item If $S$ is the sample space, $Pr(S) = 1$.
+    \item If $A \cap B = \emptyset$ (mutually exclusive), then $Pr(A \cup B) = Pr(A) + Pr(B)$.
+    \item For an infinite number of mutually exclusive sets $A_i$, $Pr(\bigcup_{i=1}^{\infty} A_i) = \sum_{i=1}^{\infty} Pr(A_i)$.
+\end{itemize}
+
+\textbf{Theorem 4.2 (Propositions from Axioms):}
+\begin{itemize}
+    \item Proposition 2.1: $Pr(A^c) = 1 - Pr(A)$.
+    \item Proposition 2.2: If $A \subset B$, then $Pr(A) \le Pr(B)$.
+    \item Proposition 2.3 (Inclusion-Exclusion): $Pr(A \cup B) = Pr(A) + Pr(B) - Pr(A \cap B)$.
+\end{itemize}
+
+\textbf{Theorem 4.3 (Product and Chain Rules):}
+\begin{itemize}
+    \item Product Rule: $Pr(A, B) = Pr(A|B)Pr(B) = Pr(B|A)Pr(A)$.
+    \item Chain Rule (M events):
+    \[
+    Pr(A_1, A_2, ... A_M) = Pr(A_M | A_1, ... A_{M-1}) \times ... \times Pr(A_2|A_1) \times Pr(A_1).
+    \]
+\end{itemize}
+
+% Section 5
+\section*{5. Proof/ Derivation}
+
+\textbf{Proof Sketch (Derivation of Missing Key Probability):}
+In Example 5 (The Missing Key), we derive $Pr(R|L^c)$ (Probability key is in Right pocket given it is NOT in Left).
+
+\textbf{Step 1:} State the initial probabilities.
+\[
+Pr(L) = 0.4 \text{ (Left)}, Pr(R) = 0.4 \text{ (Right)}, Pr(K) = 0.8 \text{ (Key is in jacket)}.
+\]
+
+\textbf{Step 2:} Apply the Conditional Probability Definition.
+\[
+Pr(R|L^c) = \frac{Pr(R \cap L^c)}{Pr(L^c)}.
+\]
+
+\textbf{Step 3:} Simplify the numerator.
+Since $R$ implies $L^c$ (the key cannot be in both pockets simultaneously), the intersection $Pr(R \cap L^c)$ simplifies to $Pr(R)$.
+
+\textbf{Step 4:} Substitute and Solve.
+\begin{itemize}
+    \item Numerator: $Pr(R) = 0.4$
+    \item Denominator: $Pr(L^c) = 1 - Pr(L) = 1 - 0.4 = 0.6$
+    \item Result: $\frac{0.4}{0.6} = \frac{2}{3}$.
+\end{itemize}
+
+% Section 6
+\section*{6. Worked Example}
+
+\textbf{Example 6.1 (Costume Party - Joint Probability):}
+Alex selects one top and one bottom randomly.
+\begin{itemize}
+    \item Tops: 3 T-shirts, 1 Cape (Total 4).
+    \item Bottoms: 2 Pants, 4 Boxers (Total 6).
+\end{itemize}
+Goal: Find the probability of the outfit being the Cape and Polka-dot Boxers.
+
+\textbf{Solution:}
+\begin{itemize}
+    \item Analyze Tops: $Pr(Cape) = 1/4$.
+    \item Analyze Bottoms: $Pr(Boxers) = 4/6 = 2/3$.
+\end{itemize}
+Calculate Joint Probability (Independence): \\
+Total Probability $= Pr(Cape) \times Pr(Boxers)$
+\[
+= (1/4) \times (4/6) = 1/6.
+\]
+
+\textbf{Example 6.2 (Cards Without Replacement - Conditional Probability):}
+Two cards are selected at random without replacement.
+\begin{itemize}
+    \item Event A: First card was a Spade.
+    \item Event B: Second card was a Spade.
+\end{itemize}
+Goal: Find $Pr(B|A)$.
+
+\textbf{Solution:} \\
+Initial State: 52 cards, 13 Spades. \\
+Event A Occurs: One Spade removed. \\
+Remaining State:
+\begin{itemize}
+    \item Total cards remaining $= 52 - 1 = 51$.
+    \item Spades remaining $= 13 - 1 = 12$.
+\end{itemize}
+Calculation:
+\[
+Pr(B|A) = \frac{\text{Remaining Spades}}{\text{Remaining Total}} = \frac{12}{51}.
+\]
+
+% Section 7
+\section*{7. Summary}
+This lecture established the key definitions, assumptions, and results required for exam preparation regarding probability theory. It covered the axioms of probability, the calculation of joint probabilities for mutually exclusive and non-exclusive events, and the rules of conditional probability including the Chain Rule. Engineering applications in speech recognition and radar systems were used to contextualize these mathematical concepts.
+
+\end{document}
