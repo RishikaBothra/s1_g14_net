@@ -1,0 +1,14 @@
+Task Instructions: Using the same structure as the example provided above, generate a comprehensive lecture scribe based on the attached context for Lecture 4 (L4.pdf). This scribe is authored by Vansh Lilani (ID: AU2320146). It is intended to serve as a primary exam-oriented reference material for a reading-based/closed-notes exam.
+
+Requirements:
+
+Faithfulness & Detail: Include all definitions, notation, and assumptions exactly as presented. Every formula, theorem statement, and worked example from the lecture must be included in full.
+
+Step-by-Step Explanations: For all proofs and derivations, provide the complete step-by-step logic shown in the slides. Do not summarize; ensure the explanation covers the transition between each mathematical step to ensure exam readiness.
+
+Scope: Stick strictly to the provided PDF. Do not invent new content or add external "intuition" not present in the lecture materials.
+
+Correctness & Tone: Maintain a formal academic tone. Prioritize mathematical precision and clarity in the layout of formulas.
+
+Structure: Adhere strictly to the organizational pattern (headings, lists, and layout) demonstrated in the "Example Lecture Scribe" provided above.
+
