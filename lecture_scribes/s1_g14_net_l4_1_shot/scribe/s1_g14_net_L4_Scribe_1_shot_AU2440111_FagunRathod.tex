@@ -1,0 +1,129 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{CSE400: Fundamentals of Probability in Computing \\ \large Lecture 4: Joint Probability and Conditional Probability}
+\author{Scribe: Fagun Rathod - AU2440111}
+\date{January 15, 2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction to Probability Theory}
+
+\subsection{Definitions and Notation}
+\begin{itemize}
+    \item \textbf{Experiment ($E$):} A procedure we perform that produces some result. \\
+    \textit{Example:} Tossing a coin five times ($E_{5}$).
+    
+    \item \textbf{Outcome ($\xi$):} A possible result of an experiment. \\
+    \textit{Example:} $\xi_{1} = HHTHT$ is one possible outcome of $E_{5}$.
+    
+    \item \textbf{Event (Any Letter):} A certain set of outcomes of an experiment. \\
+    \textit{Example:} Event $C$ (all outcomes consisting of an even number of heads) within experiment $E_{5}$.
+    
+    \item \textbf{Sample Space ($S$):} The collection or set of "all possible" distinct outcomes of an experiment. It is the universal set of outcomes and can be discrete, countably infinite, or continuous.
+    
+    \item \textbf{Mutually Exclusive:} Outcomes where you can get one result or another, but not both (e.g., heads or tails).
+    
+    \item \textbf{Collectively Exhaustive:} Outcomes where you cannot get anything other than the defined set (e.g., nothing other than heads or tails).
+    
+    \item \textbf{Probability:} A function of an event that produces a numerical quantity measuring the likelihood of that event.
+\end{itemize}
+
+\subsection{Assumptions / Conditions}
+\begin{itemize}
+    \item \textbf{Classical Approach:} Probability is assigned to various outcomes and events based on a finite sample space.
+    \item \textbf{Relative Frequency Approach:} To get an exact measure, the event must be repeatable an infinite number of times.
+\end{itemize}
+
+\subsection{Main Results / Theorems (Axioms and Propositions)}
+\begin{itemize}
+    \item \textbf{Axiom 1:} For any event $A$, $0 \le \Pr(A) \le 1$.
+    \item \textbf{Axiom 2:} If $S$ is the sample space, $\Pr(S) = 1$.
+    \item \textbf{Axiom 3:} If $A \cap B = \emptyset$, then $\Pr(A \cup B) = \Pr(A) + \Pr(B)$.
+    \item \textbf{Proposition 2.1:} $\Pr(A^{c}) = 1 - \Pr(A)$.
+    \item \textbf{Proposition 2.2:} If $A \subset B$, then $\Pr(A) \le \Pr(B)$.
+    \item \textbf{Proposition 2.3:} $\Pr(A \cup B) = \Pr(A) + \Pr(B) - \Pr(A \cap B)$.
+\end{itemize}
+
+\subsection{Worked Examples}
+\textbf{Example 2.6 (Coin flipping):} Compute $\Pr(H)$ and $\Pr(T)$. \\
+\textbf{Example 2.7 (Dice rolling):} Compute $\Pr(\text{even number is rolled})$. \\
+\textbf{Example 2.8 (Pair of dice):} Compute $\Pr(A)$ where $A$ is the event of the sum equaling five. \\
+\textit{Relative Frequency Table:} As $n$ increases from 1000 to 10,000, $n_A/n$ converges toward approximately 0.110.
+
+\hr
+\section{Joint Probability}
+
+\subsection{Definitions and Notation}
+\begin{itemize}
+    \item \textbf{Joint Probability:} The probability of the intersection of two or more events that are not mutually exclusive.
+    \item \textbf{Notation:} Denoted as $\Pr(A, B)$ or $\Pr(A \cap B)$.
+    \item \textbf{Multiple Events:} Denoted as $\Pr(A_{1}, A_{2}, \dots, A_{M})$.
+\end{itemize}
+
+\subsection{Proofs / Derivations (Calculation Approaches)}
+\begin{enumerate}
+    \item \textbf{Step 1 (Classical):} Express events $A$ and $B$ in terms of atomic outcomes.
+    \item \textbf{Step 2 (Classical):} Identify atomic outcomes common to both events.
+    \item \textbf{Step 3 (Classical):} Calculate the probabilities of these common outcomes.
+    \item \textbf{Relative Frequency Formula:} $\Pr(A, B) = \lim_{n \to \infty} \frac{n_{A,B}}{n}$.
+\end{enumerate}
+
+\subsection{Worked Examples}
+\textbf{Example 1: Card Deck} \\
+Let $A = \text{Red card}$, $B = \text{Number card (Ace included)}$, $C = \text{Heart card}$.
+\begin{itemize}
+    \item $\Pr(A) = 26/52 = 1/2$.
+    \item $\Pr(B) = 40/52 = 10/13$.
+    \item $\Pr(C) = 13/52 = 1/4$.
+    \item $\Pr(A, B) = 20/52 = 5/13$.
+    \item $\Pr(A, C) = 13/52 = 1/4$.
+    \item $\Pr(B, C) = 10/52 = 5/26$.
+\end{itemize}
+
+\textbf{Example 2: Costume Party} \\
+Alex has 4 tops (3 t-shirts, 1 cape) and 6 bottoms (2 pants, 4 boxers).
+\begin{itemize}
+    \item Step 1: $\Pr(\text{Cape}) = 1/4$.
+    \item Step 2: $\Pr(\text{Boxers}) = 4/6 = 2/3$.
+    \item Step 3: $\Pr(\text{Cape}, \text{Boxers}) = \frac{1}{4} \times \frac{4}{6} = \frac{1}{6}$.
+\end{itemize}
+
+\hr
+\section{Conditional Probability}
+
+\subsection{Definitions and Notation}
+\textbf{Conditional Probability:} The probability of event $A$ occurring given that event $B$ has already occurred. \\
+\textbf{Notation:} $\Pr(A|B)$.
+
+\subsection{Main Results / Theorems}
+\begin{itemize}
+    \item \textbf{Definition Formula:} $\Pr(A|B) = \frac{\Pr(A, B)}{\Pr(B)}$ where $\Pr(B) > 0$.
+    \item \textbf{Product Rule:} $\Pr(A, B) = \Pr(A|B)\Pr(B) = \Pr(B|A)\Pr(A)$.
+    \item \textbf{Chain Rule:} $\Pr(A_{1}, \dots, A_{M}) = \Pr(A_{M} | A_{1}, \dots, A_{M-1}) \dots \Pr(A_{2}|A_{1})\Pr(A_{1})$.
+\end{itemize}
+
+\subsection{Worked Examples}
+\textbf{Example 3: Cards Without Replacement} \\
+Select two cards; $A$ is first card is Spade, $B$ is second card is Spade.
+\begin{itemize}
+    \item Initial: 13 Spades in 52 cards.
+    \item After $A$: 12 Spades and 51 total cards remain.
+    \item Result: $\Pr(B|A) = 12/51$.
+\end{itemize}
+
+\textbf{Example 4: Poker Flush} \\
+Probability of a flush in Spades (5 cards):
+\[ \frac{13}{52} \times \frac{12}{51} \times \frac{11}{50} \times \frac{10}{49} \times \frac{9}{48} \]
+Probability of any flush: $4 \times \Pr(\text{Spade Flush})$.
+
+\textbf{Example 5: Missing Key} \\
+Key in jacket ($\Pr(K)=0.8$), Left Pocket ($\Pr(L)=0.4$), Right Pocket ($\Pr(R)=0.4$). Search of Left Pocket fails ($L^c$).
+\[ \Pr(R|L^{c}) = \frac{\Pr(R \cap L^{c})}{\Pr(L^{c})} = \frac{\Pr(R)}{1-\Pr(L)} = \frac{0.4}{1-0.4} = \frac{0.4}{0.6} = \frac{2}{3} \]
+
+\end{document}
