@@ -1,0 +1,196 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+
+% Page Geometry
+\geometry{a4paper, margin=1in}
+
+% Header/Footer
+\pagestyle{fancy}
+\fancyhead[L]{CSE400: Fundamentals of Probability}
+\fancyhead[R]{Lecture 4 Scribe}
+\fancyfoot[C]{\thepage}
+
+\title{\textbf{Lecture 4: Joint Probability and Conditional Probability}}
+\author{Based on lectures by Dhaval Patel, PhD}
+\date{January 15, 2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Engineering Applications}
+[cite_start]Probability theory is fundamental to various engineering systems[cite: 19].
+\begin{itemize}
+    [cite_start]\item \textbf{Speech Recognition:} Using templates and vocabulary (e.g., Hello, Yes, No) to map speech signals $x(t)$ to words $x(w)$ amidst noise and interference[cite: 26, 39, 59].
+    \item \textbf{Radar Systems:} Detecting signals ($S_i$) amidst noise ($W_i$). [cite_start]The system must distinguish between hypotheses $H_0$ (noise only) and $H_1$ (signal + noise) to minimize false alarms and missed detections[cite: 64, 67, 77].
+    [cite_start]\item \textbf{Communication Networks:} Managing packet arrival, QoS, and delay in networks (WiFi, 4G, 5G)[cite: 87, 101].
+\end{itemize}
+
+\section{Introduction to Probability Theory}
+
+\subsection{Definitions}
+\begin{itemize}
+    [cite_start]\item \textbf{Experiment ($E$):} A procedure performed that produces some result (e.g., Tossing a coin five times, $E_5$)[cite: 148].
+    [cite_start]\item \textbf{Outcome ($\xi$):} A possible result of an experiment (e.g., $\xi_1 = HHTHT$)[cite: 156].
+    [cite_start]\item \textbf{Event:} A certain set of outcomes of an experiment (e.g., Event $C =$ all outcomes consisting of an even number of heads)[cite: 168, 170].
+    [cite_start]\item \textbf{Sample Space ($S$):} The collection or set of "all possible" distinct outcomes of an experiment[cite: 184]. Outcomes in $S$ must be:
+    \begin{itemize}
+        [cite_start]\item \textbf{Mutually Exclusive:} You can get one outcome or another, but not both (e.g., Heads or Tails)[cite: 186].
+        [cite_start]\item \textbf{Collectively Exhaustive:} No other outcomes are possible[cite: 187].
+    \end{itemize}
+\end{itemize}
+
+\subsection{Types of Sample Spaces}
+\begin{itemize}
+    [cite_start]\item \textbf{Discrete:} Finite set of outcomes (e.g., Flipping a coin, rolling a die)[cite: 209].
+    [cite_start]\item \textbf{Countably Infinite:} (e.g., Flipping a coin until a tails occurs)[cite: 218].
+    [cite_start]\item \textbf{Continuous:} Uncountably infinite (e.g., Random number generator in interval $[0, 1)$)[cite: 219].
+\end{itemize}
+
+\section{Axioms and Propositions}
+
+\subsection{Axioms of Probability}
+[cite_start]Probability is a function producing a numerical quantity measuring likelihood[cite: 235].
+\begin{enumerate}
+    [cite_start]\item \textbf{Axiom 1:} For any event $A$, $0 \le Pr(A) \le 1$[cite: 238].
+    [cite_start]\item \textbf{Axiom 2:} If $S$ is the sample space, $Pr(S) = 1$[cite: 239].
+    [cite_start]\item \textbf{Axiom 3:} If $A \cap B = \emptyset$ (mutually exclusive), then $Pr(A \cup B) = Pr(A) + Pr(B)$[cite: 240]. 
+    \item \textbf{General Axiom 3:} For an infinite number of mutually exclusive sets $A_i$ where $A_i \cap A_j = \emptyset$ for all $i \ne j$:
+    \begin{equation}
+        [cite_start]Pr(\bigcup_{i=1}^{\infty} A_i) = \sum_{i=1}^{\infty} Pr(A_i) \quad \text{[cite: 245]}
+    \end{equation}
+\end{enumerate}
+
+\subsection{Corollaries and Propositions}
+\begin{itemize}
+    \item \textbf{Corollary 2.1:} For a finite number ($M$) of mutually exclusive sets:
+    \begin{equation}
+        [cite_start]Pr(\bigcup_{i=1}^{M} A_i) = \sum_{i=1}^{M} Pr(A_i) \quad \text{[cite: 259]}
+    \end{equation}
+    [cite_start]\item \textbf{Proposition 2.1 (Complement):} $Pr(A^c) = 1 - Pr(A)$[cite: 271].
+    [cite_start]\item \textbf{Proposition 2.2 (Subset):} If $A \subset B$, then $Pr(A) \le Pr(B)$[cite: 278].
+    \item \textbf{Proposition 2.3 (Union of 2 Sets):} For any sets $A$ and $B$:
+    \begin{equation}
+        [cite_start]Pr(A \cup B) = Pr(A) + Pr(B) - Pr(A \cap B) \quad \text{[cite: 287]}
+    \end{equation}
+    \item \textbf{Proposition 2.4 (Union of M Sets - Inclusion-Exclusion):}
+    \begin{multline}
+        Pr(A_1 \cup A_2 \cup \dots \cup A_M) = \sum_{i=1}^{M} Pr(A_i) - \sum_{i_1 < i_2} Pr(A_{i_1}A_{i_2}) + \dots \\
+        + (-1)[cite_start]^{r+1} \sum_{i_1 < i_2 < \dots < i_r} Pr(A_{i_1} \dots A_{i_r}) + \dots + (-1)^{M+1} Pr(A_1 \dots A_M) \quad \text{[cite: 302, 304]}
+    \end{multline}
+\end{itemize}
+
+\section{Assigning Probabilities}
+\begin{itemize}
+    [cite_start]\item \textbf{Classical Approach:} Based on atomic outcomes (e.g., Coin flipping $Pr(H)=1/2$, Dice rolling)[cite: 310].
+    \item \textbf{Relative Frequency Approach:} Requires repeating an event $n$ times. Let $n_{A,B}$ be the occurrences:
+    \begin{equation}
+        [cite_start]Pr(A,B) = \lim_{n \to \infty} \frac{n_{A,B}}{n} \quad \text{[cite: 400]}
+    \end{equation}
+    [cite_start]\textit{Drawback:} Requires infinite repetition; many phenomena are not repeatable[cite: 326].
+\end{itemize}
+
+\section{Joint Probability}
+
+\subsection{Definitions}
+\begin{itemize}
+    \item \textbf{Motivation:} Events are not always mutually exclusive. [cite_start]We need the probability of the intersection $AB$[cite: 353].
+    [cite_start]\item \textbf{Notation:} $Pr(A,B)$ or $Pr(A \cap B)$[cite: 361].
+    [cite_start]\item \textbf{Multiple Events:} Denoted $Pr(A_1, A_2, \dots, A_M)$[cite: 370].
+\end{itemize}
+
+\subsection{Worked Examples}
+
+\subsubsection*{Example 1: Card Deck}
+\textbf{Problem:} Consider a 52-card deck. $A=\{Red\}$, $B=\{Number Card\}$, $C=\{Heart\}$. [cite_start]Find joint probabilities[cite: 408].\\
+\textbf{Solution:}
+\begin{itemize}
+    [cite_start]\item $Pr(A) = 26/52 = 1/2$ (13 Hearts + 13 Diamonds)[cite: 440].
+    [cite_start]\item $Pr(B) = 40/52 = 5/26$ (10 number cards per suit)[cite: 441].
+    [cite_start]\item $Pr(C) = 13/52 = 1/4$[cite: 442].
+    [cite_start]\item $Pr(A,B) = 20/52 = 5/13$ (10 red number cards in Hearts + 10 in Diamonds)[cite: 444].
+    [cite_start]\item $Pr(A,C) = 13/52 = 1/4$ (All hearts are red)[cite: 445].
+    [cite_start]\item $Pr(B,C) = 10/52$ (10 number cards that are hearts)[cite: 446].
+\end{itemize}
+
+\subsubsection*{Example 2: Costume Party}
+\textbf{Problem:} Alex has 4 tops (3 T-shirts, 1 Cape) and 6 bottoms (2 Pants, 4 Boxers). She selects one top and one bottom randomly. [cite_start]What is the probability of the outfit {Cape, Polka-dot Boxers}?[cite: 454, 459].\\
+\textbf{Solution:}
+\begin{enumerate}
+    [cite_start]\item \textbf{Analyze Tops:} Total = 4. $Pr(Cape) = 1/4$[cite: 479].
+    [cite_start]\item \textbf{Analyze Bottoms:} Total = 6. $Pr(Boxers) = 4/6 = 2/3$[cite: 491].
+    \item \textbf{Joint Probability:} Since selections are independent:
+    \begin{equation}
+        [cite_start]Pr(Cape, Boxers) = Pr(Cape) \times Pr(Boxers) = \frac{1}{4} \times \frac{4}{6} = \frac{1}{6} \quad \text{[cite: 494]}
+    \end{equation}
+\end{enumerate}
+
+\section{Conditional Probability}
+
+\subsection{Definitions}
+\begin{itemize}
+    \item \textbf{Definition:} The probability of $A$ conditioned on knowing $B$ occurred:
+    \begin{equation}
+        [cite_start]Pr(A|B) = \frac{Pr(A,B)}{Pr(B)} \quad \text{where } Pr(B) > 0 \quad \text{[cite: 530]}
+    \end{equation}
+    \item \textbf{Product Rule:}
+    \begin{equation}
+        [cite_start]Pr(A,B) = Pr(A|B)Pr(B) = Pr(B|A)Pr(A) \quad \text{[cite: 540]}
+    \end{equation}
+    \item \textbf{Chain Rule (M events):}
+    \begin{equation}
+        [cite_start]Pr(A_1, \dots, A_M) = Pr(A_M | A_1 \dots A_{M-1}) \times \dots \times Pr(A_2|A_1)Pr(A_1) \quad \text{[cite: 566]}
+    \end{equation}
+\end{itemize}
+
+\subsection{Worked Examples}
+
+\subsubsection*{Example 3: Cards Without Replacement}
+\textbf{Problem:} Select two cards. The first is not returned. [cite_start]Find $Pr(B|A)$ where $A=$ First is Spade, $B=$ Second is Spade[cite: 576].\\
+\textbf{Solution:}
+\begin{itemize}
+    [cite_start]\item Initial State: 52 cards, 13 Spades[cite: 604].
+    [cite_start]\item Event A Occurs: 1 Spade removed[cite: 605].
+    [cite_start]\item Remaining State: 51 cards total, 12 Spades left[cite: 626].
+    \item Calculation:
+    \begin{equation}
+        [cite_start]Pr(B|A) = \frac{12}{51} \quad \text{[cite: 629]}
+    \end{equation}
+\end{itemize}
+
+\subsubsection*{Example 4: Game of Poker (Flush)}
+\textbf{Problem:} What is the probability of being dealt a flush (5 cards of same suit) in Spades? [cite_start]What about any suit?[cite: 638].\\
+\textbf{Solution:}
+\begin{enumerate}
+    \item \textbf{Spade Flush:} Let $A_i$ be the event the $i^{th}$ card is a spade. Using the chain rule:
+    \begin{equation}
+        [cite_start]P(Spade Flush) = \frac{13}{52} \times \frac{12}{51} \times \frac{11}{50} \times \frac{10}{49} \times \frac{9}{48} \quad \text{[cite: 670]}
+    \end{equation}
+    \item \textbf{Any Flush:} Since suits are mutually exclusive:
+    \begin{equation}
+        [cite_start]P(Any Flush) = 4 \times P(Spade Flush) \quad \text{[cite: 685]}
+    \end{equation}
+\end{enumerate}
+
+\subsubsection*{Example 5: The Missing Key}
+\textbf{Problem:} Bob is 80\% certain the key is in the jacket ($K$). Left pocket ($L$) has 40\%, Right pocket ($R$) has 40\%. [cite_start]If the key is not in the Left pocket ($L^c$), what is the probability it is in the Right?[cite: 693].\\
+\textbf{Solution:}
+\begin{itemize}
+    [cite_start]\item \textbf{Given:} $P(L) = 0.4$, $P(R) = 0.4$, $P(K) = 0.8$[cite: 706].
+    [cite_start]\item \textbf{Goal:} Find $P(R|L^c)$[cite: 709].
+    \item \textbf{Derivation:}
+    \begin{equation}
+        P(R|L^c) = \frac{P(R \cap L^c)}{P(L^c)}
+    \end{equation}
+    [cite_start]Since $R$ implies $L^c$ (key cannot be in both pockets), $P(R \cap L^c) = P(R)$[cite: 722].
+    \begin{equation}
+        [cite_start]P(R|L^c) = \frac{P(R)}{1 - P(L)} = \frac{0.4}{1 - 0.4} = \frac{0.4}{0.6} = \frac{2}{3} \quad \text{[cite: 721]}
+    \end{equation}
+\end{itemize}
+
+\end{document}
