@@ -1,0 +1,109 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{bm}
+
+% Custom section styling
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries}{}{0em}{}
+
+\title{Lecture 8: Gaussian RVs, Moments, and Engineering Modeling}
+\author{Engineering Applications of Probability}
+\date{2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Topic: Moments of a Random Variable}
+
+\subsection{Definitions}
+The $n$-th order \textbf{central moment} of a random variable $X$ measures the deviation from its mean $\mu_X$.
+
+For \textbf{Continuous} RVs:
+\[ E[(X-\mu_X)^n] = \int_{-\infty}^{\infty} (x-\mu_X)^n f_X(x) \, dx \]
+
+For \textbf{Discrete} RVs:
+\[ E[(X-\mu_X)^n] = \sum_{k} (x_k-\mu_X)^n p_X(x_k) \]
+
+\subsection{Key Moments and Interpretations}
+\begin{itemize}
+    \item \textbf{Zeroth Moment ($n=0$):} $E[(X-\mu_X)^0] = E[1] = 1$.
+    \item \textbf{First Moment ($n=1$):} $E[X-\mu_X] = E[X] - \mu_X = 0$.
+    \item \textbf{Second Moment ($n=2$):} \textbf{Variance} ($\sigma_X^2$).
+    \[ \sigma_X^2 = E[(X-\mu_X)^2] = E[X^2] - \mu_X^2 \]
+    \item \textbf{Third Moment ($n=3$):} \textbf{Skewness}. Measures the symmetry of the PDF.
+    \[ C_s = \frac{E[(X-\mu_X)^3]}{\sigma_X^3} \]
+    \begin{itemize}
+        \item $C_s > 0$: Right Skewed (tail to the right).
+        \item $C_s < 0$: Left Skewed (tail to the left).
+    \end{itemize}
+    \item \textbf{Fourth Moment ($n=4$):} \textbf{Kurtosis}. Measures the "peakedness" or tail weight.
+    \[ C_k = \frac{E[(X-\mu_X)^4]}{\sigma_X^4} \]
+\end{itemize}
+
+---
+
+\section{Topic: Gaussian Random Variable}
+
+\subsection{Definition}
+A Gaussian (Normal) random variable $X \sim \mathcal{N}(\mu, \sigma^2)$ has the PDF:
+\[ f_X(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \]
+
+
+
+\subsection{Standard Forms and Special Functions}
+To calculate probabilities, we map $X$ to the \textbf{Standard Normal} $Z \sim \mathcal{N}(0, 1)$ using $Z = \frac{X-\mu}{\sigma}$.
+
+\begin{itemize}
+    \item \textbf{$\Phi$-Function (CDF):} Area under the left tail.
+    \[ \Phi(x) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{x} \exp\left(-\frac{t^2}{2}\right) dt \]
+    \item \textbf{Q-Function (Tail Function):} Area under the right tail.
+    \[ Q(x) = \frac{1}{\sqrt{2\pi}} \int_{x}^{\infty} \exp\left(-\frac{t^2}{2}\right) dt \]
+    \item \textbf{Relationships:} $Q(x) = 1 - \Phi(x)$ and $\Phi(-x) = 1 - \Phi(x)$.
+\end{itemize}
+
+
+
+---
+
+\section{Topic: Gaussian Probability Example}
+
+\textbf{Problem:} Given $f_X(x) = \frac{1}{\sqrt{8\pi}} \exp\left(-\frac{(x+3)^2}{8}\right)$, find $Pr(X > 4)$.
+
+\textbf{Solution:}
+\begin{enumerate}
+    \item \textbf{Identify Parameters:} Comparing to standard form, $\mu = -3$ and $2\sigma^2 = 8 \implies \sigma = 2$.
+    \item \textbf{Standardize:} 
+    \[ Pr(X > 4) = Q\left(\frac{4 - (-3)}{2}\right) = Q\left(\frac{7}{2}\right) = Q(3.5) \]
+\end{enumerate}
+
+---
+
+\section{Topic: Engineering Modeling and Applications}
+
+\subsection{Gaussian Modeling}
+In engineering, measurements are often modeled as:
+\[ X = \text{True Value} + \text{Gaussian Noise} \]
+\[ X = \mu + \sigma Z, \quad Z \sim \mathcal{N}(0,1) \]
+
+\subsection{Specific Applications}
+\begin{itemize}
+    \item \textbf{Electronics:} Modeling thermal noise voltage in circuits.
+    \item \textbf{Networking:} Jitter (packet delay variation) analysis.
+    \item \textbf{Image Processing:} Denoising camera sensor "grain."
+\end{itemize}
+
+
+
+\subsection{Density Estimation}
+When parameters $\mu$ and $\sigma$ are unknown, we estimate them from raw data samples:
+\begin{itemize}
+    \item $\hat{\mu} = \frac{1}{n} \sum x_i$ (Sample Mean)
+    \item $\hat{\sigma}^2 = \frac{1}{n-1} \sum (x_i - \hat{\mu})^2$ (Sample Variance)
+\end{itemize}
+
+\end{document}
