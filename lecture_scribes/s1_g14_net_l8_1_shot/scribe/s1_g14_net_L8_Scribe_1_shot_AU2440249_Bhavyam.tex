@@ -1,0 +1,168 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{geometry}
+\usepackage{parskip}
+
+% Page geometry setup
+\geometry{left=1in, right=1in, top=1in, bottom=1in}
+
+\begin{document}
+
+% Header Information
+\begin{center}
+    \textbf{\Large Lecture Title: Lecture 8: Gaussian, Uniform, Exponential, and Gamma Random Variables} \\
+    \vspace{0.2cm}
+    \textbf{Course: CSE400 - Fundamentals of Probability in Computing} \\
+    \vspace{0.2cm}
+    \textit{Purpose: Exam-oriented lecture scribe for revision}
+\end{center}
+
+\hrule
+\vspace{0.5cm}
+
+\section*{Overview}
+This lecture introduces the properties and standard forms of the Gaussian Random Variable (RV), including the Gaussian Probability Density Function (PDF) and Cumulative Distribution Function (CDF). It establishes the relationship between the CDF ($\Phi$-function) and the Gaussian Tail Function (Q-function). The lecture also covers the definition of Central Moments (Variance, Skewness, Kurtosis) and their use in describing distribution shapes. Finally, practical applications such as modeling thermal noise, sensor errors, and network packet jitter are discussed.
+
+\section*{Definitions and Notation}
+
+\noindent \textbf{Definition 2.1 (Gaussian Random Variable):} \\
+A Gaussian random variable $X$ is defined by a PDF of the general form:
+\[
+f_{X}(x)=\frac{1}{\sqrt{2\pi\sigma^{2}}}\exp\left(-\frac{(x-m)^{2}}{2\sigma^{2}}\right)
+\]
+where $m$ (or $\mu$) is the mean and $\sigma^2$ is the variance. \\
+Notation: $X \sim \mathcal{N}(m, \sigma^2)$.
+
+\vspace{0.3cm}
+
+\noindent \textbf{Definition 2.2 (Standard Normal Distribution):} \\
+A Gaussian distribution where the mean is $0$ and the variance is $1$ ($\sigma^2=1$).
+
+\vspace{0.3cm}
+
+\noindent \textbf{Definition 2.3 (Central Moments):} \\
+The $n$-th order central moment is defined as $E[(X-\mu_{X})^{n}]$.
+\begin{itemize}
+    \item Variance ($n=2$): $\sigma_{X}^{2}=E[(X-\mu_{X})^{2}] = E[X^2] - \mu_X^2$.
+    \item Skewness ($n=3$): A measure of symmetry. $C_{s}=\frac{E[(X-\mu_{X})^{3}]}{{\sigma_{X}}^{3}}$.
+    \item Kurtosis ($n=4$): A measure of the "tailedness" or peak. $c_{k}=\frac{E[(X-\mu_{X})^{4}]}{\sigma^{4}}$.
+\end{itemize}
+
+\noindent \textbf{Definition 2.4 (Error Functions):}
+\begin{itemize}
+    \item Error Function: $erf(x)=\frac{2}{\sqrt{\pi}}\int_{0}^{x}\exp(-t^{2})dt$.
+    \item Complementary Error Function: $erfc(x)=1-erf(x)=\frac{2}{\sqrt{\pi}}\int_{x}^{\infty}\exp(-t^{2})dt$.
+\end{itemize}
+
+\noindent \textbf{Definition 2.5 (Standard Gaussian Functions):}
+\begin{itemize}
+    \item $\Phi$-function (CDF of Standard Normal): $\Phi(x)=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{x}\exp(-\frac{t^{2}}{2})dt$.
+    \item Q-function (Gaussian Tail Function): $Q(x)=\frac{1}{\sqrt{2\pi}}\int_{x}^{\infty}\exp(-\frac{t^{2}}{2})dt$.
+\end{itemize}
+
+\section*{Assumptions and Conditions}
+\textbf{Assumption A:} \\
+In the context of Gaussian density estimation from raw data, it is assumed that sample statistics (mean and variance) derived from noisy observations can be used to estimate the underlying probability distribution.
+
+\vspace{0.2cm}
+
+\noindent \textbf{Assumption B:} \\
+For generative modeling of noise, the relationship is assumed to be $X=\sigma Z+\mu$, where $Z$ represents standard randomness.
+
+\section*{Main Result / Theorem}
+
+\noindent \textbf{Theorem 4.1 (Linearity of Expectation):} \\
+For any constants $a$ and $b$, $E[aX+b]=aE[x]+b$. \\
+Furthermore, for a sum of functions: $E[\sum_{k=1}^{N}g_{k}(x)]=\sum_{k=1}^{N}E[g_{k}(x)]$.
+
+\vspace{0.3cm}
+
+\noindent \textbf{Theorem 4.2 (Gaussian CDF and Tail Probabilities):} \\
+For a Gaussian RV $X \sim \mathcal{N}(m, \sigma^2)$: \\
+The CDF is given by: $F_{X}(x) = \Phi\left(\frac{x-m}{\sigma}\right)$. \\
+The tail probability is given by: $Pr(X>x) = Q\left(\frac{x-m}{\sigma}\right)$.
+
+\vspace{0.3cm}
+
+\noindent \textbf{Theorem 4.3 (Key Identities for Evaluation):} \\
+The following identities relate the Q-function and $\Phi$-function:
+\begin{align*}
+    Q(x) &= 1 - \Phi(x) \\
+    F_{X}(x) &= 1 - Q\left(\frac{x-m}{\sigma}\right) \\
+    \Phi(-x) &= 1 - \Phi(x)
+\end{align*}
+
+\section*{Proof/ Derivation}
+\textbf{Proof Sketch (Evaluation of Gaussian CDF):}
+
+\textbf{Step 1:} Start with the definition of the CDF for a Gaussian random variable.
+\[
+F_{X}(x)=\int_{-\infty}^{x}\frac{1}{\sqrt{2\pi\sigma^{2}}}\exp\left(-\frac{(y-m)^{2}}{2\sigma^{2}}\right)dy
+\]
+
+\textbf{Step 2:} Apply a change of variables. Let $t = \frac{y-m}{\sigma}$. Consequently, $dy = \sigma dt$. The upper limit of integration changes from $x$ to $\frac{x-m}{\sigma}$. \\
+The integral becomes:
+\[
+=\int_{-\infty}^{\frac{x-m}{\sigma}}\frac{1}{\sqrt{2\pi}}\exp\left(-\frac{t^{2}}{2}\right)dt
+\]
+
+\textbf{Step 3:} Identify the resulting integral as the definition of the standard normal CDF ($\Phi$-function).
+\[
+=\Phi\left(\frac{x-m}{\sigma}\right)
+\]
+
+\textbf{Step 4:} For tail probabilities, use the symmetry property and the definition of the Q-function.
+\[
+Pr(X>x)=\int_{\frac{x-m}{\sigma}}^{\infty}\frac{1}{\sqrt{2\pi}}\exp\left(-\frac{t^{2}}{2}\right)dt = Q\left(\frac{x-m}{\sigma}\right)
+\]
+
+\section*{Worked Example}
+\textbf{Example 6.1 (Calculating Gaussian Probabilities):} \\
+A random variable $X$ has a PDF given by $f_{X}(x)=\frac{1}{\sqrt{8\pi}}\exp\left(-\frac{(x+3)^{2}}{8}\right)$. Find the probabilities using Q-functions.
+
+\textbf{Step 1:} Identify parameters by comparing to the standard Gaussian form.
+\[
+m = -3 \text{ and } 2\sigma^2 = 8 \Rightarrow \sigma^2 = 4 \Rightarrow \sigma = 2.
+\]
+
+\textbf{Step 2:} Evaluate $Pr(X \le 0)$.
+\[
+Pr(X\le0) = F_{X}(0) = \Phi\left(\frac{0-m}{\sigma}\right) = \Phi\left(\frac{0-(-3)}{2}\right) = \Phi(1.5)
+\]
+Using the identity $Q(x)=1-\Phi(x)$:
+\[
+= 1 - Q(1.5)
+\]
+
+\textbf{Step 3:} Evaluate $Pr(X > 4)$.
+\[
+Pr(X>4) = Q\left(\frac{4-m}{\sigma}\right) = Q\left(\frac{4-(-3)}{2}\right) = Q(3.5)
+\]
+
+\textbf{Step 4:} Evaluate $Pr(|X+3| < 2)$. \\
+This inequality represents $-2 < X+3 < 2$, which implies $-5 < X < -1$.
+\[
+Pr(-5 < X < -1) = F_X(-1) - F_X(-5) = \Phi\left(\frac{-1+3}{2}\right) - \Phi\left(\frac{-5+3}{2}\right)
+\]
+\[
+= \Phi(1) - \Phi(-1)
+\]
+Using $\Phi(-x) = 1 - \Phi(x)$, this simplifies to:
+\[
+2\Phi(1) - 1 = 1 - 2Q(1)
+\]
+
+\textbf{Step 5:} Evaluate $Pr(|X-2| > 1)$. \\
+This inequality implies $X < 1$ or $X > 3$.
+\[
+Pr = F_X(1) + Pr(X > 3) = \Phi\left(\frac{1+3}{2}\right) + Q\left(\frac{3+3}{2}\right)
+\]
+\[
+= \Phi(2) + Q(3) = (1 - Q(2)) + Q(3)
+\]
+
+\section*{Summary}
+This lecture established the definitions of Central Moments, specifically variance, skewness, and kurtosis, as measures of distribution shape. The Gaussian Random Variable was defined, and its probabilities were formulated using the standard $\Phi$-function and Q-function. The relationship $Q(x) = 1 - \Phi(x)$ is central to evaluating these probabilities. Finally, the lecture demonstrated how to normalize a general Gaussian variable to standard form to calculate CDF and tail probabilities.
+
+\end{document}

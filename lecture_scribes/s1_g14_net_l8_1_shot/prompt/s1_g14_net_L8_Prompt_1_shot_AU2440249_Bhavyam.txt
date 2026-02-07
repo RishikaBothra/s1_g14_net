@@ -1,0 +1,9 @@
+Task: Generate a lecture scribe intended as exam-oriented reference material. The scribe must be faithful to the provided context and suitable for closed-notes exam revision.
+
+Context rules: Use only the attached context (lecture slides and relevant textbook excerpts). Do not introduce any material, intuition, examples, or explanations that are not present in the provided context.
+
+Single-response rule: Generate the complete lecture scribe in one response only. Do not ask questions, clarifications, confirmations, or request additional input. Do not provide options or commentary.
+
+Structural constraint: The lecture scribe must strictly follow the structure shown in the attached “Example Lecture Scribe (Structure Only)” PDF. No reordering, additions, or deletions of sections are permitted.
+
+The scribe must prioritize correctness over style; follow the lecture’s structure and scope; include definitions, notation, assumptions, and stated results; include proofs, derivations, and worked examples only if they appear in the provided context; and maintain a formal, academic tone.
