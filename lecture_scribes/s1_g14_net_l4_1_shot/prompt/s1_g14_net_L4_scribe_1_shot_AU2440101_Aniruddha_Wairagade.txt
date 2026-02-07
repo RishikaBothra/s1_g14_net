@@ -1,0 +1,38 @@
+Example Lecture Scribe (structure only):
+Lecture 0: Introduction to Logic
+1. Definitions
+Proposition: A declarative statement that is either true or false, but not both.
+Notation: Denoted by lowercase letters $p, q, r$.
+Compound Proposition: A proposition formed from existing propositions using logical operators.
+2. Logical Operators
+Negation ($\neg p$): The statement "it is not the case that p".
+Truth Table: If $p$ is True, $\neg p$ is False.
+3. Theorems and Proofs
+Theorem 1 (De Morgan's Law): $\neg(p \land q) \equiv \neg p \lor \neg q$
+Proof:
+Construct a truth table for both sides.
+Observe that for all truth value assignments of $p$ and $q$, the column for $\neg(p \land q)$ is identical to $\neg p \lor \neg q$.
+Thus, the statements are logically equivalent.
+4. Worked Example
+Problem: Show that $p \lor \neg p$ is a tautology.
+Solution:
+Step 1: Assign logical values.
+Step 2: If $p=T$, then $\neg p=F$, so $T \lor F = T$.
+Step 3: If $p=F$, then $\neg p=T$, so $F \lor T = T$.
+Conclusion: In all cases, the result is True.
+Instructions:
+Using the same structure as the example above, generate a lecture scribe for the provided context (lecture slides/textbook).
+Requirements:
+
+Purpose: The scribe must serve as exam reference material.
+
+
+Content: Include definitions, notation, assumptions, theorem statements, proofs, derivations, and worked examples exactly as presented in the lecture materials.
+
+
+Faithfulness: Do not introduce new examples, creative explanations, or intuition not discussed in the context. Everything must be traceable to the provided files.
+
+
+Format: Use clear Markdown headers, bullet points for definitions, and LaTeX formatting for all mathematical notation.
+
+Directly give me the latex code for this 
