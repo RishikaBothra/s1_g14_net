@@ -1,0 +1,126 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumitem}
+\usepackage{titlesec}
+
+% Custom section styling
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries}{}{0em}{}
+
+\title{Engineering Applications and Probability Theory Fundamentals}
+\author{Study Summary}
+\date{2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Topic: Engineering Applications}
+
+\subsection{Speech Recognition System}
+\begin{itemize}
+    \item \textbf{Mechanism:} Uses vocabulary sets (e.g., Hello, Yes, No, Bye) and templates to match signals.
+    \item \textbf{Processing:} Input signal $x(t)$ is processed into word representations $x(w)$.
+    \item \textbf{Variations:} Templates must account for different speakers (male, female, child) and noise/interference.
+\end{itemize}
+
+\subsection{Radar System}
+Operates on \textbf{Hypothesis Testing}:
+\begin{itemize}
+    \item $H_0$: No target present ($Y_i = W_i'$).
+    \item $H_1$: Target present ($Y_i = S_i + W_i$).
+    \item \textbf{Outcomes:} Classified as False Alarm or Miss Detect ($P_M$).
+    \item \textbf{Key Relationship:} $P_D + P_M = 1$ (where $P_D$ is Probability of Detection).
+\end{itemize}
+
+\subsection{Communication Network}
+\begin{itemize}
+    \item \textbf{Standards:} Wi-Fi 802.11 a/b/g/n/ac/ax.
+    \item \textbf{Bands:} 2.4 GHz, 5 GHz, 6 GHz.
+    \item \textbf{QoS Metrics:} Delay and Latency.
+\end{itemize}
+
+---
+
+\section{Topic: Introduction to Probability Theory}
+
+\begin{description}
+    \item[Experiment ($E$):] A procedure that produces a result. Example: $E_5$ (tossing a coin five times).
+    \item[Outcome ($\xi$):] A possible result. Example: $\xi_1 = HHTHT$.
+    \item[Event:] A set of outcomes. Example: $C = \{ \text{outcomes with even number of heads} \}$.
+    \item[Sample Space ($S$):] The set of all distinct outcomes. Must be:
+    \begin{enumerate}
+        \item \textbf{Mutually Exclusive:} Only one outcome can occur at a time.
+        \item \textbf{Collectively Exhaustive:} No other outcomes are possible.
+    \end{enumerate}
+\end{description}
+
+$S$ can be \textbf{Discrete}, \textbf{Countably Infinite}, or \textbf{Continuous} (e.g., random number in $[0, 1)$).
+
+---
+
+\section{Topic: Axioms of Probability}
+
+\textbf{Definition:} Probability is a measure of the likelihood of events, mapping an event to a numerical value.
+
+\subsection{The Three Axioms}
+\begin{enumerate}
+    \item \textbf{Axiom 1:} For any event $A$, $0 \le Pr(A) \le 1$.
+    \item \textbf{Axiom 2:} $Pr(S) = 1$.
+    \item \textbf{Axiom 3:} If $A \cap B = \emptyset$ (mutually exclusive), then $Pr(A \cup B) = Pr(A) + Pr(B)$.
+\end{enumerate}
+
+For an infinite sequence of mutually exclusive events $A_i$:
+\[ Pr\left(\bigcup_{i=1}^{\infty} A_i\right) = \sum_{i=1}^{\infty} Pr(A_i) \]
+
+---
+
+\section{Topic: Corollaries and Propositions}
+
+\begin{itemize}
+    \item \textbf{Corollary 2.1:} For $M$ finite mutually exclusive sets: $Pr\left(\bigcup_{i=1}^{M} A_i\right) = \sum_{i=1}^{M} Pr(A_i)$.
+    \item \textbf{Proposition 2.1:} $Pr(A^c) = 1 - Pr(A)$.
+    \item \textbf{Proposition 2.2:} If $A \subset B$, then $Pr(A) \le Pr(B)$.
+    \item \textbf{Proposition 2.3:} $Pr(A \cup B) = Pr(A) + Pr(B) - Pr(A \cap B)$.
+    \item \textbf{Proposition 2.4 (Inclusion-Exclusion):} 
+    \[ Pr\left(\bigcup_{i=1}^{M} A_i\right) = \sum Pr(A_i) - \sum Pr(A_{i_1} A_{i_2}) + \dots + (-1)^{M+1} Pr(A_1 \dots A_M) \]
+\end{itemize}
+
+---
+
+\section{Topic: Joint and Conditional Probability}
+
+\subsection{Joint Probability}
+Probability of the intersection of events: $Pr(A, B)$ or $Pr(A \cap B)$.
+\begin{itemize}
+    \item \textbf{Classical:} Identify common atomic outcomes.
+    \item \textbf{Relative Frequency:} $\lim_{n \to \infty} \frac{n_{A,B}}{n}$.
+\end{itemize}
+
+\subsection{Conditional Probability}
+Probability of $A$ given $B$ has occurred:
+\[ Pr(A|B) = \frac{Pr(A, B)}{Pr(B)}, \quad Pr(B) > 0 \]
+
+\textbf{Product Rule:} $Pr(A, B) = Pr(A|B)Pr(B) = Pr(B|A)Pr(A)$.
+
+\textbf{Chain Rule (M events):}
+\[ Pr(A_1, \dots, A_M) = Pr(A_M | A_1 \dots A_{M-1}) \dots Pr(A_2 | A_1) Pr(A_1) \]
+
+---
+
+\section{Example: The Missing Key}
+\textbf{Scenario:} 
+$K$: Key in jacket ($Pr(K) = 0.8$).
+$L$: Key in Left pocket ($Pr(L) = 0.4$).
+$R$: Key in Right pocket ($Pr(R) = 0.4$).
+
+\textbf{Problem:} Find $Pr(R | L^c)$ (Probability key is in right pocket given it wasn't in the left).
+
+\textbf{Solution:}
+\[ Pr(R | L^c) = \frac{Pr(R \cap L^c)}{Pr(L^c)} \]
+Since the key cannot be in both pockets simultaneously ($R \subset L^c$), $Pr(R \cap L^c) = Pr(R)$.
+\[ Pr(R | L^c) = \frac{Pr(R)}{1 - Pr(L)} = \frac{0.4}{1 - 0.4} = \frac{0.4}{0.6} = \frac{2}{3} \]
+
+\end{document}
