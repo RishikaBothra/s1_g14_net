@@ -1,0 +1,89 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\title{Lecture L11\_12: Transformation of Random Variables}
+\author{Dhaval Patel, PhD \\ CSE400: Fundamentals of Probability in Computing}
+\date{February 10, 2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Outline}
+\begin{itemize}
+    [cite_start]\item \textbf{Transformation of Random Variables}: Learning techniques for $y=g(x)$[cite: 30, 33].
+    [cite_start]\item \textbf{Function of Two Random Variables}: Joint transformations and derived distributions $f_{Y}(y)$[cite: 34, 37].
+    [cite_start]\item \textbf{Illustrative Example}: Detailed derivation for the case $Z = X + Y$[cite: 39, 40].
+\end{itemize}
+
+\section{Transformation of a Single Random Variable}
+[cite_start]Given a random variable $X$ with a known PDF $f_X(x)$ and CDF $F_X(x)$, we seek to find the PDF $f_Y(y)$ of a new random variable $Y = g(x)$[cite: 1, 21, 23, 24].
+
+\subsection{Derivation Steps}
+\begin{itemize}
+    [cite_start]\item \textbf{Step 1: Find the CDF of $Y$} [cite: 51]
+    \begin{equation}
+        [cite_start]F_Y(y) = P(Y \le y) = P(g(X) \le y) = P(X \le g^{-1}(y)) = F_X(g^{-1}(y)) \text{ [cite: 60, 61]}
+    \end{equation}
+    [cite_start]\item \textbf{Step 2: Differentiate with respect to $y$ to find the PDF} [cite: 50, 52]
+    \begin{equation}
+        [cite_start]f_Y(y) = \frac{d}{dy}[F_X(g^{-1}(y))] = f_X(g^{-1}(y)) \cdot \frac{d}{dy}g^{-1}(y) \text{ [cite: 52, 54]}
+    \end{equation}
+\end{itemize}
+
+\subsection{General Formula}
+If $g(x)$ is a monotonic function, the PDF of $Y$ is expressed as:
+\begin{equation}
+    f_Y(y) = \frac{f_X(x)}{\left| [cite_start]\frac{dy}{dx} \right|} \bigg|_{x=g^{-1}(y)} \text{ [cite: 75, 90]}
+\end{equation}
+
+\section{Worked Example: Uniform to Sine Transformation}
+\textbf{Problem:} Let $X$ be a uniformly distributed RV on $(-1, 1)$. [cite_start]Find the PDF of $Y = \sin\left(\frac{\pi x}{2}\right)$[cite: 80].
+
+\textbf{Solution:}
+\begin{enumerate}
+    \item \textbf{Given PDF of $X$}:
+    \begin{equation}
+        [cite_start]f_x(x) = \begin{cases} \frac{1}{2} & -1 < x < 1 \\ 0 & \text{otherwise} \end{cases} \text{ [cite: 82]}
+    \end{equation}
+    [cite_start]\item \textbf{Transformation}: $y = \sin\left(\frac{\pi x}{2}\right) \implies x = \frac{2}{\pi}\sin^{-1}(y)$[cite: 83, 84].
+    [cite_start]\item \textbf{Derivative}: $\frac{dx}{dy} = \frac{2}{\pi} \frac{1}{\sqrt{1-y^2}}$[cite: 85].
+    \item \textbf{Resulting PDF}:
+    \begin{equation}
+        [cite_start]f_Y(y) = \frac{1}{2} \cdot \frac{2}{\pi} \cdot \frac{1}{\sqrt{1-y^2}} = \frac{1}{\pi\sqrt{1-y^2}}, \quad -1 < y < 1 \text{ [cite: 92, 93]}
+    \end{equation}
+\end{enumerate}
+
+\section{Function of Two Random Variables: $Z = X + Y$}
+To find the PDF $f_Z(z)$ when $Z = X + Y$:
+
+\subsection{CDF Method}
+\begin{equation}
+    [cite_start]F_Z(z) = Pr(X+Y \le z) = \int_{-\infty}^{\infty} \int_{-\infty}^{z-y} f_{XY}(x,y) dx dy \text{ [cite: 121, 123]}
+\end{equation}
+
+\subsection{Leibniz Rule for Differentiation}
+To differentiate the integral $G(x) = \int_{a(x)}^{b(x)} h(x,y) dy$:
+\begin{equation}
+    [cite_start]\frac{d}{dx}[G(x)] = \frac{d}{dx}b(x) \cdot h(x, b(x)) - \frac{d}{dx}a(x) \cdot h(x, a(x)) + \int_{a(x)}^{b(x)} \frac{\partial}{\partial x} h(x,y) dy \text{ [cite: 132, 133]}
+\end{equation}
+
+\subsection{PDF of Sum (Convolution)}
+[cite_start]If $X$ and $Y$ are independent, the PDF of $Z$ is the convolution of $f_X$ and $f_Y$[cite: 99, 154]:
+\begin{equation}
+    [cite_start]f_Z(z) = \int_{-\infty}^{\infty} f_X(x) f_Y(z-x) dx \text{ [cite: 154]}
+\end{equation}
+
+\section{Applications of Joint Transformations}
+\begin{itemize}
+    [cite_start]\item \textbf{Sum of Normals}: If $X \sim N(0,1)$ and $Y \sim N(0,1)$ are independent, then $Z = X+Y \sim N(0,2)$[cite: 102, 103, 177].
+    [cite_start]\item \textbf{Sum of Exponentials}: If $X, Y$ are exponential RVs with parameter $\lambda$, find $f_Z(z)$ using the convolution integral[cite: 104, 183, 189]:
+    \begin{equation}
+        [cite_start]f_Z(z) = \int_{0}^{z} \lambda e^{-\lambda x} \cdot \lambda e^{-\lambda(z-x)} dx \text{ [cite: 191]}
+    \end{equation}
+    [cite_start]\item \textbf{Difference and Ratio}: Techniques are also provided for $Z = X - Y$ and $Z = \frac{X}{Y}$[cite: 211, 223].
+\end{itemize}
+
+\end{document}
