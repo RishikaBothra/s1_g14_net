@@ -1,0 +1,113 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+
+\title{CSE400: Fundamentals of Probability in Computing \\ \large Transformation of Random Variables and Functions of Two Random Variables}
+\author{Lecture Scribe for Revision}
+\date{}
+
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{assumption}{Assumption}[section]
+\newtheorem{example}{Example}[section]
+
+\begin{document}
+
+\maketitle
+
+\section{Overview}
+This lecture introduces the techniques for finding the probability density function (PDF) of a new random variable $Y$ derived from a known random variable $X$ via a transformation $y=g(x)$. Additionally, it covers functions of two random variables, specifically the derivation of distributions for $Z = g(X, Y)$, with a detailed focus on the sum of random variables ($Z = X + Y$).
+
+\section{Definitions and Notation}
+
+\begin{definition}[PDF and CDF of Known RV]
+Let $X$ be a random variable where the Probability Density Function (PDF), denoted as $f_X(x)$, and the Cumulative Distribution Function (CDF), denoted as $F_X(x)$, are known a priori.
+\end{definition}
+
+\begin{definition}[Transformation of a Single RV]
+A new random variable $Y$ is defined by the function $y = g(x)$. The objective is to find the PDF of $Y$, denoted as $f_Y(y)$.
+\end{definition}
+
+\begin{definition}[Function of Two RVs]
+A new random variable $Z$ is defined by $Z = g(X, Y)$. Common examples include:
+\begin{itemize}
+    \item Sum: $Z = X + Y$
+    \item Difference: $Z = X - Y$
+    \item Ratio: $Z = \frac{X}{Y}$
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Convolution]
+When $Z = X + Y$ and $X, Y$ are independent, the PDF of $Z$ is the \textbf{convolution} of the PDFs of $X$ and $Y$.
+\end{definition}
+
+\section{Assumptions and Conditions}
+\begin{itemize}
+    \item \textbf{Assumption A:} For $y = g(x)$, the function is assumed to be monotonic. This implies the existence of an inverse function $x = g^{-1}(y)$.
+    \item \textbf{Assumption B:} In specific derivations regarding the sum of random variables, $X$ and $Y$ may be assumed to be independent.
+    \item \textbf{Assumption C:} The PDFs $f_X(x)$ and $f_Y(y)$ (or joint $f_{XY}$) are known.
+\end{itemize}
+
+\section{Main Theorems}
+
+\begin{theorem}[PDF of Transformed RV $Y=g(X)$]
+For a monotonic transformation $y = g(x)$, the PDF of $Y$ is:
+\[ f_Y(y) = f_X(g^{-1}(y)) \cdot \left| \frac{d}{dy} g^{-1}(y) \right| \]
+Alternatively expressed as: $f_Y(y) = f_X(x) \left| \frac{dx}{dy} \right|_{x=g^{-1}(y)}$.
+\end{theorem}
+
+\begin{theorem}[PDF of Sum of Two RVs $Z=X+Y$]
+The PDF of $Z = X + Y$ is determined by:
+\[ f_Z(z) = \int_{-\infty}^{\infty} f_{XY}(x, z-x) \, dx \]
+If $X$ and $Y$ are independent, this simplifies to the convolution integral:
+\[ f_Z(z) = \int_{-\infty}^{\infty} f_X(x) \cdot f_Y(z-x) \, dx \]
+\end{theorem}
+
+\section{Proof Sketches}
+
+\subsection{Single Variable Transformation (Theorem 4.1)}
+\begin{enumerate}
+    \item \textbf{CDF Definition:} $F_Y(y) = P(Y \le y) = P(g(X) \le y)$.
+    \item \textbf{Inverse Mapping:} Assuming $g$ is monotonically increasing: $P(X \le g^{-1}(y)) = F_X(g^{-1}(y))$.
+    \item \textbf{Differentiation:} Using the chain rule:
+    \[ f_Y(y) = \frac{d}{dy} [F_X(g^{-1}(y))] = f_X(g^{-1}(y)) \cdot \frac{d}{dy} g^{-1}(y) \]
+    \textit{Note: Absolute value bars are added to account for decreasing functions.}
+\end{enumerate}
+
+\subsection{Sum of RVs (Theorem 4.2)}
+\begin{enumerate}
+    \item \textbf{CDF Definition:} $F_Z(z) = P(X + Y \le z)$.
+    \item \textbf{Double Integral:} Integrate over the region $y \le z - x$:
+    \[ F_Z(z) = \int_{-\infty}^{\infty} \int_{-\infty}^{z-x} f_{XY}(x, y) \, dy \, dx \]
+    \item \textbf{Leibniz Rule:} Differentiate with respect to $z$:
+    \[ f_Z(z) = \frac{d}{dz} \int_{-\infty}^{\infty} \left( \int_{-\infty}^{z-x} f_{XY}(x, y) \, dy \right) dx = \int_{-\infty}^{\infty} f_{XY}(x, z-x) \, dx \]
+\end{enumerate}
+
+\section{Worked Examples}
+
+\begin{example}[Sine Transformation]
+Let $X \sim \text{Uniform}(-1, 1)$. Find the PDF of $Y = \sin(\frac{\pi X}{2})$.
+\begin{itemize}
+    \item $f_X(x) = \frac{1}{2}$ for $-1 < x < 1$.
+    \item Inverse: $x = \frac{2}{\pi} \sin^{-1}(y)$.
+    \item Derivative: $\frac{dx}{dy} = \frac{2}{\pi} \frac{1}{\sqrt{1-y^2}}$.
+    \item Result: $f_Y(y) = \frac{1}{2} \cdot \frac{2}{\pi \sqrt{1-y^2}} = \frac{1}{\pi\sqrt{1-y^2}}$ for $-1 < y < 1$.
+\end{itemize}
+\end{example}
+
+\begin{example}[Sum of Independent Normal RVs]
+Let $X, Y \sim N(0, 1)$ be independent. Prove $Z = X + Y \sim N(0, 2)$.
+\begin{itemize}
+    \item $f_Z(z) = \frac{1}{2\pi} \int_{-\infty}^{\infty} e^{-\frac{x^2}{2}} e^{-\frac{(z-x)^2}{2}} \, dx$.
+    \item After completing the square and integrating:
+    \[ f_Z(z) = \frac{1}{\sqrt{2\pi}\sqrt{2}} e^{-\frac{z^2}{2(2)}} \]
+    \item This confirms $Z \sim N(0, 2)$.
+\end{itemize}
+\end{example}
+
+\section{Summary}
+This lecture established the core methodologies for RV transformations. Key takeaways include the use of the Jacobian (derivative of the inverse) for single variables and the application of convolution for sums of independent variables.
+
+\end{document}
