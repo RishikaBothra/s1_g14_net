@@ -2,4 +2,4 @@ Gemini Chat links for Lecture 4
 
 Scribe formation : https://gemini.google.com/share/1a266c27af8c
 		
-Latex Code Generation: https://gemini.google.com/share/4fc410fb6bdf
+Latex Code Generation: https://gemini.google.com/share/4fc410fb6bdf28e7fa1005a8

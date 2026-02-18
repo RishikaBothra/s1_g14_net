@@ -1,0 +1,303 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{CSE400 — Fundamentals of Probability in Computing \\
+Lecture L11--12: Transformation of Random Variables}
+\author{Vansh Lilani (ID: AU2320146)}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Topic Title}
+
+\textbf{Transformation of Random Variables and Functions of Two Random Variables}
+
+Topics covered:
+\begin{itemize}
+\item Transformation of random variables
+\item Function of two random variables
+\item Derived distribution example: $Z = X + Y$
+\end{itemize}
+
+\section{Definitions and Notation}
+
+Let:
+\begin{itemize}
+\item $X$ be a continuous random variable with known PDF $f_X(x)$
+\item $F_X(x)$ be the CDF of $X$
+\end{itemize}
+
+A transformation is defined as:
+\[
+Y = g(X)
+\]
+
+If invertible:
+\[
+x = g^{-1}(y)
+\]
+
+Goal:
+\[
+f_Y(y) \quad \text{and} \quad F_Y(y)
+\]
+
+For two random variables:
+\[
+Z = g(X,Y)
+\]
+
+Examples:
+\[
+Z = X + Y, \quad X - Y, \quad \frac{X}{Y}, \quad XY
+\]
+
+\section{Assumptions / Conditions}
+
+\subsection{Monotonic Transformation}
+
+The function $g(x)$ must be:
+\begin{itemize}
+\item monotonically increasing, or
+\item monotonically decreasing
+\end{itemize}
+
+\section{Main Results / Theorems}
+
+\subsection{Transformation Theorem (Single Random Variable)}
+
+\subsubsection*{Step 1: CDF Transformation}
+
+\[
+F_Y(y) = P(Y \le y)
+\]
+\[
+= P(g(X) \le y)
+\]
+
+If $g$ is increasing:
+\[
+F_Y(y) = P(X \le g^{-1}(y))
+= F_X(g^{-1}(y))
+\]
+
+If $g$ is decreasing:
+\[
+F_Y(y) = P(X \ge g^{-1}(y))
+= 1 - F_X(g^{-1}(y))
+\]
+
+\subsubsection*{Step 2: PDF Transformation}
+
+\[
+f_Y(y) = \frac{d}{dy}F_Y(y)
+\]
+
+\[
+f_Y(y) = f_X(g^{-1}(y)) \left| \frac{dx}{dy} \right|
+\]
+
+where
+\[
+x = g^{-1}(y)
+\]
+
+\section{Proofs / Derivations}
+
+\subsection{Function of Two Random Variables}
+
+Let
+\[
+Z = X + Y
+\]
+
+\[
+F_Z(z) = P(Z \le z)
+\]
+\[
+= P(X + Y \le z)
+\]
+
+\subsubsection*{Integral Representation}
+
+\[
+F_Z(z) =
+\int_{-\infty}^{\infty}
+\int_{-\infty}^{z-y}
+f_{XY}(x,y)\,dx\,dy
+\]
+
+\subsection{Leibniz Rule}
+
+If
+\[
+G(x)=\int_{a(x)}^{b(x)} h(x,y)\,dy
+\]
+
+then
+
+\[
+\frac{d}{dx}G(x)
+=
+\frac{db(x)}{dx}h(x,b(x))
+-
+\frac{da(x)}{dx}h(x,a(x))
++
+\int_{a(x)}^{b(x)}
+\frac{\partial}{\partial x}h(x,y)\,dy
+\]
+
+\subsection{Differentiating the CDF}
+
+\[
+f_Z(z)=\frac{d}{dz}F_Z(z)
+\]
+
+\[
+f_Z(z)=\int_{-\infty}^{\infty}
+f_{XY}(z-y,y)\,dy
+\]
+
+Equivalent form:
+\[
+f_Z(z)=\int_{-\infty}^{\infty}
+f_{XY}(x,z-x)\,dx
+\]
+
+\subsection{Independent Case (Convolution)}
+
+If $X$ and $Y$ are independent:
+\[
+f_{XY}(x,y)=f_X(x)f_Y(y)
+\]
+
+\[
+f_Z(z)=\int_{-\infty}^{\infty}
+f_X(x)f_Y(z-x)\,dx
+\]
+
+This is called the \textbf{convolution integral}.
+
+\section{Worked Examples}
+
+\subsection{Example 1 — Transformation of RV}
+
+Given:
+\[
+X \sim \text{Uniform}(-1,1)
+\]
+
+\[
+f_X(x)=
+\begin{cases}
+\frac12, & -1<x<1 \\
+0, & \text{otherwise}
+\end{cases}
+\]
+
+Find PDF of:
+\[
+Y=\sin\left(\frac{\pi X}{2}\right)
+\]
+
+\subsubsection*{Solution}
+
+\[
+x=\frac{2}{\pi}\sin^{-1}(y)
+\]
+
+\[
+\frac{dx}{dy}=\frac{2}{\pi}\frac{1}{\sqrt{1-y^2}}
+\]
+
+\[
+f_Y(y)=f_X(x)\left|\frac{dx}{dy}\right|
+\]
+
+\[
+f_Y(y)=\frac12\cdot\frac{2}{\pi}\frac{1}{\sqrt{1-y^2}}
+\]
+
+\[
+f_Y(y)=\frac{1}{\pi\sqrt{1-y^2}}, \quad -1<y<1
+\]
+
+\subsection{Example 2 — Sum of Independent Normals}
+
+\[
+X \sim N(0,1), \quad Y \sim N(0,1)
+\]
+
+\[
+f_Z(z)=\int_{-\infty}^{\infty}
+\frac{1}{\sqrt{2\pi}}e^{-x^2/2}
+\cdot
+\frac{1}{\sqrt{2\pi}}e^{-(z-x)^2/2}
+dx
+\]
+
+Result:
+\[
+Z \sim N(0,2)
+\]
+
+\subsection{Example 3 — Exponential RVs}
+
+\[
+X,Y \sim \text{Exponential}(\lambda)
+\]
+
+\[
+f_X(x)=\lambda e^{-\lambda x}, \quad x>0
+\]
+\[
+f_Y(y)=\lambda e^{-\lambda y}, \quad y>0
+\]
+
+\[
+f_Z(z)=\int_0^z
+\lambda e^{-\lambda x}
+\lambda e^{-\lambda(z-x)}\,dx
+\]
+
+\[
+=\lambda^2 e^{-\lambda z}\int_0^z dx
+\]
+
+\[
+f_Z(z)=\lambda^2 z e^{-\lambda z}, \quad z>0
+\]
+
+\subsection{Example 4 — Difference of RVs}
+
+\[
+Z=X-Y
+\]
+
+\[
+F_Z(z)=P(X-Y\le z)
+\]
+
+\[
+=\int_{-\infty}^{\infty}
+\int_{-\infty}^{z+y}
+f_{XY}(x,y)\,dx\,dy
+\]
+
+\[
+f_Z(z)=\frac{d}{dz}F_Z(z)
+\]
+
+\section{Additional Transformations Mentioned}
+
+\[
+Z=\frac{X}{Y}, \quad
+R=\sqrt{X^2+Y^2}
+\]
+
+\end{document}
