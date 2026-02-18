@@ -1,0 +1,58 @@
+Purpose is to generate exam-oriented lecture notes (lecture scribe) strictly from the provided lecture PPT and my notes. The scribe must serve as a precise reference for exams.
+
+Scope is to use only the content explicitly present in the provided material. Do not add external explanations, background knowledge, interpretations or examples. If a definition, assumption, example, derivation, or proof is not present in the material, do not include it.
+
+Structural constraint :
+
+Follow the exact structure and order of the lecture PPT. Preserve topic sequence and hierarchy.
+
+Example Lecture Scribe (structure only)
+Topic: 
+Sample Topic Title
+
+Definition:
+A formal definition as stated in the lecture.
+
+Assumptions:
+List of assumptions used.
+
+Key Results:
+• Statement of a theorem or result.
+
+Proof:
+Step 1: First step as presented.
+Step 2: Second step as presented.
+
+Conclusion
+
+Example:
+A short worked example exactly as shown in the lecture.
+
+
+Instruction
+
+Using the same structure as the example above, generate the lecture scribe for the provided lecture PPT and notes. The scribe must:
+• Be structured exactly like the example
+• Include definitions, assumptions, results, proofs, derivations, and worked examples only if they appear in the provided material
+• Use simple, clear language while preserving correctness
+• Remain fully aligned with the lecture content and ordering
+
+What a lecture scribe is?
+A lecture scribe is a faithful, exam-ready reconstruction of what was taught in
+class, written so that a student can later rely on it as reference material while studying.
+A correct lecture scribe should allow a student to:
+• Recall definitions and notation
+• Reconstruct proofs and derivations
+• Follow example solutions step by step
+• Understand logical dependencies between concepts
+A lecture scribe should answer the question:
+“If I study only this document, can I reliably revise what was taught?”
+
+What it's not.
+A lecture scribe is not:
+• A creative explanation
+• A simplified tutorial
+• A textbook rewrite
+• A solution manual for unseen problems
+• A place to add intuition not discussed in class
+Everything included must be traceable to the provided context

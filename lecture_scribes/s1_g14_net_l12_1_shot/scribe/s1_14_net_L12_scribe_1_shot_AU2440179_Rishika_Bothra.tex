@@ -1,0 +1,187 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Transformation of Random Variables}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Definition}
+
+The objective is to find the Probability Density Function (PDF) or Cumulative 
+Distribution Function (CDF) of a new random variable (RV), denoted as $Y$, 
+which is a function of an existing random variable $X$ (i.e., $y = g(x)$). 
+The PDF $f_X(x)$ and CDF $F_X(x)$ of $X$ are known a priori.
+
+% ============================================================
+\section{Transformation of Random Variables ($y = g(x)$)}
+% ============================================================
+
+\subsection*{Assumptions}
+\begin{itemize}
+    \item $y = g(x)$ is a transformation function.
+    \item The inverse function $x = g^{-1}(y)$ exists.
+\end{itemize}
+
+\subsection*{Key Results}
+\begin{itemize}
+    \item \textbf{Step 1 (CDF Method):} Find the CDF of $Y$: 
+          $F_Y(y) = P(Y \leq y)$.
+    \item \textbf{Step 2 (PDF Derivation):} Differentiate the CDF with respect 
+          to $y$ to find $f_Y(y)$.
+\end{itemize}
+
+\subsection*{Derivation}
+
+\textbf{Step 1:}
+\begin{align}
+    F_Y(y) &= \Pr(Y \leq y) \notag \\
+           &= \Pr\bigl(g(X) \leq y\bigr) \notag \\
+           &= \Pr\bigl(X \leq g^{-1}(y)\bigr) \notag \\
+           &= F_X\!\bigl(g^{-1}(y)\bigr).
+\end{align}
+
+\textbf{Step 2:}
+\begin{align}
+    f_Y(y) &= \frac{d}{dy}\Bigl[F_X\!\bigl(g^{-1}(y)\bigr)\Bigr]
+             = f_X\!\bigl(g^{-1}(y)\bigr)\cdot\frac{d}{dy}g^{-1}(y).
+\end{align}
+
+\textbf{General Formula:}
+\begin{equation}
+    \boxed{f_Y(y) = \frac{f_X(x)}{\left|\dfrac{dy}{dx}\right|}
+    \Bigg|_{x \,=\, g^{-1}(y)}}
+\end{equation}
+
+\subsection*{Example}
+
+\textbf{Problem:} $X$ is a uniformly distributed RV on $(-1,\,1)$. 
+Find the PDF of $Y = \sin\!\left(\dfrac{\pi X}{2}\right)$.
+
+\textbf{Solution:}
+\begin{enumerate}
+    \item \textbf{Given PDF of $X$:}
+    \[
+        f_X(x) = \begin{cases} \dfrac{1}{2}, & -1 < x < 1, \\ 0, & \text{otherwise.} \end{cases}
+    \]
+
+    \item \textbf{Transformation:}
+    \[
+        y = \sin\!\left(\frac{\pi x}{2}\right)
+        \implies
+        x = \frac{2}{\pi}\sin^{-1}(y).
+    \]
+
+    \item \textbf{Derivative:}
+    \[
+        \frac{dx}{dy} = \frac{2}{\pi}\cdot\frac{1}{\sqrt{1-y^2}}.
+    \]
+
+    \item \textbf{Final PDF:}
+    \[
+        f_Y(y) = f_X(x)\cdot\left|\frac{dx}{dy}\right|
+               = \frac{1}{2}\cdot\frac{2}{\pi}\cdot\frac{1}{\sqrt{1-y^2}}
+               = \frac{1}{\pi\sqrt{1-y^2}},
+               \quad -1 < y < 1.
+    \]
+\end{enumerate}
+
+% ============================================================
+\section{Function of Two Random Variables}
+% ============================================================
+
+\subsection*{Topic: Sum of Two Random Variables ($Z = X + Y$)}
+
+\subsection*{Assumptions}
+\begin{itemize}
+    \item $X$ and $Y$ are independent random variables.
+\end{itemize}
+
+\subsection*{Key Result: Convolution Integral}
+\begin{equation}
+    f_Z(z) = \int_{-\infty}^{\infty} f_X(x)\cdot f_Y(z - x)\, dx.
+\end{equation}
+
+\subsection*{Derivation}
+\begin{enumerate}
+    \item \textbf{CDF Setup:}
+    \[
+        F_Z(z) = \Pr(Z \leq z) = \Pr(X + Y \leq z).
+    \]
+
+    \item \textbf{Double Integral:}
+    \[
+        F_Z(z) = \int_{-\infty}^{\infty}\int_{-\infty}^{z - y}
+                 f_{XY}(x,\,y)\,dx\,dy.
+    \]
+
+    \item \textbf{Leibniz Rule Application:}\\
+    To find $f_Z(z) = \dfrac{d}{dz}F_Z(z)$, apply the Leibniz rule:
+    \[
+        \frac{d}{dx}\int_{a(x)}^{b(x)} h(x,y)\,dy
+        = h\bigl(x,b(x)\bigr)\frac{db}{dx}
+          - h\bigl(x,a(x)\bigr)\frac{da}{dx}
+          + \int_{a(x)}^{b(x)}\frac{\partial}{\partial x}h(x,y)\,dy.
+    \]
+
+    \item \textbf{Result:}
+    \[
+        f_Z(z) = \int_{-\infty}^{\infty} f_{XY}(z - y,\,y)\,dy.
+    \]
+    For independent $X$ and $Y$, this simplifies to the convolution of 
+    $f_X$ and $f_Y$.
+\end{enumerate}
+
+\subsection*{Illustrative Examples}
+
+\subsubsection*{Example 1: Normal Distribution}
+\begin{itemize}
+    \item \textbf{Given:} $X \sim \mathcal{N}(0,1)$ and $Y \sim \mathcal{N}(0,1)$, 
+          independent.
+    \item \textbf{Goal:} Prove $Z = X + Y \sim \mathcal{N}(0,2)$.
+    \item \textbf{Setup:}
+    \[
+        f_Z(z) = \frac{1}{2\pi}\int_{-\infty}^{\infty}
+                 e^{-x^2/2}\cdot e^{-(z-x)^2/2}\,dx.
+    \]
+    \item \textbf{Conclusion:} After integration, $Z \sim \mathcal{N}(0,\sigma^2)$ 
+          where $\sigma^2 = 2$.
+\end{itemize}
+
+\subsubsection*{Example 2: Exponential Distribution}
+\begin{itemize}
+    \item \textbf{Given:} $X$ and $Y$ are exponential RVs with parameter $\lambda$.
+    \item \textbf{Setup:}
+    \[
+        f_Z(z) = \int_{-\infty}^{\infty}
+                 \lambda e^{-\lambda x}\,u(x)\cdot
+                 \lambda e^{-\lambda(z-x)}\,u(z-x)\,dx.
+    \]
+\end{itemize}
+
+% ============================================================
+\section{Other Transformations}
+% ============================================================
+
+\begin{itemize}
+    \item \textbf{Difference:} $Z = X - Y$.
+    \[
+        F_Z(z) = \Pr(X - Y \leq z)
+               = \int_{-\infty}^{\infty}\int_{-\infty}^{z+y}
+                 f_{XY}(x,\,y)\,dx\,dy.
+    \]
+
+    \item \textbf{Ratio:} $Z = \dfrac{X}{Y}$.
+    \[
+        F_Z(z) = \Pr\!\left(\frac{X}{Y} \leq z\right).
+    \]
+
+    \item \textbf{Magnitude:} $R = \sqrt{X^2 + Y^2}$.
+\end{itemize}
+
+\end{document}
