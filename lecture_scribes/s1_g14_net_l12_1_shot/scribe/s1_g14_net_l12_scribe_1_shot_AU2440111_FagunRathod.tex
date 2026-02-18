@@ -1,0 +1,128 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+
+\begin{document}
+
+\title{CSE 400: Fundamentals of Probability in Computing}
+\author{\textbf{Scribe:} Fagun Rathod - AU2440111 \\ 
+        \textbf{Lecture:} L11\_12: Transformation of Random Variables}
+\date{February 10, 2026}
+\maketitle
+
+\hr
+
+\section{Transformation of a Single Random Variable}
+
+\subsection{Definitions and Notation}
+\begin{itemize}
+    \item \textbf{Initial RV}: $X$ with a known PDF $f_X(x)$ and CDF $F_X(x)$.
+    \item \textbf{Transformation Function}: $g(x)$.
+    \item \textbf{New RV}: $Y = g(X)$.
+    \item \textbf{Goal}: Find the PDF $f_Y(y)$ and CDF $F_Y(y)$.
+\end{itemize}
+
+\subsection{Assumptions / Conditions}
+\begin{itemize}
+    \item The function $g(x)$ is typically assumed to be monotonic (e.g., $\log(x)$).
+    \item The inverse function $x = g^{-1}(y)$ must exist to solve for $X$ in terms of $Y$.
+\end{itemize}
+
+\subsection{Main Results / Theorems}
+The PDF of the transformed variable $Y$ is given by:
+\[ f_Y(y) = f_X(g^{-1}(y)) \left| \frac{d}{dy} g^{-1}(y) \right| \]
+
+Alternatively expressed as:
+\[ f_Y(y) = \frac{f_X(x)}{\left| \frac{dy}{dx} \right|} \bigg|_{x=g^{-1}(y)} \]
+
+\subsection{Proofs / Derivations}
+\begin{itemize}
+    \item \textbf{Step 1}: Find the CDF of $Y$: $F_Y(y) = P(Y \leq y)$.
+    \item \textbf{Step 2}: This simplifies to $P(g(X) \leq y) = P(X \leq g^{-1}(y))$.
+    \item \textbf{Step 3}: Differentiate the CDF with respect to $y$ using the chain rule:
+    \[ f_Y(y) = \frac{d}{dy} F_X(g^{-1}(y)) = f_X(g^{-1}(y)) \cdot \frac{d}{dy} g^{-1}(y) \]
+    \item \textbf{Step 4}: \textbf{Note}: If $g(x)$ is decreasing, $P(g(X) \leq y) = P(X \geq g^{-1}(y))$, leading to the absolute value in the general formula.
+\end{itemize}
+
+\subsection{Worked Examples}
+\textbf{Example 1: Uniform to Sine Transformation}
+\begin{itemize}
+    \item \textbf{Given}: $X \sim U(0, \pi/2)$, so $f_X(x) = \frac{2}{\pi}$ for $0 < x < \pi/2$.
+    \item \textbf{Transformation}: $Y = \sin(X)$.
+    \item \textbf{Step 1 (Inverse)}: $x = \arcsin(y)$.
+    \item \textbf{Step 2 (Derivative)}: $\frac{dx}{dy} = \frac{1}{\sqrt{1-y^2}}$.
+    \item \textbf{Step 3 (PDF)}: $f_Y(y) = \frac{2}{\pi \sqrt{1-y^2}}$ for $0 < y < 1$.
+\end{itemize}
+
+\hrule
+\vspace{0.5cm}
+
+\section{Function of Two Random Variables ($Z = X + Y$)}
+
+\subsection{Definitions and Notation}
+\begin{itemize}
+    \item \textbf{Input RVs}: $X$ and $Y$ with joint PDF $f_{X,Y}(x,y)$.
+    \item \textbf{Transformation}: $Z = X + Y$.
+    \item \textbf{Resulting PDF}: $f_Z(z)$.
+\end{itemize}
+
+\subsection{Main Results / Theorems}
+If $X$ and $Y$ are \textbf{independent}, the PDF of $Z$ is the \textbf{convolution} of their individual PDFs:
+\[ f_Z(z) = f_X(x) * f_Y(y) = \int_{-\infty}^{\infty} f_X(w) f_Y(z-w) \, dw \]
+
+\subsection{Proofs / Derivations}
+\begin{itemize}
+    \item \textbf{Step 1}: Write the CDF $F_Z(z) = P(X+Y \leq z)$.
+    \item \textbf{Step 2}: Express as a double integral: $\int_{-\infty}^{\infty} \int_{-\infty}^{z-x} f_{X,Y}(x,y) \, dy \, dx$.
+    \item \textbf{Step 3}: Differentiate with respect to $z$ using the \textbf{Leibnitz Rule}:
+    \[ f_Z(z) = \frac{d}{dz} \int_{-\infty}^{\infty} F_Y(z-x) f_X(x) \, dx \]
+    \item \textbf{Step 4}: Apply Leibnitz to get $f_Z(z) = \int_{-\infty}^{\infty} f_Y(z-x) f_X(x) \, dx$.
+\end{itemize}
+
+\subsection{Worked Examples}
+\textbf{Example 1: Sum of Independent Normal RVs}
+\begin{itemize}
+    \item \textbf{Given}: $X \sim N(\mu_1, \sigma_1^2)$ and $Y \sim N(\mu_2, \sigma_2^2)$ are independent.
+    \item \textbf{Result}: $Z \sim N(\mu_1 + \mu_2, \sigma_1^2 + \sigma_2^2)$.
+\end{itemize}
+
+\textbf{Example 2: Sum of Independent Exponential RVs}
+\begin{itemize}
+    \item \textbf{Given}: $f_X(x) = \lambda e^{-\lambda x}$ and $f_Y(y) = \lambda e^{-\lambda y}$ for $x,y \geq 0$.
+    \item \textbf{Result}: $f_Z(z) = \lambda^2 z e^{-\lambda z}$ for $z \geq 0$ (Erlang distribution).
+\end{itemize}
+
+\hrule
+\vspace{0.5cm}
+
+\section{Other Joint Transformations ($X-Y$ and $X/Y$)}
+
+\subsection{Definitions and Notation}
+\begin{itemize}
+    \item \textbf{Difference}: $Z = X - Y$.
+    \item \textbf{Ratio}: $Z = X/Y$.
+\end{itemize}
+
+\subsection{Proofs / Derivations}
+\textbf{For $Z = X - Y$}:
+\begin{itemize}
+    \item \textbf{Step 1}: $F_Z(z) = P(X-Y \leq z) = P(X \leq z+Y)$.
+    \item \textbf{Step 2}: $f_Z(z) = \int_{-\infty}^{\infty} f_{X,Y}(z+y, y) \, dy$.
+\end{itemize}
+
+\textbf{For $Z = X/Y$}:
+\begin{itemize}
+    \item \textbf{Step 1}: $F_Z(z) = P(X/Y \leq z)$.
+    \item \textbf{Step 2}: Rewrite as $P(X \leq zY)$ (assuming $Y > 0$).
+    \item \textbf{Result}: $f_Z(z) = \int_{-\infty}^{\infty} |y| f_{X,Y}(zy, y) \, dy$.
+\end{itemize}
+
+\subsection{Worked Examples}
+\textbf{Example 1: Magnitude of Two RVs}
+\begin{itemize}
+    \item \textbf{Find}: PDF of $Z = \sqrt{X^2 + Y^2}$ (often leading to Rayleigh distribution if $X,Y$ are i.i.d. Normal).
+\end{itemize}
+
+\end{document}
