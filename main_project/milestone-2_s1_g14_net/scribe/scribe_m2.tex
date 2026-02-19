@@ -236,4 +236,227 @@ This reasoning is strictly supported by the translation invariance property of a
 Mathematically, shifting a stationary PPP ($\Phi_B$) by a movement vector $x(t)$ result in a relative point process ($\Phi_B - x(t)$) that is fundamentally indistinguishable from the original PPP.    % [cite: 236]
 Because $\Phi_B$ is a homogeneous PPP, it is translation invariant, yielding the equivalence $\tilde{\Phi}_D(t) \equiv \text{PPP}(\lambda_0)$.    % [cite: 237]
 
+\newpage
+
+\section{Scribe Question 4: Model-Implementation Alignment}
+
+\textbf{Question:} Explain how the theoretical probabilistic model is implemented in practice (e.g., via simulation). Discuss the parameters, results, and the key mathematical assumptions that influence the system design.
+
+\subsection{1. Simulation Approach (Monte Carlo Methodology)}
+
+The theoretical probabilistic model is practical implemented through Monte Carlo simulations. The variables defined in the system model are translated into a step-by-step algorithmic execution:
+
+\begin{enumerate}
+    \item \textbf{Step 1 - Initialization (Spatial Statistics):}
+
+    To simulate the Homogeneous Poisson Point Process (PPP), the implementation first generates the total number of Drone Base Stations (DBSs) in a bounded simulation area using a Poisson random variable:
+    
+    \[
+    N \sim \text{Poisson}(\lambda_0 \times \text{Area})
+    \]
+
+    These $N$ drones are then assigned uniform $x$ and $y$ coordinates. Initial directions are assigned as:
+    
+    \[
+    \theta_i \sim U[0, 2\pi)
+    \]
+
+    and speeds $V_i$ are assigned based on the chosen PDF $f_V(v)$ (constant for SSM, random for DSM).
+
+
+
+    \item \textbf{Step 2 - Time Evolution (Kinematics):}
+
+    The mathematical distance evolution is computationally implemented by updating the position vectors of all drones linearly over time. The new position of the $i$-th drone at time $t$ is calculated as:
+
+    \[
+    x_i(t) = x_i(0) + V_i t [\cos(\theta_i), \sin(\theta_i)]
+    \]
+
+    At each time step:
+    \begin{itemize}
+        \item The Euclidean distance from the origin to all drones is calculated.
+        \item The minimum distance is identified.
+        \item The index of the serving drone is determined.
+        \item A handover is recorded if this serving index changes from its $t=0$ state.
+    \end{itemize}
+
+    \item \textbf{Step 3 - Probability Estimation:}
+
+    The mathematical expectation $\mathbb{P}[H(t)]$ is estimated empirically over thousands of independent iterations as the ratio:
+
+    \[
+    \mathbb{P}[H(t)] \approx 
+    \frac{\text{Number of trials with a handover by time } t}
+    {\text{Total number of Monte Carlo trials}}
+    \]
+\end{enumerate}
+
+\subsection{2. Parameter Alignment}
+
+The simulations use specific numerical parameters to validate the mathematical integrals (Equation 2 and Equation 5). The paper aligns the models using:
+
+\begin{itemize}
+    \item Density: $\lambda_0 = 1 \text{ DBS/km}^2$
+    \item Speed (SSM): A deterministic velocity of $v = 45 \text{ km/h}$
+    \item Speed (DSM): A random variable $V$ with a mean speed of $\mathbb{E}[V] = 45 \text{ km/h}$ to provide a fair comparison against the SSM
+    \item Time Window: Observations are recorded over an interval of $t = 0$ to $100$ seconds
+\end{itemize}
+
+\subsection{3. Results Alignment and Bound Tightness}
+
+\begin{itemize}
+    \item \textbf{SSM Validation:}
+
+    At $t = 100$ seconds, both the exact analytical expression (Theorem 2) and the Monte Carlo simulation yield a handover probability of:
+
+    \[
+    \mathbb{P}[H(t)] \approx 0.40
+    \]
+
+    The perfect alignment confirms the validity of the equivalence principle (Theorem 1).
+
+    \item \textbf{DSM Bound Tightness:}
+
+    Because the DSM relies on a lower bound (Theorem 3) rather than an exact formula, the simulation serves to test the ``tightness'' of this bound.
+
+    At $t = 100$ seconds:
+    \[
+    \text{Simulation} \approx 0.35
+    \]
+    \[
+    \text{Analytical lower bound} \approx 0.34
+    \]
+
+    This narrow gap proves that the derived mathematical bound is highly tight and serves as an accurate proxy for the true probability.
+\end{itemize}
+
+\subsection{4. Key Modeling Assumptions Influencing Implementation}
+
+\begin{itemize}
+    \item \textbf{Nearest-Neighbor Policy:} This simplifies the handover event strictly to a geometric calculation of distance arrays. A handover geometrically corresponds to a drone crossing the perpendicular bisector (Voronoi cell boundary) between the current server and the candidate server.
+
+    \item \textbf{Straight-Line Mobility:} Assuming 
+    \[
+    x_i(t) = x_i(0) + \vec{v}t
+    \]
+    allows the implementation to use simple linear algebraic updates rather than simulating complex trajectory algorithms.
+
+    \item \textbf{Constant Height ($h$):} By assuming all drones fly at the exact same altitude $h$, the 3D Euclidean distance calculations reduce to 2D planar distances plus a constant $h^2$. The researchers project the user vertically to the drone plane ($o'$), allowing the simulation to operate strictly in 2D space without loss of accuracy.
+\end{itemize}
+
+% ----------------------------------------------------------
+\newpage
+\section{Scribe Question 5: Cross-Milestone Consistency and Change}
+
+\textbf{Question:} Reflect on how your understanding of the probabilistic model has evolved from Milestone 1 to Milestone 2. What is now well-defined, and what still needs clarification?
+
+\subsection{1. Evolution of the Poisson Point Process (PPP)}
+
+\textbf{Milestone 1 State:} The group initially understood the Homogeneous Poisson Point Process (PPP) strictly as a conceptual tool to represent randomly placed drones without coordination.
+
+\textbf{Milestone 2 Refinement:} The mathematical mechanics of the PPP are now fully integrated into the model. The group understands that the PPP allows for the calculation of the void probability, which is mathematically derived to formulate the nearest-neighbor distance Probability Density Function (PDF):
+
+\[
+f(r) = 2\pi\lambda_0 r e^{-\pi\lambda_0 r^2}
+\]
+
+This serves as the foundational weighting function for all subsequent spatial integrations in the paper.
+
+\subsection{2. Justification of the Equivalence Principle}
+
+\textbf{Milestone 1 State:} Theorem 1 was viewed as a conceptual observation.
+
+\textbf{Milestone 2 Refinement:} The equivalence is mathematically grounded in the translation invariance property of a homogeneous PPP. Shifting all points in a stationary PPP ($\Phi_B$) by a vector $x(t)$ preserves the exact distribution of the PPP. Therefore, the relative geometric calculations remain identical.
+
+\subsection{3. Mathematical Breakdown of the Different Speed Model}
+
+\textbf{Milestone 1 State:} DSM only provided a lower bound without clear probabilistic reasoning.
+
+\textbf{Milestone 2 Refinement:} The varying speeds break the spatial similarity transformation present in SSM. This creates temporal dependence, causing the non-serving drone locations ($\Phi'_D(t)$) to distort into an inhomogeneous PPP. The lower bound is defined via the time-dependent density function:
+
+\[
+\lambda(t; u_x, u^*)
+\]
+
+\subsection{4. What is Now Well-Defined}
+
+\begin{itemize}
+    \item Exact derivations of CDFs and PDFs for drone distance and speed.
+    \item Application of the Displacement Theorem (Lemma 1).
+    \item Theorem 2:
+\end{itemize}
+
+\[
+\mathbb{P}[H(t)] = \int_{0}^{\infty} \int_{0}^{2\pi}
+\left( 1 - e^{-\lambda_0(\pi R^2 - \mathcal{S})} \right)
+f_{\theta}(\theta)
+f_{u^*}(r)
+d\theta dr
+\]
+
+Where:
+
+\[
+f_{\theta}(\theta) = \frac{1}{2\pi}
+\]
+
+\[
+f_{u^*}(r) = 2\pi\lambda_0 r e^{-\pi\lambda_0 r^2}
+\]
+
+\subsection{5. What Still Needs Clarification}
+
+\begin{itemize}
+    \item Numerical methods required to evaluate nested integrals.
+    \item Step-by-step analytical derivation of Lemma 3.
+\end{itemize}
+
+% ----------------------------------------------------------
+\newpage
+\section{Scribe Question 6: Open Issues and Responsibility Attribution}
+
+\textbf{Question:} Detail the remaining open issues, unresolved probabilistic questions, and assign specific responsibilities to group members for the next milestone.
+
+\subsection{1. Resolved Probabilistic Modeling (M1 to M2)}
+
+\begin{itemize}
+    \item Justification for using Homogeneous PPP via Displacement Theorem (Lemma 1).
+    \item Validation of Theorem 1 via translation invariance.
+    \item DSM lower bound defined via inhomogeneous density function $\lambda(t; u_x, u^*)$.
+\end{itemize}
+
+\subsection{2. Open Mathematical and Analytical Issues}
+
+\begin{itemize}
+    \item Derivation of Lemma 3 (trigonometric terms in Equation 4).
+    \item Independent verification of numerical integration in Theorem 2 and Theorem 3.
+    \item Investigation of strict upper bounds for DSM.
+    \item Quantification of tightness as a function of $\lambda_0$ and speed variance $\sigma^2$.
+\end{itemize}
+
+\subsection{3. Responsibility Attribution for Milestone 3}
+
+\textbf{Entire Group:}
+\begin{itemize}
+    \item Study Monte Carlo simulation convergence.
+    \item Review validation plots.
+\end{itemize}
+
+\textbf{Scribe:}
+\begin{itemize}
+    \item Document full derivations of Lemma 2 and Lemma 3.
+\end{itemize}
+
+\textbf{Mathematical Analysis:}
+\begin{itemize}
+    \item Verify numerical integration of Equation (5).
+    \item Match analytical and simulation distributions for different $f_V(v)$.
+\end{itemize}
+
+\textbf{GitHub Management:}
+\begin{itemize}
+    \item Organize simulation codebase.
+\end{itemize}
+
 \end{document}
