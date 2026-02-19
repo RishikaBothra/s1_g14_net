@@ -1,0 +1,239 @@
+\documentclass[12pt,a4paper]{article}
+
+% ------------------------------------------------
+% PAGE FORMATTING
+% ------------------------------------------------
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{parskip}
+
+% ------------------------------------------------
+% MATHEMATICS
+% ------------------------------------------------
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+
+% ------------------------------------------------
+% GRAPHICS AND FIGURES
+% ------------------------------------------------
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% ------------------------------------------------
+% LISTS
+% ------------------------------------------------
+\usepackage{enumitem}
+
+% ------------------------------------------------
+% TABLES
+% ------------------------------------------------
+\usepackage{booktabs}
+\usepackage{array}
+
+% ------------------------------------------------
+% HYPERLINKS
+% ------------------------------------------------
+\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue]{hyperref}
+
+% ------------------------------------------------
+% CUSTOM COMMANDS (Optional but Recommended)
+% ------------------------------------------------
+\newcommand{\PPP}{\text{PPP}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+
+% ------------------------------------------------
+% TITLE INFORMATION
+% ------------------------------------------------
+\title{CSE400 --- Fundamentals of Probability in Computing\\
+Milestone 2 Scribe\\
+Handover Probability in Drone Cellular Networks\\ 
+Group  -  s1\_g14\_net}
+
+
+
+\date{\today}
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\setcounter{secnumdepth}{0}
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\newpage
+\setcounter{page}{1}
+
+   \section*{Scribe Question 1: Project System and Objective} % [cite: 115]
+
+   \subsection*{Probabilistic Problem Definition} % [cite: 116]
+In Milestone Two, we formalize the probabilistic problem presented in Milestone One as a stochastic geometry-based problem and will analyse the stability of the association between a typical user equipment at the origin and the network of mobile Drone Base Stations (DBS) serving it.    % [cite: 117]
+The crux of the mathematical representation of the problem is through the defining handover event, denoted as $H(t)$.    % [cite: 118]
+Let $x_i(t)$ be the 3-dimensional position of the i-th drone at time $t$.    % [cite: 119]
+The index of the serving drone at any instant in time, $s$, is given by the nearest-neighbour's rule for finding the closest drone.    % [cite: 120]
+   $$S_s = \arg \min_{i\in N} ||x_i(s)||$$ % [cite: 121]
+   The occurrence of handover at time $t$, referred to as $H(t)$ is defined as a change in the service index due to a change in serving base stations: % [cite: 122]
+   $$H(t) = \{\exists s < t : S_s \neq S(t)\}$$ % [cite: 123]
+
+   \subsection*{Goal of the System} % [cite: 124]
+The primary objective is to derive an analytical model for calculating the Handover Probability.    % [cite: 125]
+This probability is the cumulative distribution function (CDF) of the random variable representing the time until the first handover or the time between consecutive handovers.    % [cite: 126]
+   The group wishes to model the handover probability for two mobility models: % [cite: 127]
+\begin{itemize}
+    \item \textbf{The Same Speed Model (SSM):} assumes that the speed of the Drones is constant and deterministic ($\upsilon_i = \upsilon$).    % [cite: 128]
+    \item \textbf{The Different Speed Model (DSM):} assumes that the speed of the Drones is a random variable ($V_i \sim f_V(\upsilon)$).    % [cite: 129]
+\end{itemize}
+
+   \subsection*{Sources of Uncertainty in the System} % [cite: 130]
+   There are three sources of uncertainty in the system and have chosen to model them using stochastics: % [cite: 131]
+\begin{enumerate}
+       \item \textbf{Initial Spatial Distribution:} % [cite: 132]
+    The initial locations of the Drones are not deterministic (i.e., where the drone is when it first starts).    % [cite: 133]
+    The initial locations of drones are represented as a homogeneous Poisson point process (PPP) with a given intensity, $\lambda_0$ on 2D plane, and at a height $h$.    % [cite: 134]
+       Therefore, the number of Drones per area $A$ is represented as a Poisson random variable / Poisson Distribution: % [cite: 135]
+       $$P(N(A)=k) = \frac{(\lambda_0 A)^k e^{-\lambda_0 A}}{k!}$$ % [cite: 136]
+
+       \item \textbf{Movement Direction ($\theta$):} % [cite: 137]
+    Drone movement: Each drone will independently fly along a linear path.    % [cite: 138]
+    The direction of movement to angle ($\theta$) that it flies is uniformly distributed.    % [cite: 139]
+       $$\theta \sim U[0,2\pi)$$ % [cite: 140]
+    This introduces directional uncertainty i.e. any drone could go in any direction.    % [cite: 141]
+
+       \item \textbf{Speed difference (DSM only):} % [cite: 142]
+    The Different Speed Model gives different speed probabilities for each drone by using a PDF $f_V(\upsilon)$ (e.g., Rayleigh distribution, Uniform distribution).    % [cite: 143]
+       This creates uncertainty regarding the speed of the drones and thus also means that the handover probability must be integrated across the entire V domain as per lemma 3. % [cite: 144]
+\end{enumerate}
+
+\vspace{1em}
+   \section*{Scribe Question 2: Key Random Variables and Uncertainty Modeling} % [cite: 145]
+
+   \subsection*{Drone Position ($\phi_D(0)$) and Nearest Neighbour Distance ($u^*$)} % [cite: 146]
+The Drone Base Station (DBS) position uses a homogeneous Poisson Point Process (PPP) to determine all positions of the DBS in the two-dimensional plane at height $h$, denoted by $\phi_D(0)$ with density $\lambda_0$.    % [cite: 147]
+The fundamental random variable for this analysis is $u^*$, which is defined as the distance from the single user to the closest drone at $t = 0$, before use begins.    % [cite: 148]
+
+\begin{itemize}
+       \item \textbf{Assumption:} The number of drones $N(A)$ in any area $A$ has a Poisson distribution as follows: % [cite: 149]
+       $$P(N(A)=k) = \frac{(\lambda_0 A)^k e^{-\lambda_0 A}}{k!}$$ % [cite: 150]
+    
+       \item \textbf{Void Probability Derivation:} Void probability is probability of the region with area $A$ in containing zero drones ($k=0$): % [cite: 151]
+       $$P(N(A)=0) = \frac{(\lambda_0 A)^0 e^{-\lambda_0 A}}{0!} = e^{-\lambda_0 A}$$ % [cite: 152]
+    
+       \item \textbf{CDF Derivation:} % [cite: 153]
+    The event that the nearest neighbour is greater than distance $r$ ($P[u^*>r]$) equals the event that the circular area $A = \pi r^2$ around the user has no drones.    % [cite: 154]
+       $$P(u^* > r) = P(N(\pi r^2)=0) = e^{-\lambda_0 \pi r^2}$$ % [cite: 155]
+       The CDF is the complement of this probability: % [cite: 156]
+       $$F_{u^*}(r) = P(u^* \leq r) = 1 - P(u^* > r) = 1 - e^{-\lambda_0 \pi r^2}$$ % [cite: 157]
+    
+    \item \textbf{PDF Derivation:} The PDF is obtained by differentiating the CDF with respect to $r$.    % [cite: 158]
+       $$f_{u^*}(r) = \frac{d}{dr}F_{u^*}(r) = \frac{d}{dr}(1 - e^{-\lambda_0 \pi r^2}) = 2\pi\lambda_0 r e^{-\lambda_0 \pi r^2}$$ % [cite: 159]
+\end{itemize}
+This particular PDF $f_{u^*}(r)$ serves as the weight for the integral portion of the handover probability Equation (5) used in the Theorem 3 proof.    % [cite: 160]
+
+   \subsection*{Direction ($\theta_i$)} % [cite: 161]
+In this section, a mathematical approach will be used to derive the trajectory of each drone, which has been defined in straight line.    % [cite: 162]
+\begin{itemize}
+    \item \textbf{PDF:} drone’s direction of movement, $\theta_i$, is uniformly distributed random variable over the interval $[0,2\pi)$.    % [cite: 163]
+    This uniform distribution will give a constant probability density function for each of the directionally randomly chosen drone movements, $f(\theta) = \frac{1}{2\pi}$.    % [cite: 164]
+    \item \textbf{Modelling:} The direction will be determined independently for each of the drone and therefore will be independent of the initial distances from the start position (i.e., the length and angle).    % [cite: 165]
+\end{itemize}
+
+   \subsection*{Speed ($V_i$) Distributions (DSM only)} % [cite: 166]
+With respect to the DSM, the speed $V$ of the drones will be a statistically independent and identically distributed (i.i.d) random variable.    % [cite: 167]
+The paper uses a specific probability function to model this uncertainty.    % [cite: 168]
+
+   \subsubsection*{Rayleigh Distribution: (Used to model variance around a mean speed)} % [cite: 169]
+\begin{itemize}
+       \item \textbf{PDF:} $f_V(v) = \frac{v}{\sigma^2} e^{-v^2/2\sigma^2}, v \geq 0$ % [cite: 170]
+       \item \textbf{CDF:} $F_V(v) = 1 - e^{-v^2/2\sigma^2}$ % [cite: 171]
+       \item \textbf{Mean:} $E[V] = \sigma \sqrt{\frac{\pi}{2}}$ % [cite: 172]
+\end{itemize}
+
+   \subsubsection*{Uniform Distribution: (Used as an alternative bounded speed model)} % [cite: 173]
+\begin{itemize}
+       \item \textbf{PDF:} $f_V(v) = \frac{1}{b-a}, a \leq v \leq b$ % [cite: 174]
+       \item \textbf{CDF:} $F_V(v) = \frac{v-a}{b-a}$ % [cite: 175]
+       \item \textbf{Mean:} $E[V] = \frac{a+b}{2}$ % [cite: 176]
+\end{itemize}
+The PDFs ($f_v(v)$), used in this section will be used in the integral equations that were previously described to determine the density of the non-serving drones and the final probability of handover.    % [cite: 177]
+
+   \subsection*{Drone displacement Geometry ($R$)} % [cite: 178]
+Using vector geometry, the trajectory of a drone at time $t$ relative to its original position is modelled.    % [cite: 179]
+\begin{itemize}
+    \item \textbf{Formula:} A drone that originally started off at a distance of $r$ moves with speed $v$ for time $t$, in the direction of $\theta$.    % [cite: 180]
+    The new resulting distance ($R$) from the origin will be determined by using the Law of Cosines.    % [cite: 181]
+       $$R(r,t,\theta) = \sqrt{r^2+v^2t^2-2rvt\cos(\theta)}$$ % [cite: 182]
+\end{itemize}
+The geometric formulation will be used directly in both Theorem 2 and Theorem 3 to define the dynamic limits of integration for computing the probability of handover.    % [cite: 183]
+
+   \subsection*{Distance to serving drone ($u^*(t)$)} % [cite: 184]
+This variable describes how far away from the user’s location is the nearest DBS at time ‘$t$’.    % [cite: 185]
+\begin{itemize}
+    \item \textbf{Modelling:} The locations of a DBS at two distinct times, $t_1$ and $t_2$, could not be obtained independently of one another.    % [cite: 186]
+    In the same speed model (SSM), computing distribution work due to network property preservation, leveraging the spatial equivalence proven in theorem 1. In contrast to this, in the discrete speed model (DSM), which is characterized by variable speeds, the temporal correlation that makes mathematically intractable, keep track of DBSs over time.    % [cite: 187]
+\end{itemize}
+
+   \subsection*{Non-Serving Drone Density ($\phi_D'(t)$) in DSM} % [cite: 188]
+In the DSM, the point process $\phi_D'(t)$ representing all drones in the air with the exception of the serving drone is modelled as an inhomogeneous Poisson point process (PPP).    % [cite: 189]
+\begin{itemize}
+       \item \textbf{Formula:} Because the user is connected to the nearest drone at time $t=0$, there exists a temporary zone around the user in which the density is 0. The user will have created a density function $\lambda(t; u_x, u^*)$ at a distance of $u_x$ from user location as a result of integrating the speed probability density function, $f_V(v)$, as discussed in Lemma 3: % [cite: 190]
+       $$\lambda(t; u_x, u^*) = \lambda_0 \left[ 1 - \int_{\frac{u^* - u_x}{t}}^{\frac{u^* + u_x}{t}} f_V(v) \frac{1}{\pi} \cos^{-1}\left( \frac{v^2 t^2 + u_x^2 - (u^*)^2}{2vtu_x} \right) dv \right]$$ % [cite: 191]
+\end{itemize}
+Equation (4) demonstrates the manner in which the temporary exclusion zone that is created by the user distorts the drone density as time progresses.    % [cite: 192]
+As $t \rightarrow \infty$, the point process for non-serving drones will have been completely intermixed (conditioned) and the density will converge to $\lambda_0$.    % [cite: 193]
+
+   \subsection*{How Uncertainty is Modelled: Why These Distributions?} % [cite: 194]
+Stochastic geometry is utilized by the researchers to accommodate both the spatial and temporal uncertainties of the network.    % [cite: 195]
+\begin{itemize}
+    \item \textbf{PPP:} A Poisson Point Process (PPP) is mathematically tractable and can be used to provide an accurate match for uncoordinated random deployments.    % [cite: 196]
+    The most important aspect of the PPP is that it allows for the use of the Displacement Theorem (Lemma 1), which guarantees that the $\lambda_0$ density will be preserved and that these drones will continue to form a homogeneous PPP as they each move independently.    % [cite: 197]
+    \item \textbf{Rayleigh Speed:} The majority of drones will fly with an average operational speed; however, there will be a significantly smaller number of drones that are operating near either an extreme low or an average operational speed.    % [cite: 198, 199]
+    This speed distribution is well modelled using the Rayleigh curve.    % [cite: 200]
+    \item \textbf{Uniform Direction:} Out of all DBSs, since there is no coordination, all possible flight directions are equally likely.    % [cite: 201]
+    Therefore, the resulting flight direction distribution of DBSs can be said to follow a uniform distribution.    % [cite: 202]
+    \item \textbf{Note:} The PDF of the nearest neighbour distance ($u^*$) is, in form, very similar to a Rayleigh distribution.    % [cite: 203]
+    This is strictly a geometric consequence of the PPP void probability and is not a result of an independent agreement of previous distributional characteristics.    % [cite: 204]
+\end{itemize}
+
+\vspace{1em}
+   \section*{Scribe Question 3: Probabilistic Reasoning and Dependencies} % [cite: 205]
+
+   \subsection*{Spatial and Kinematic Independence (The Displacement Theorem)} % [cite: 206]
+To retain analytical tractability, it is necessary for our mathematical model to be based on the assumption of independence.    % [cite: 207]
+The initial spatial distribution of Drone Base Stations (DBSs) will be an independent Poisson Point Process (PPP).    % [cite: 208]
+It is also assumed that each DBS makes its choice of straight-line trajectory and direction completely independently from the other DBSs.    % [cite: 209]
+The paper uses strict independence to apply the Displacement Theorem (or Lemma 1).    % [cite: 210]
+According to this theorem, if points of a Homogeneous PPP are displaced independently (with identically distributed displacements), the final configuration will be a Homogeneous PPP with the same density, $\lambda_0$, as before.    % [cite: 211]
+The probabilistic calculation is important, since it ensures that for any future time, $t$; mobile drones in the Same Speed Model (SSM) will have the same characteristics of the original network and thus can produce geometrically consistent calculations.    % [cite: 212, 213]
+
+   \subsection*{Conditionality for the System Integration} % [cite: 214]
+The primary mathematical technique to determine the probability formula for handover is through conditionality.    % [cite: 215]
+Instead of trying to compute the complicated total probability directly, the system computes the probabilities of handover based on previously determined geometric values.    % [cite: 216]
+The SSM computation for the (Theorem 2), For an initial serving distance of '$r$', to discover the total probability that there will be no handover from an initial location to a target location, if you move along an angle $\theta$, it can be expressed as the conditional handover probability where ($C_2 \setminus C_1$) are the newly created circular formations due to the direction ($\theta$).    % [cite: 217]
+   Thus, the SSM model can calculate the probability of the drone making a handover through the following mathematical relationship: % [cite: 218]
+   $$\mathbb{P}[H(t) \mid r,\theta] = 1 - \mathbb{P}[N(C_2 \setminus C_1) = 0] = 1 - e^{-\lambda_0(\pi R^2 - S)}$$ % [cite: 219]
+Where $S$ is the exact size of the mathematical area of overlap between the original serving area ($C_1$) and the new offset serving area ($C_2$).    % [cite: 220]
+After the SSM model has been able to establish the SSM relationship between the two variables the final outcomes must be determined by "Deconditioning" the values of these two relationships.    % [cite: 221]
+To achieve this, the SSM model must compute the unconditional probability of the SSM relationship.    % [cite: 222]
+This is done by employing all of the values of $r$ and $\theta$ and then integrating the values of $r$ and $\theta$ according to the Probability Distribution Functions that were established by the model’s system (i.e., Equation (2)) to provide the model with a value for the unconditional probability of the SSM relationship.    % [cite: 223]
+
+   \subsection*{Temporal Dependence and the DSM Lower Bound} % [cite: 224]
+In summary, this paper indicates that there exists an exact probabilistic dependency that arises in terms of the DSM's conceptual framework.    % [cite: 225]
+Although the model supports the premise that the actions of the drones are independent from one another when travelling through space, the position of each drone on a given time ($t_2$) has a very high probability of being located adjacent to its original position ($t_1$) based on its respective operating speeds.    % [cite: 226]
+As a result of the methodology used to describe both events (no specific formulae exist for this temporal correlation) an exact mathematical formula for determining adjacent neighbour locations is geometrically impractical.    % [cite: 227]
+However, with the use of this temporal correlation through Theorem 3, this model produces a Lower Bound.    % [cite: 228]
+Through the definition of event $G$ (the potential for no DBS to exist in the bounding circle $C_2$) and the establishment of the event ‘no handover’ event $H'(t)$ as a subset of $G$ ($H'(t) \subset G$), i.e. ‘no handover’ occurs at the boundary of every event $H'(t)$ due to the relative speeds of the aircraft at the boundary causing the potential for drones to have entered or exited $C_2$ at time $t$, $\mathbb{P}[H'(t)] \leq \mathbb{P}[G]$ is used.    % [cite: 229]
+   $$\mathbb{P}[H(t)] \geq 1 - \mathbb{P}[G]$$ % [cite: 230]
+which forms the foundational basis for the complex integral evaluated in Equation (5).    % [cite: 231]
+
+   \subsection*{Equivalence Through Translation Invariance} % [cite: 232]
+Finally, the model uses a powerful probabilistic equivalence (Theorem 1) to bridge aerial and terrestrial networks.    % [cite: 233]
+It proves mathematically that the handover probability for a static user facing mobile drones is exactly equivalent to that of a mobile user moving through static terrestrial base stations.    % [cite: 234]
+This reasoning is strictly supported by the translation invariance property of a homogeneous PPP.    % [cite: 235]
+Mathematically, shifting a stationary PPP ($\Phi_B$) by a movement vector $x(t)$ result in a relative point process ($\Phi_B - x(t)$) that is fundamentally indistinguishable from the original PPP.    % [cite: 236]
+Because $\Phi_B$ is a homogeneous PPP, it is translation invariant, yielding the equivalence $\tilde{\Phi}_D(t) \equiv \text{PPP}(\lambda_0)$.    % [cite: 237]
+
+\end{document}
