@@ -213,4 +213,52 @@ P[H(t)]
 
 which indicates the likelihood that there will be an instance when a handoff has taken place prior to $t$.
 
+\newpage
+
+% ------------------------------------------------
+% SCRIBE QUESTION 4
+% ------------------------------------------------
+
+\section*{Scribe Question 4: Model-Implementation Alignment}
+
+\textbf{Translating Stochastic Geometry into Programmatic Logic}
+
+The theoretical mathematical model changes to the Python and MATLAB scripts is a large reliance on Monte Carlo techniques and deterministic numerical in- tegration. The theoretical spatial arrangement of the drone base stations, which are the starting point of the drone base stations. a homogeneous Poisson Point Process on a 2D plane, defined by model is simulated by. modeling the total number of drones as a Poisson distributed variable and locating the drones at random. formally working with polar coordinates in a discrete simulation radius. The nearest-neighbor association policy is enforced programmatically by defining an exclusion zone. The distance to the first serving drone is identified in the scripts and a bool array is used. mask so that no drones are filtered through that radius, exactly resembling the mathematical. definition of the non-serving drone point process. 
+
+\textbf{Kinematic Updates and Empirical Validation}
+
+The random direction mobility models, and the same speed Model of both models are straight-line mobility models. The different speed model (DSM) and the SSM are applied through discrete kinematic. updates. The simulation chooses random speeds, based on given distributions, including Rayleigh or Uniform, and renews the Cartesian coordinates of each drone at each time. Whenever the recalculated minimum distance is less than it was before, handover events are empirically recorded. below the original serving range. To evaluate the exact handover formulas and lower bounds computationally, the theoretical scripts shift from Monte Carlo to deterministic numerical integration, utilizing libraries like SciPy to evaluate the complex geometric intersection areas and probability density functions.
+
+\textbf{The Law of Large Numbers in Action}
+
+The results of the given simulation are a perfect demonstration of the correspondence between the theoretical. model and the empirical representation by the Law of Large Numbers. In the plot produced by using 1,000 realizations, the generated data points (red circles) are simulated, and hence have. strong noise and variance, commonly jaggedly discontinuous with the smooth analytical curves. Such scattering directly owes to the very high spatial randomness of the network. first release and disorganized movement. However, in the plot scaled to 10,000 as realizations, the empiric data becomes smoothing. The simulating points are tracking the theoretic exact SSM curve and DSM lower limit with high accuracy. This visual convergence certifies that the programmed simulation is an accurate reflection of the underlying. mathematical structure of the paper 
+
+% ------------------------------------------------
+% SCRIBE QUESTION 5
+% ------------------------------------------------
+
+\section*{Scribe Question 5: Cross-Milestone Consistency and Change}
+
+\textbf{From Abstract Mathematics to Concrete Execution}
+
+The greatest development following the above milestones is the crystallization of abstract probabilistic models into concree program implementation. In the earlier math- The concepts such as the exclusion zone and the inhomogeneous density of are broken up mathematically. non-serving drones were purely theoretical constructions that were determined by the void probability. theorems of formula and displacement. At the present implementation phase, the following notions were present. have now shifted to literal manipulations of arrays and spatial coordinates updates. Similarly The complicated double and triple integrals that have been used to establish the handover probability are intricate. Lower bounds have not just been symbolic representations on paper, but nested numerical. Functions of quadrature determined in the code. 
+
+\textbf{Validating Theoretical Assumptions}
+
+The core theoretical assumptions established in earlier milestones have remained remarkably consistent and are now visually verifiable. The critical observation that the time-correlated, heterogeneous velocities of the Different Speed Model result in a lower handover probability than the Same Speed Model over time is clearly demonstrated in the simulated plots. Furthermore, the stark difference between the 1,000 and 10,000 realization graphs resolves a major implementation question from earlier discussions. It proves definitively that any observed gaps between the theoretical formulas and the empirical tests were artifacts of an insufficient sample size rather than a flaw in the theoretical framework or the duality equivalence.
+
+% ------------------------------------------------
+% SCRIBE QUESTION 6
+% ------------------------------------------------
+
+\section*{Scribe Question 6: Open Issues and Responsibility Attribution}
+
+\textbf{Computational Bottlenecks and Boundary Constraints}
+
+Although scaling the simulation to 10,000 realizations was able to smooth the empirical. - curves, this success throws into sharp relief an unresolved problem with respect to computational complexity. Operating tens of thousands of independent network instantiations across. spatial bins and many time steps cause gigantically large processing overhead. To reach the gold standard of 1,000,000 realizations that is commonly desired in rigorous stochastic geometry. sub research, the existing iterative cycles have a harsh computational bottleneck. Addition- ally, one has a hypothetical unresolved problem on the spatial limit of the simulation. The mathematical model assumes that there is an infinite two-dimensional plane but the code imposes a mathematical model that there is an infinite two-dimensional plane but the code imposes a finite 10-kilometer radius. Whether this hard boundary is an artificially created boundary is still yet to be verified and it artificially distorts the incoming density of drones with long simulation periods because of edge 
+
+\textbf{Team Responsibilities and Next Steps}
+
+In order to address these pending issues, one should delegate certain duties in the following stage. of the project. The programming head should be concerned with optimization of Monte Carlo execution, experimenting with more complex vectorization, or use of parallel processing. libraries in order to get extreme realization counts computationally feasible without crashing. the system. The mathematical analyst has the responsibility of exploring the finite boundary effects, proving mathematically whether the 10-kilometer limit is a perfect approximation of the. that is, infinite-plane assumption, and that the numerical integration functions do so as to preserve precision at edge limits. Lastly, the scribe has the duty of recording these in detail. certain computational tradeoffs, and there will be a final report that represents the work of the team. 
+
 \end{document}
