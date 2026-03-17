@@ -1,0 +1,83 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\begin{document}
+
+\section*{Topic: Joint Random Variables and Joint Distributions}
+
+\subsection*{Definitions}
+
+\begin{itemize}
+    \item \textbf{Joint PMF (Discrete Case):} For discrete random variables $X \in \{x_1, x_2, \dots, x_n\}$ and $Y \in \{y_1, y_2, \dots, y_m\}$, the joint probability mass function is defined as:
+    \[ p(x_i, y_j) = P(X = x_i, Y = y_j) \]
+    This computes the probability of the joint outcome occurring simultaneously.
+
+    \item \textbf{Joint PDF (Continuous Case):} For continuous random variables $X$ and $Y$, a function $f(x,y)$ is the joint probability density function if the probability that the pair $(X,Y)$ lies in a small rectangle of area $dx\,dy$ is approximately $f(x,y)dx\,dy$.
+
+    \item \textbf{Joint CDF:} The joint cumulative distribution function for random variables $X$ and $Y$ is defined as:
+    \[ F(x,y) = P(X \le x, Y \le y) \]
+\end{itemize}
+
+\subsection*{Assumptions}
+\begin{itemize}
+    \item In the \textbf{discrete case}, the ordered pair $(X, Y)$ takes values in the product set $\{(x_1, y_1), (x_1, y_2), \dots, (x_n, y_m)\}$.
+    \item In the \textbf{continuous case}, if $X \in [a,b]$ and $Y \in [c,d]$, the pair $(X, Y)$ takes values in the product region $[a,b] \times [c,d]$.
+    \item When random variables are not independent, covariance and correlation are used as measures of the nature of the dependence between them.
+\end{itemize}
+
+\subsection*{Key Results}
+
+\subsubsection*{Discrete Joint PMF Properties}
+\begin{enumerate}
+    \item $0 \le p(x_i, y_j) \le 1$.
+    \item $\sum_{i=1}^{n}\sum_{j=1}^{m} p(x_i, y_j) = 1$.
+\end{enumerate}
+
+\subsubsection*{Continuous Joint PDF Properties}
+\begin{enumerate}
+    \item $f(x,y) \ge 0$.
+    \item $\int_{c}^{d}\int_{a}^{b} f(x,y) \, dx \, dy = 1$.
+    \item The joint PDF $f(x,y)$ may take values greater than 1; it is a probability density, not a probability.
+\end{enumerate}
+
+\subsubsection*{Formulas for CDF and PDF Recovery}
+\begin{itemize}
+    \item \textbf{Continuous Joint CDF:} Obtained by integrating the density:
+    \[ F(x,y) = \int_{-\infty}^{y}\int_{-\infty}^{x} f(u,v) \, du \, dv \]
+    \item \textbf{Recovering Joint PDF:} Using partial derivatives:
+    \[ f(x,y) = \frac{\partial^2}{\partial x \partial y} F(x,y) \]
+    \item \textbf{Discrete Joint CDF:} Obtained by summing probabilities:
+    \[ F(x,y) = \sum_{x_i \le x}\sum_{y_j \le y} p(x_i, y_j) \]
+\end{itemize}
+
+\subsubsection*{Properties of the Joint CDF}
+\begin{itemize}
+    \item $F(x,y)$ is \textbf{non-decreasing}; if $x$ or $y$ increase, then $F(x,y)$ must stay constant or increase.
+    \item $\lim_{(x,y)\rightarrow(-\infty,-\infty)} F(x,y) = 0$ (Lower-left boundary).
+    \item $\lim_{(x,y)\rightarrow(\infty,\infty)} F(x,y) = 1$ (Upper-right boundary).
+\end{itemize}
+
+\strut\hrule
+\section*{Examples}
+
+\subsection*{Example 1: Rolling Two Dice (Discrete PMF)}
+\textbf{Experiment:} Roll two fair dice. \\
+Let $X = \text{value on the first die}$ and $T = \text{total (sum) of both dice}$. \\
+Each outcome $(i,j)$ has a probability of $\frac{1}{36}$. The resulting joint probability table consists of entries that are either $0$ or $\frac{1}{36}$. This establishes that $X$ and $T$ are \textbf{not independent}.
+
+\subsection*{Example 2: Joint PDF Validation (Continuous PDF)}
+\textbf{Given:} $f(x,y) = 4xy$, for $0 \le x \le 1$ and $0 \le y \le 1$.
+
+\paragraph{Step 1: Check Validity (Normalization)}
+\[ \int_{0}^{1}\int_{0}^{1} 4xy \, dx \, dy = \int_{0}^{1} \left( \int_{0}^{1} 4xy \, dx \right) dy = \int_{0}^{1} 2y \, dy = [y^2]_{0}^{1} = 1 \]
+Because $f(x,y) \ge 0$ and the total probability equals 1, it is a valid joint PDF.
+
+\paragraph{Step 2: Compute $P(A)$ for event $A = \{X < 0.5, Y > 0.5\}$}
+\[ P(A) = \int_{0}^{0.5}\int_{0.5}^{1} 4xy \, dy \, dx = \int_{0}^{0.5} [2xy^2]_{0.5}^{1} \, dx \]
+\[ = \int_{0}^{0.5} 2x(1 - 0.25) \, dx = \int_{0}^{0.5} \frac{3}{2}x \, dx = \left[ \frac{3}{4}x^2 \right]_{0}^{0.5} = \frac{3}{16} \]
+
+\end{document}
