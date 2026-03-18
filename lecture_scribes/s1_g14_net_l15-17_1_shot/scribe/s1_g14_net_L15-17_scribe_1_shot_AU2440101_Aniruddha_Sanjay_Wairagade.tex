@@ -1,0 +1,125 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{enumitem}
+
+\begin{document}
+
+\noindent \textbf{Lecture Scribe: Joint Random Variables + Joint Distributions + Examples} \\
+\vspace{0.1cm} \\
+\textbf{Course:} CSE400 -- Fundamentals of Probability in Computing \textbf{Instructor:} Dhaval Patel, PhD \\
+\textbf{Date:} March 10, 2026
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+\section*{1. Introduction to Joint Random Variables}
+
+\begin{itemize}[label=\textbullet]
+    \item \textbf{Motivation:} In science and real life, we are often interested in two or more random variables at the same time.
+    \item \textbf{Purpose:} The random variables have a joint distribution that allows us to compute probabilities of events involving both variables and understand the relationship between them.
+    \item \textbf{Dependence:} This is simplest when the variables are independent. When they are not, covariance and correlation are used as measures of the nature of the dependence between them.
+    \item \textbf{Examples:}
+    \begin{itemize}[label=$\circ$]
+        \item Height and weight of giraffes.
+        \item Frequency of exercise and rate of heart disease.
+        \item Smart Transportation: $X = \text{Vehicle Speed}$ and $Y = \text{Traffic Density}$.
+        \item Wireless Network Performance: $X = \text{Signal-to-Noise Ratio (SNR)}$ and $Y = \text{Data Throughput}$. Throughput depends on SNR, making $X$ and $Y$ correlated random variables.
+        \item Weather Prediction: $X = \text{Rainfall}$ and $Y = \text{Temperature}$.
+    \end{itemize}
+\end{itemize}
+
+\vspace{0.25cm}
+\hrule
+\vspace{0.25cm}
+
+\section*{2. Discrete Case: Joint Probability Mass Function (PMF)}
+
+\begin{itemize}[label=\textbullet]
+    \item \textbf{Setup:} Suppose $X$ and $Y$ are discrete random variables where $X \in \{x_1, x_2, \dots, x_n\}$ and $Y \in \{y_1, y_2, \dots, y_m\}$.
+    \item \textbf{Product Set:} The ordered pair $(X, Y)$ takes values in the product set: \\
+    $\{(x_1, y_1), (x_1, y_2), \dots, (x_n, y_m)\}$.
+    \item \textbf{Definition (Joint PMF):} $p(x_i, y_j) = P(X = x_i, Y = y_j)$. This gives the probability of the joint outcome occurring simultaneously.
+    \item \textbf{Properties:}
+    \begin{itemize}[label=$\circ$]
+        \item $0 \le p(x_i, y_j) \le 1$.
+        \item $\sum_{i=1}^{n} \sum_{j=1}^{m} p(x_i, y_j) = 1$.
+    \end{itemize}
+    \item \textbf{Example (Rolling Two Dice):} * \textbf{Experiment:} Roll two fair dice. Let $X = \text{value on the first die}$, and $T = \text{total (sum) of both dice}$.
+    \begin{itemize}[label=$\circ$]
+        \item Since each outcome $(i, j)$ has probability $\frac{1}{36}$, we can construct the joint probability table.
+        \item \textbf{Observations:} Entries in the table are either $0$ or $\frac{1}{36}$, and $X$ and $T$ are not independent.
+    \end{itemize}
+\end{itemize}
+
+\vspace{0.25cm}
+\hrule
+\vspace{0.25cm}
+
+\section*{3. Continuous Case: Joint Probability Density Function (PDF)}
+
+\begin{itemize}[label=\textbullet]
+    \item \textbf{Analogy:} The continuous case is analogous to the discrete case, where discrete values become continuous intervals, Joint PMF becomes Joint PDF, and sums become double integrals.
+    \item \textbf{Setup:} If $X \in [a, b]$ and $Y \in [c, d]$, then the pair $(X, Y)$ takes values in the product region: $[a, b] \times [c, d]$.
+    \item \textbf{Definition (Joint PDF):} A function $f(x, y)$ is called the joint probability density function of $X$ and $Y$ if $P((X, Y) \text{ lies in a small rectangle of area } dx \, dy) \approx f(x, y) dx \, dy$.
+    \item \textbf{Key Properties:}
+    \begin{itemize}[label=$\circ$]
+        \item $f(x, y) \ge 0$.
+        \item $\int_{c}^{d} \int_{a}^{b} f(x, y) \, dx \, dy = 1$.
+        \item The joint PDF $f(x, y)$ may take values greater than $1$. It is a probability density, not a probability.
+    \end{itemize}
+\end{itemize}
+
+\vspace{0.25cm}
+\hrule
+\vspace{0.25cm}
+
+\section*{4. Worked Example: Continuous Joint PDF}
+
+\begin{itemize}[label=\textbullet]
+    \item \textbf{Problem:} Given $f(x, y) = 4xy$, where $0 \le x \le 1$ and $0 \le y \le 1$. Jointly, $(X, Y)$ takes values in the unit square $[0, 1]^2$.
+    \item \textbf{Task 1: Show that $f(x, y)$ is a valid joint PDF.}
+    \begin{itemize}[label=$\circ$]
+        \item \textbf{Step 1:} Check Validity (Normalization).
+        \item $\int_{0}^{1} \int_{0}^{1} 4xy \, dx \, dy = \int_{0}^{1} \left( \int_{0}^{1} 4xy \, dx \right) dy = \int_{0}^{1} 2y \, dy = \left[ y^2 \right]_{0}^{1} = 1$.
+        \item \textbf{Conclusion:} Hence $f(x, y) \ge 0$ and total probability is $1$. So it is a valid joint PDF.
+    \end{itemize}
+    \item \textbf{Task 2: Compute $P(A)$ for the event $A = \{X < 0.5, Y > 0.5\}$.}
+    \begin{itemize}[label=$\circ$]
+        \item \textbf{Step 2:} Compute $P(A)$.
+        \item $P(A) = \int_{0}^{0.5} \int_{0.5}^{1} 4xy \, dy \, dx = \int_{0}^{0.5} \left[ 2xy^2 \right]_{0.5}^{1} dx = \int_{0}^{0.5} 2x(1 - 0.25) \, dx = \int_{0}^{0.5} \frac{3}{2}x \, dx = \left[ \frac{3}{16} \right]$.
+    \end{itemize}
+\end{itemize}
+
+\vspace{0.25cm}
+\hrule
+\vspace{0.25cm}
+
+\section*{5. Joint Cumulative Distribution Function (Joint CDF)}
+
+\begin{itemize}[label=\textbullet]
+    \item \textbf{Notation:} We use the notation $\{X \le x \text{ and } Y \le y\}$ to mean the event $X \le x, Y \le y$.
+    \item \textbf{Definition:} The joint cumulative distribution function is defined as $F(x, y) = P(X \le x, Y \le y)$.
+    \item \textbf{Continuous Case:} * If $X$ and $Y$ are continuous random variables with joint density $f(x, y)$ over $[a, b] \times [c, d]$, the joint CDF is obtained by integrating the density.
+    \begin{itemize}[label=$\circ$]
+        \item $F(x, y) = \int_{c}^{y} \int_{a}^{x} f(u, v) \, du \, dv$.
+        \item \textbf{Recovering the Joint PDF:} Since there are two variables, we use partial derivatives: \\
+        $f(x, y) = \frac{\partial^2}{\partial x \partial y} F(x, y)$.
+    \end{itemize}
+    \item \textbf{Discrete Case:}
+    \begin{itemize}[label=$\circ$]
+        \item If $X$ and $Y$ are discrete random variables with joint PMF $p(x_i, y_j)$, the joint CDF is obtained by summing probabilities.
+        \item $F(x, y) = \sum_{x_i \le x} \sum_{y_j \le y} p(x_i, y_j)$.
+        \item \textbf{Interpretation:} Add all probabilities in the table for rows with $x_i \le x$ and columns with $y_j \le y$.
+    \end{itemize}
+    \item \textbf{Properties of the Joint CDF:} The joint CDF $F(x, y)$ of $X$ and $Y$ must satisfy several properties:
+    \begin{itemize}[label=$\circ$]
+        \item $F(x, y)$ is non-decreasing. If $x$ or $y$ increase, then $F(x, y)$ must stay constant or increase.
+        \item $F(x, y) = 0$ at the lower-left of the joint range. If the lower-left corner is $(-\infty, -\infty)$, then $\lim_{(x,y) \to (-\infty, -\infty)} F(x, y) = 0$.
+        \item $F(x, y) = 1$ at the upper-right of the joint range. If the upper-right corner is $(\infty, \infty)$, then $\lim_{(x,y) \to (\infty, \infty)} F(x, y) = 1$.
+    \end{itemize}
+\end{itemize}
+
+\end{document}
