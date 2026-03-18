@@ -1,0 +1,132 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{hyperref}
+
+\title{Lecture Scribe: Joint Random Variables and Distributions}
+\author{Scribe: Vansh Lilani (ID: AU2320146)}
+\date{March 10, 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{tabular}{ll}
+    \textbf{Course:} & CSE400 – Fundamentals of Probability in Computing \\
+    \textbf{Lecturer:} & Dhaval Patel, PhD \\
+\end{tabular}
+
+
+\section{Introduction to Joint Random Variables}
+In scientific analysis and real-world applications, it is often necessary to observe and analyze two or more random variables (RVs) simultaneously to understand their relationships.
+
+\subsection*{Real-World Examples}
+\begin{itemize}
+    \item \textbf{Smart Transportation:} $X =$ Vehicle Speed, $Y =$ Traffic Density.
+    \item \textbf{Wireless Networks:} $X =$ Signal-to-Noise Ratio (SNR), $Y =$ Data Throughput.
+    \item \textbf{Logistics:} $X =$ Wind Speed, $Y =$ Delivery Time for drone delivery.
+    \item \textbf{General Biology/Social Science:} Height and weight of giraffes, IQ and birthweight of children, or exercise frequency and heart disease rates.
+\end{itemize}
+
+\subsection*{Key Concepts}
+\begin{itemize}
+    \item \textbf{Joint Distribution:} Allows the computation of probabilities for events involving multiple variables and reveals their dependency.
+    \item \textbf{Independence:} The simplest case where variables do not influence each other.
+    \item \textbf{Correlation/Covariance:} Measures used to quantify the nature of dependence when variables are not independent.
+\end{itemize}
+
+\section{Discrete Case: Joint Probability Mass Function (PMF)}
+\subsection*{Setup and Definition}
+Suppose $X$ and $Y$ are discrete random variables with possible values $X \in \{x_1, x_2, \dots, x_n\}$ and $Y \in \{y_1, y_2, \dots, y_m\}$. The ordered pair $(X, Y)$ takes values in the product set $\{(x_1, y_1), (x_1, y_2), \dots, (x_n, y_m)\}$.
+
+\textbf{Definition:} The Joint PMF is defined as:
+\[ p(x_i, y_j) = P(X = x_i, Y = y_j) \]
+This represents the probability that the joint outcome occurs simultaneously.
+
+\subsection*{Key Properties}
+\begin{enumerate}
+    \item \textbf{Non-negativity:} $0 \le p(x_i, y_j) \le 1$ for all $i, j$.
+    \item \textbf{Normalization:} The sum of all joint probabilities must equal 1:
+    \[ \sum_{i=1}^{n} \sum_{j=1}^{m} p(x_i, y_j) = 1 \]
+\end{enumerate}
+
+\section{Worked Example: Rolling Two Dice}
+\textbf{Experiment:} Roll two fair dice. Let $X =$ Value on the first die and $T =$ Total (sum) of both dice. \\
+\textbf{Construction:} Since each outcome $(i, j)$ of two dice has a probability of $1/36$, we construct the joint probability table for $(X, T)$.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{c|ccccccccccc}
+\toprule
+$X \setminus T$ & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 \\
+\midrule
+1 & 1/36 & 1/36 & 1/36 & 1/36 & 1/36 & 1/36 & 0 & 0 & 0 & 0 & 0 \\
+2 & 0 & 1/36 & 1/36 & 1/36 & 1/36 & 1/36 & 1/36 & 0 & 0 & 0 & 0 \\
+3 & 0 & 0 & 1/36 & 1/36 & 1/36 & 1/36 & 1/36 & 1/36 & 0 & 0 & 0 \\
+4 & 0 & 0 & 0 & 1/36 & 1/36 & 1/36 & 1/36 & 1/36 & 1/36 & 0 & 0 \\
+5 & 0 & 0 & 0 & 0 & 1/36 & 1/36 & 1/36 & 1/36 & 1/36 & 1/36 & 0 \\
+6 & 0 & 0 & 0 & 0 & 0 & 1/36 & 1/36 & 1/36 & 1/36 & 1/36 & 1/36 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Observations:}
+\begin{itemize}
+    \item Entries are either 0 or $1/36$.
+    \item $X$ and $T$ are \textbf{NOT} independent because the possible values of $T$ depend on the value of $X$.
+\end{itemize}
+
+\section{Continuous Case: Joint Probability Density Function (PDF)}
+The continuous case transitions from sums to integrals:
+\begin{itemize}
+    \item Discrete values $\rightarrow$ Continuous intervals.
+    \item Joint PMF $\rightarrow$ Joint PDF.
+    \item Sums $\rightarrow$ Double integrals.
+\end{itemize}
+
+\subsection*{Setup and Definition}
+If $X \in [a, b]$ and $Y \in [c, d]$, the pair $(X, Y)$ takes values in the product region $[a, b] \times [c, d]$. \\
+\textbf{Definition:} A function $f(x, y)$ is the joint PDF of $X$ and $Y$ if:
+\[ P((X, Y) \in \text{small rectangle area } dx\,dy) \approx f(x, y)\,dx\,dy \]
+
+\subsection*{Key Properties}
+\begin{enumerate}
+    \item \textbf{Non-negativity:} $f(x, y) \ge 0$.
+    \item \textbf{Normalization:} $\int_{c}^{d} \int_{a}^{b} f(x, y)\,dx\,dy = 1$.
+    \item \textbf{Density vs. Probability:} $f(x, y)$ can be $> 1$ as it is a density.
+\end{enumerate}
+
+\section{Comprehensive Example: Continuous Joint PDF}
+\textbf{Given:} $f(x, y) = 4xy$ for $0 \le x \le 1$ and $0 \le y \le 1$.
+\subsection*{1. Verification of Validity}
+Check if the double integral over the unit square $[0,1]^2$ equals 1:
+\[ \int_{0}^{1} \int_{0}^{1} 4xy \, dx\,dy = \int_{0}^{1} \left[ 2x^2y \right]_{x=0}^{x=1} dy = \int_{0}^{1} 2y \, dy = \left[ y^2 \right]_{0}^{1} = 1 \]
+
+\subsection*{2. Computing Probability $P(A)$}
+For $A = \{X < 0.5, Y > 0.5\}$:
+\[ P(A) = \int_{0.5}^{1} \int_{0}^{0.5} 4xy \, dx\,dy \]
+Inner integral ($x$): $\int_{0}^{0.5} 4xy \, dx = [2x^2y]_{0}^{0.5} = 2(0.25)y = 0.5y$ \\
+Outer integral ($y$): $\int_{0.5}^{1} 0.5y \, dy = [0.25y^2]{0.5}^{1} = 0.25(1 - 0.25) = 0.1875$.
+
+\section{Joint Cumulative Distribution Function (Joint CDF)}
+\textbf{Definition:} $F_{X,Y}(x, y) = P(X \le x, Y \le y)$
+
+\subsection*{Calculation Methods}
+\begin{itemize}
+    \item \textbf{Continuous:} $F_{X,Y}(x, y) = \int_{-\infty}^{y} \int_{-\infty}^{x} f(u, v) \, du\,dv$
+    \item \textbf{Discrete:} $F_{X,Y}(x, y) = \sum_{x_i \le x} \sum_{y_j \le y} p(x_i, y_j)$
+\end{itemize}
+
+\subsection*{Properties of Joint CDF}
+\begin{itemize}
+    \item \textbf{Monotonicity:} $F(x, y)$ is non-decreasing in both $x$ and $y$.
+    \item \textbf{Boundary:} $F(-\infty, y) = 0$, $F(x, -\infty) = 0$, and $F(\infty, \infty) = 1$.
+    \item \textbf{Relationship to PDF:} $f(x, y) = \frac{\partial^2 F(x, y)}{\partial x \partial y}$.
+\end{itemize}
+
+\end{document}

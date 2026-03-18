@@ -1,0 +1,5 @@
+Gemini Chat links for Lecture 15-17
+
+ChatLink : https://gemini.google.com/share/c46960653f28 
+		
+Latex Code Generation: https://gemini.google.com/share/4731f60597d4
