@@ -1,0 +1,111 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\title{CSE 400: Joint Random Variables \\ \large Lecture 16 Notes}
+\author{Scribe: Fagun Rathod - AU2440111}
+\date{March 19, 2026}
+
+\begin{document}
+
+\maketitle
+
+\section*{Topic 1: Introduction to Joint Random Variables}
+
+\subsection*{1. Why Study Joint Random Variables?}
+In real-life and scientific applications, we are often interested in two or more random variables (RVs) simultaneously. Relationships are expected between simultaneous variables, such as vehicle speed and traffic density.
+
+\subsection*{2. Definitions and Notation}
+\begin{itemize}
+    \item \textbf{Joint Distribution:} A distribution that allows for the computation of probabilities for events involving two or more variables simultaneously and provides an understanding of their relationship.
+    \item \textbf{Independence:} The simplest state of joint variables where they do not influence each other.
+    \item \textbf{Covariance:} A measure of the nature of dependence between non-independent variables.
+    \item \textbf{Correlation:} A measure used to understand the relationship between non-independent variables.
+\end{itemize}
+
+\subsection*{3. Main Results and Application Areas}
+\textbf{Correlation Example:} Variables $X$ (Signal-to-Noise Ratio) and $Y$ (Data Throughput) are correlated because throughput depends on SNR.
+\paragraph{Applications:}
+\begin{itemize}
+    \item \textbf{Smart Transportation:} Adaptive signals, congestion prediction, and autonomous routing.
+    \item \textbf{Wireless Networks:} 5G scheduling, adaptive modulation, and network planning.
+    \item \textbf{Other:} Weather forecasting, UAV logistics, and social science.
+\end{itemize}
+
+\subsection*{4. Worked Examples}
+\textbf{Example 2: Wireless Network Performance} \\
+$X = \text{SNR Level}$, $Y = \text{Data Throughput}$
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+SNR Level ($X$) & Throughput High & Throughput Low \\
+\midrule
+High & 0.40 & 0.10 \\
+Medium & 0.20 & 0.15 \\
+Low & 0.05 & 0.10 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\newpage
+
+\section*{Topic 2: Discrete Joint Random Variables}
+
+\subsection*{1. Joint Probability Mass Function (PMF)}
+\textbf{Setup:} $X \in \{x_1, \dots, x_n\}$ and $Y \in \{y_1, \dots, y_m\}$.
+\begin{itemize}
+    \item \textbf{Product Set:} The pair $(X, Y)$ takes values in $\{(x_1, y_1), \dots, (x_n, y_m)\}$.
+    \item \textbf{Joint PMF:} $p(x_i, y_j) = P(X = x_i, Y = y_j)$.
+\end{itemize}
+
+\subsection*{2. Conditions for Validity}
+\begin{enumerate}
+    \item \textbf{Non-negativity:} $0 \le p(x_i, y_j) \le 1$.
+    \item \textbf{Normalization:} $\sum_{i=1}^{n} \sum_{j=1}^{m} p(x_i, y_j) = 1$.
+\end{enumerate}
+
+\subsection*{3. Worked Example: Rolling Two Dice}
+$X = \text{value on first die}$, $T = \text{total sum}$.
+\begin{itemize}
+    \item $P(X=1, T=2) = 1/36$
+    \item $P(X=1, T=8) = 0$
+    \item $P(X=2, T=3) = 1/36$
+\end{itemize}
+\textit{Observation:} Entries are either 0 or $1/36$. $X$ and $T$ are dependent.
+
+\section*{Topic 3: Continuous Joint Random Variables}
+
+\subsection*{1. Joint Probability Density Function (PDF)}
+\textbf{Definition:} A function $f(x,y)$ such that $P((X,Y) \in A) = \iint_A f(x,y) \,dx\,dy$.
+\begin{itemize}
+    \item \textbf{Non-negativity:} $f(x,y) \ge 0$.
+    \item \textbf{Normalization:} $\int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f(x,y) \,dx\,dy = 1$.
+\end{itemize}
+
+\subsection*{2. Worked Example}
+Given $f(x,y) = 4xy$ for $0 \le x, y \le 1$.
+\paragraph{Normalization Check:}
+\[ \int_{0}^{1} \int_{0}^{1} 4xy \,dx\,dy = \int_{0}^{1} [2x^2y]_{0}^{1} \,dy = \int_{0}^{1} 2y \,dy = [y^2]_{0}^{1} = 1 \]
+\paragraph{Compute $P(X < 0.5, Y > 0.5)$:}
+\[ P(A) = \int_{0}^{0.5} \int_{0.5}^{1} 4xy \,dy\,dx = \int_{0}^{0.5} [2xy^2]_{0.5}^{1} \,dx = \int_{0}^{0.5} 1.5x \,dx = [\frac{3}{4}x^2]_{0}^{0.5} = \frac{3}{16} \]
+
+\section*{Topic 4: Joint Cumulative Distribution Function (CDF)}
+
+\subsection*{1. Definition}
+$F(x,y) = P(X \le x, Y \le y)$.
+\begin{itemize}
+    \item \textbf{Continuous:} $F(x,y) = \int_{-\infty}^{y} \int_{-\infty}^{x} f(u,v) \,du\,dv$.
+    \item \textbf{Discrete:} $F(x,y) = \sum_{x_i \le x} \sum_{y_j \le y} p(x_i, y_j)$.
+\end{itemize}
+
+\subsection*{2. Properties}
+\begin{itemize}
+    \item \textbf{Recovering PDF:} $f(x,y) = \frac{\partial^2}{\partial x \partial y} F(x,y)$.
+    \item \textbf{Limits:} $F(-\infty, -\infty) = 0$ and $F(\infty, \infty) = 1$.
+    \item \textbf{Monotonicity:} $F(x,y)$ is non-decreasing in both $x$ and $y$.
+\end{itemize}
+
+\end{document}
