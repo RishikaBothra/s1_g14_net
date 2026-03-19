@@ -1,0 +1,139 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{enumitem}
+
+\begin{document}
+
+% --- PAGE 1 ---
+\noindent
+Lecture Scribe Generation Task \\
+L15\_L17 \\
+PDF PDF \\
+Task: Generate a lecture scribe intended as exam-oriented reference material. \\
+The scribe must be faithful to the provided context and suitable for closed-notes exam revision. \\
+Context rules: Use only the attached context (lecture slides and relevant textbook excerpts). \\
+Do not introduce any material, intuition, examples, or explanations that are not present in the provided context. \\
+Single-call rule: Generate the complete lecture scribe in one response only. \\
+Do not ask questions, clarifications, confirmations, or request additional input. Do not provide options or commentary. \\
+Structural constraint: The lecture scribe must strictly follow the structure shown in the attached "Example Lecture Scribe (Structure Only)" PDF. \\
+No reordering, additions, or deletions of sections are permitted. \\
+The scribe must prioritize correctness over style; follow the lecture's structure and scope; include definitions, notation, assumptions, and stated results; \\
+include proofs, derivations, and worked examples only if they appear in the provided context; and maintain a formal, academic tone.
+
+\vspace{1cm}
+
+\noindent
+\textbf{Lecture Scribe: Joint Random Variables and Joint Distributions}
+
+\section{1. Lecture Information}
+\begin{itemize}[noitemsep]
+    \item \textbf{Course:} CSE400 - Fundamentals of Probability in Computing.
+    \item \textbf{Topic:} Lecture L15\_16\_17\_18: Joint Random Variables + Joint Distributions + Examples.
+    \item \textbf{Instructor:} Dhaval Patel, PhD.
+    \item \textbf{Date:} March 10, 2026.
+\end{itemize}
+
+\newpage
+
+% --- PAGE 2 ---
+\section{2. Motivation and Applications}
+In science and real-world scenarios, multiple random variables are often analyzed simultaneously to understand the relationships and dependencies between them. \\
+When variables are not independent, covariance and correlation are used as measures of the nature of their dependence.
+
+\noindent
+\textbf{Application Examples:}
+\begin{itemize}[noitemsep]
+    \item \textbf{Smart Transportation:} Analyzing Vehicle Speed (X) and Traffic Density (Y).
+    \item \textbf{Wireless Network Performance:} Signal-to-Noise Ratio (SNR) (X) and Data Throughput (Y).
+    \item \textbf{Weather Prediction:} Rainfall (X) and Temperature (Y).
+    \item \textbf{Drone Delivery:} Wind Speed (X) and Delivery Time (Y).
+\end{itemize}
+
+\section{3. Discrete Joint Distributions}
+\textbf{Setup:} Let $X$ and $Y$ be discrete random variables where $X \in \{x_1, x_2, \dots, x_n\}$ and $Y \in \{y_1, y_2, \dots, y_m\}$. \\
+The ordered pair $(X, Y)$ takes values in the product set $\{(x_1, y_1), (x_1, y_2), \dots, (x_n, y_m)\}$.
+
+\noindent
+\textbf{Joint Probability Mass Function (PMF):} Defined as $p(x_i, y_j) = P(X = x_i, Y = y_j)$. \\
+The Joint PMF represents the probability of the joint outcome occurring simultaneously.
+
+\noindent
+\textbf{Properties of the Joint PMF:}
+\begin{itemize}
+    \item The probability is bounded: $0 \le p(x_i, y_j) \le 1$
+    \item The sum of all probabilities equals 1: $\sum_{i=1}^{n}\sum_{j=1}^{m} p(x_i, y_j) = 1$
+\end{itemize}
+
+\section{4. Continuous Joint Distributions}
+The continuous case is analogous to the discrete case, where discrete values become continuous intervals, Joint PMFs become Joint Probability Density Functions (PDFs), and sums become double integrals.
+
+\noindent
+\textbf{Setup:} If $X \in [a, b]$ and $Y \in [c, d]$, the pair $(X, Y)$ takes values in the product region $[a, b] \times [c, d]$.
+
+\noindent
+\textbf{Joint Probability Density Function (PDF):} A function $f(x, y)$ where the probability that $(X, Y)$ lies in a small rectangle of area $dx \, dy$ is approximately $f(x, y) \, dx \, dy$.
+
+\noindent
+\textbf{Properties of the Joint PDF:}
+\begin{itemize}
+    \item The density is non-negative: $f(x, y) \ge 0$.
+    \item The total volume under the density surface equals 1: $\int_{c}^{d} \int_{a}^{b} f(x, y) \, dx \, dy = 1$.
+    \item The joint PDF $f(x, y)$ is a probability density, not a probability, meaning it may take values greater than 1.
+\end{itemize}
+
+\newpage
+
+% --- PAGE 3 & 4 ---
+\section{5. Joint Cumulative Distribution Function (CDF)}
+\textbf{Definition:} For jointly distributed random variables $X$ and $Y$, the joint CDF is defined as $F(x, y) = P(X \le x, Y \le y)$.
+
+\noindent
+\textbf{Continuous Case:} The joint CDF is obtained by integrating the joint density $f(x, y)$:
+\[ F(x, y) = \int_{c}^{y} \int_{a}^{x} f(u, v) \, du \, dv \]
+\textbf{Recovering the Joint PDF:} Utilizing partial derivatives, the PDF can be recovered from the CDF:
+\[ f(x, y) = \frac{\partial^2}{\partial x \partial y} F(x, y) \]
+
+\noindent
+\textbf{Discrete Case:} The joint CDF is obtained by summing probabilities for all valid $x_i$ and $y_j$:
+\[ F(x, y) = \sum_{x_i \le x} \sum_{y_j \le y} p(x_i, y_j) \]
+
+\noindent
+\textbf{Properties of the Joint CDF:}
+\begin{itemize}
+    \item $F(x, y)$ is non-decreasing; it must stay constant or increase if $x$ or $y$ increase.
+    \item Lower-left limit: $\lim_{(x,y) \to (-\infty, -\infty)} F(x, y) = 0$.
+    \item Upper-right limit: $\lim_{(x,y) \to (\infty, \infty)} F(x, y) = 1$.
+\end{itemize}
+
+\section{6. Worked Examples}
+\textbf{Example 1: Rolling Two Dice (Discrete)} \\
+\textbf{Experiment:} Roll two fair dice. \\
+Let $X$ be the value on the first die, and $T$ be the total sum of both dice. \\
+Each specific pair of outcomes $(i, j)$ has a probability of $1/36$. \\
+In the resulting joint probability table for $(X, T)$ all individual probability entries evaluate to either 0 or $1/36$. \\
+The random variables $X$ and $T$ are observed to not be independent.
+
+\vspace{0.5cm}
+\noindent
+\textbf{Example 2: Continuous PDF Validation and Probability Computation} \\
+\textbf{Given:} $f(x, y) = 4xy$ for $0 \le x \le 1$ and $0 \le y \le 1$. The pair $(X, Y)$ jointly takes values in the unit square $[0, 1]^2$.
+
+\noindent
+\textbf{Step 1: Check Validity (Normalization)} \\
+The double integral over the specified domain is:
+\[ \int_{0}^{1} \int_{0}^{1} 4xy \, dx \, dy = \int_{0}^{1} \left( \int_{0}^{1} 4xy \, dx \right) dy = \int_{0}^{1} 2y \, dy = [y^2]_0^1 = 1 \]
+Because $f(x, y) \ge 0$ and the total probability integrates exactly to 1, it is a valid joint PDF.
+
+\noindent
+\textbf{Step 2: Compute Probability of an Event} \\
+Define the specific event $A = \{X < 0.5, Y > 0.5\}$. \\
+The probability $P(A)$ is formulated as:
+\[ P(A) = \int_{0}^{0.5} \int_{0.5}^{1} 4xy \, dy \, dx \]
+Evaluating the integrals step-by-step:
+\[ P(A) = \int_{0}^{0.5} [2xy^2]_{0.5}^{1} \, dx = \int_{0}^{0.5} 2x(1 - 0.25) \, dx = \int_{0}^{0.5} \frac{3}{2}x \, dx = \frac{3}{16} \]
+
+\end{document}
