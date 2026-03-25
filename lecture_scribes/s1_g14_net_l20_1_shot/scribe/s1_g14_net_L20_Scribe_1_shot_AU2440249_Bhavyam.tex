@@ -1,0 +1,180 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{enumitem}
+
+\begin{document}
+
+\noindent
+CSE400: Fundamentals of Probability in Computing \\
+Lecture 20: Linear Transformations and Expectations of Multiple RVs \\
+Instructor: Dhaval Patel, PhD \\
+Date: March 19, 2025 \\
+Institution: Ahmedabad University 
+
+\section*{1. Lecture Outline}
+Statistical Representation of Random Vectors \\
+Mean Vector, Correlation, and Covariance Matrices \\
+Linear Transformations \\
+Mapping properties under $\underline{Y}=\underline{A}\underline{X}+\underline{b}$ \\
+Multivariate Gaussian Distributions \\
+From 1D/2D cases to N-dimensional Joint PDFs \\
+Special Cases and Properties \\
+Implications of zero correlation and matrix factorization 
+
+\section*{2. Statistical Representation of Random Vectors}
+\subsection*{2.1 Random Vector Definition}
+For random variables $X_{1}, X_{2}, \dots, X_{N}$, the representation as a vector is called a random vector, denoted as $\underline{X}$. \\
+It provides a compact representation of multiple random variables. \\
+Vector form: $\underline{X} = \begin{bmatrix} X_{1} \\ X_{2} \\ \vdots \\ X_{N} \end{bmatrix}$.
+
+\subsection*{2.2 Mean Vector}
+The mean vector of $\underline{X}$ is defined as $\underline{\mu}_{X}=E[\underline{X}]$. \\
+It represents the average value of the random vector. \\
+Each element corresponds to the mean of one random variable. \\
+Example structure: $\underline{\mu}_{X} = \begin{bmatrix} E[X_{1}] \\ E[X_{2}] \\ \vdots \\ E[X_{N}] \end{bmatrix}$.
+
+\subsection*{2.3 Correlation Matrix}
+The correlation matrix represents the correlation between multiple random variables, defined as $R_{XX}=E[\underline{X}\underline{X}^{T}]$. \\
+Matrix elements are defined as $R_{XX}(i,j)=E[X_{i}X_{j}]$, where $i$ and $j \le N$. \\
+$R_{XX}$ is a symmetric matrix. \\
+Full matrix representation: $R_{XX} = \begin{bmatrix} E[X_{1}X_{1}] & E[X_{1}X_{2}] & \dots & E[X_{1}X_{N}] \\ E[X_{2}X_{1}] & \dots & \dots & E[X_{2}X_{N}] \\ \vdots & \vdots & \ddots & \vdots \\ E[X_{N}X_{1}] & E[X_{N}X_{2}] & \dots & E[X_{N}X_{N}] \end{bmatrix}_{N \times N}$.
+
+\subsection*{2.4 Covariance Matrix}
+The covariance matrix acts as a relationship map of random vectors. \\
+Mathematical definition for a random vector: $C_{XX}=E[(\underline{X}-\underline{\mu}_{X})(\underline{X}-\underline{\mu}_{X})^{T}]$. \\
+Practical structure: $C_{XX} = \begin{bmatrix} Var(X_{1}) & Cov(X_{1},X_{2}) & \dots \\ Cov(X_{2},X_{1}) & Var(X_{2}) & \dots \\ \vdots & \vdots & \ddots \end{bmatrix}$. \\
+Symmetry property: $Cov(X_{i},X_{j})=Cov(X_{j},X_{i})$, which makes the matrix a "mirror" of itself.
+
+\section*{3. Linear Transformations}
+\subsection*{3.1 The Linear Model}
+Consider the transformation: $\underline{Y}=\underline{A}\underline{X}+\underline{b}$. \\
+$\underline{A}$ represents the transformation matrix, which scales and rotates the data. \\
+$\underline{b}$ represents the constant vector, which shifts or translates the center. \\
+$\underline{X}$ represents the input random vector. \\
+For N-dimensional vectors, the system of equations is: \\
+$Y_{1}=a_{11}X_{1}+a_{12}X_{2}+\dots+a_{1N}X_{N}+b_{1}$ \\
+$Y_{N}=a_{N1}X_{1}+a_{N2}X_{2}+\dots+a_{NN}X_{N}+b_{N}$ 
+
+\subsection*{3.2 Summary of Properties under Transformation}
+If $\underline{Y}=\underline{A}\underline{X}+\underline{b}$, the resulting statistical properties are summarized below:
+
+\vspace{0.5cm}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Property} & \textbf{Transformed Result} \\
+\hline
+Mean & $\mu_{Y}=\underline{A}\mu_{X}+\underline{b}$ \\
+\hline
+Covariance & $C_{YY}=\underline{A}C_{XX}\underline{A}^{T}$ \\
+\hline
+Correlation & $R_{YY}=\underline{A}R_{XX}\underline{A}^{T}+\underline{A}\mu_{X}\underline{b}^{T}+\underline{b}\mu_{X}^{T}\underline{A}^{T}+\underline{b}\underline{b}^{T}$ \\
+\hline
+\end{tabular}
+\vspace{0.5cm}
+
+\section*{4. Derivations}
+\subsection*{4.1 Mean Transformation Derivation}
+Definition: $\mu_{Y}=E[\underline{Y}]$. \\
+Substitute the linear model: $\mu_{Y}=E[\underline{A}\underline{X}+\underline{b}]$. \\
+Apply linearity of expectation: $E[\underline{A}\underline{X}]+E[\underline{b}]$. \\
+Final Result: $\mu_{Y}=\underline{A}\mu_{X}+\underline{b}$.
+
+\subsection*{4.2 Correlation Matrix Transformation Derivation}
+Definition: $R_{YY}=E[\underline{Y}\underline{Y}^{T}] = E[(\underline{A}\underline{X}+\underline{b})(\underline{A}\underline{X}+\underline{b})^{T}]$. \\
+Expansion of terms: $R_{YY}=E[\underline{A}\underline{X}\underline{X}^{T}\underline{A}^{T}+\underline{A}\underline{X}\underline{b}^{T}+\underline{b}\underline{X}^{T}\underline{A}^{T}+\underline{b}\underline{b}^{T}]$. \\
+Applying Expectation yields the final result: $R_{YY}=\underline{A}R_{XX}\underline{A}^{T}+\underline{A}\mu_{X}\underline{b}^{T}+\underline{b}\mu_{X}^{T}\underline{A}^{T}+\underline{b}\underline{b}^{T}$.
+
+\subsection*{4.3 Covariance Matrix Transformation Derivation}
+Key Observation: The deviation from the mean is independent of the shift $\underline{b}$. \\
+$\underline{Y}-\mu_{Y}=(\underline{A}\underline{X}+\underline{b})-(\underline{A}\mu_{X}+\underline{b})=\underline{A}(\underline{X}-\mu_{X})$. \\
+Derivation steps: \\
+$C_{YY}=E[(\underline{Y}-\mu_{Y})(\underline{Y}-\mu_{Y})^{T}]$. \\
+$C_{YY}=E[\underline{A}(\underline{X}-\mu_{X})(\underline{X}-\mu_{X})^{T}\underline{A}^{T}]$. \\
+Simplified Result: $C_{YY}=\underline{A}C_{XX}\underline{A}^{T}$. \\
+Notice that the shift $\underline{b}$ does not affect the covariance, meaning it does not affect the spread.
+
+\section*{5. Gaussian Distributions}
+\subsection*{5.1 1D and 2D Gaussian Distributions}
+Univariate Gaussian (1D): For a single random variable $X$, the probability density function (PDF) is $f_{X}(x)=\frac{1}{\sqrt{2\pi\sigma^{2}}}exp(-\frac{(x-\mu)^{2}}{2\sigma^{2}})$. \\
+Joint Gaussian (2D): For two random variables $X$ and $Y$, the joint PDF is $f_{XY}(x,y)=\frac{exp\{-\frac{1}{2(1-\rho_{XY}^{2})}[(\frac{x-\mu_{X}}{\sigma_{X}})^{2}-2\rho_{XY}\frac{(x-\mu_{X})(y-\mu_{Y})}{\sigma_{X}\sigma_{Y}}+(\frac{y-\mu_{Y}}{\sigma_{Y}})^{2}]\}}{2\pi\sigma_{X}\sigma_{Y}\sqrt{1-\rho_{XY}^{2}}}$.
+
+\subsection*{5.2 Multivariate Gaussian Distribution}
+For an N-dimensional random vector $\underline{X}=[X_{1}, X_{2}, \dots, X_{N}]^{T}$. \\
+The General Vector PDF is defined as: $f_{\underline{X}}(x)=\frac{1}{\sqrt{(2\pi)^{N}det(C_{XX})}}exp(-\frac{1}{2}(x-\underline{\mu}_{X})^{T}C_{XX}^{-1}(x-\underline{\mu}_{X}))$. \\
+Structure Components: $\underline{\mu}_{X}$ is the Mean vector of size $(N \times 1)$, and $C_{XX}$ is the Covariance matrix of size $(N \times N)$.
+
+\subsection*{5.3 Special Case: Uncorrelated Gaussian Random Variables}
+For mutually uncorrelated Gaussian random variables, $Cov(X_{i},X_{j})=0$ for all $i \ne j$. \\
+The covariance matrix simplifies to a diagonal matrix, which implies the inverse $C_{XX}^{-1}$ is also a diagonal matrix containing elements $\sigma_{n}^{-2}$ on the diagonal. \\
+Substituting the inverse back into the density function yields the exponent: $exp(-\frac{1}{2}\sum_{n=1}^{N}(\frac{x_{n}-\mu_{n}}{\sigma_{n}})^{2})$. \\
+Interpretation: The joint Gaussian PDF factorizes into the product of individual Gaussian PDFs: $f_{\underline{x}}(\underline{x})=\prod_{n=1}^{N}\frac{1}{\sqrt{2\pi\sigma_{n}^{2}}}exp(-\frac{(x_{n}-\mu_{n})^{2}}{2\sigma_{n}^{2}})$.
+
+\sectionsection*{6. Worked Examples}
+\subsection*{6.1 Numerical Linear Transformation}
+Given the linear transformation $\underline{Y}=\underline{A}\underline{X}$ where: \\
+$\underline{\mu}_{X} = \begin{bmatrix} 2 \\ -1 \\ 1 \end{bmatrix}$, $\underline{A} = \begin{bmatrix} 1 & 0 & -1 \\ 0 & -1 & 1 \\ -1 & 1 & 0 \end{bmatrix}$, and $R_{XX} = \begin{bmatrix} 13 & 2 & 3 \\ 2 & 10 & 3 \\ 3 & 3 & 10 \end{bmatrix}$.
+
+\noindent
+Find Mean Vector of Y: \\
+$\underline{\mu}_{Y} = \underline{A}\underline{\mu}_{X} = \begin{bmatrix} 1 & 0 & -1 \\ 0 & -1 & 1 \\ -1 & 1 & 0 \end{bmatrix} \begin{bmatrix} 2 \\ -1 \\ 1 \end{bmatrix} = \begin{bmatrix} 1 \\ 2 \\ -3 \end{bmatrix}$.
+
+\noindent
+Find Correlation Matrix of Y: \\
+Step 1: Compute $\underline{A}R_{XX} = \begin{bmatrix} 1 & 0 & -1 \\ 0 & -1 & 1 \\ -1 & 1 & 0 \end{bmatrix} \begin{bmatrix} 13 & 2 & 3 \\ 2 & 10 & 3 \\ 3 & 3 & 10 \end{bmatrix} = \begin{bmatrix} 10 & -1 & -7 \\ 1 & -7 & 7 \\ -11 & 8 & 0 \end{bmatrix}$. \\
+Step 2: Multiply by $\underline{A}^{T}$ to get $R_{YY} = \begin{bmatrix} 10 & -1 & -7 \\ 1 & -7 & 7 \\ -11 & 8 & 0 \end{bmatrix} \begin{bmatrix} 1 & 0 & -1 \\ 0 & -1 & 1 \\ -1 & 1 & 0 \end{bmatrix} = \begin{bmatrix} 17 & -6 & -11 \\ -6 & 14 & -8 \\ -11 & -8 & 19 \end{bmatrix}$.
+
+\noindent
+Find Covariance Matrix of Y: \\
+Use property $C_{YY} = R_{YY} - \underline{\mu}_{Y}\underline{\mu}_{Y}^{T}$. \\
+Outer product of the mean: $\underline{\mu}_{Y}\underline{\mu}_{Y}^{T} = \begin{bmatrix} 1 \\ 2 \\ -3 \end{bmatrix} \begin{bmatrix} 1 & 2 & -3 \end{bmatrix} = \begin{bmatrix} 1 & 2 & -3 \\ 2 & 4 & -6 \\ -3 & -6 & 9 \end{bmatrix}$. \\
+Subtraction: $C_{YY} = \begin{bmatrix} 17 & -6 & -11 \\ -6 & 14 & -8 \\ -11 & -8 & 19 \end{bmatrix} - \begin{bmatrix} 1 & 2 & -3 \\ 2 & 4 & -6 \\ -3 & -6 & 9 \end{bmatrix} = \begin{bmatrix} 16 & -8 & -8 \\ -8 & 10 & -2 \\ -8 & -2 & 10 \end{bmatrix}$. (Note: Source 283 shows an intermediate matrix with -9 in corners, corrected to -11 based on $R_{YY}$).
+
+\subsection*{6.2 2D Joint Gaussian PDF Derivation}
+Given mean vector $\underline{\mu}_{X} = \begin{bmatrix} \mu_{1} \\ \mu_{2} \end{bmatrix}$ and covariance matrix $C_{XX} = \begin{bmatrix} \sigma_{1}^{2} & \rho\sigma_{1}\sigma_{2} \\ \rho\sigma_{1}\sigma_{2} & \sigma_{2}^{2} \end{bmatrix}$. \\
+Determinant computation: $det(C_{XX}) = \sigma_{1}^{2}\sigma_{2}^{2} - (\rho\sigma_{1}\sigma_{2})^{2} = \sigma_{1}^{2}\sigma_{2}^{2}(1-\rho^{2})$. \\
+Inverse of covariance matrix: $C_{XX}^{-1} = \frac{1}{det(C_{XX})}adj(C_{XX}) = \frac{1}{1-\rho^{2}}\begin{bmatrix} \sigma_{1}^{-2} & -\rho\sigma_{1}^{-1}\sigma_{2}^{-1} \\ -\rho\sigma_{1}^{-1}\sigma_{2}^{-1} & \sigma_{2}^{-2} \end{bmatrix}$. \\
+Evaluate quadratic form $Q(x) = (\underline{x}-\underline{\mu}_{X})^{T}C_{XX}^{-1}(\underline{x}-\underline{\mu}_{X})$. \\
+After algebraic simplification, this yields: $Q(x) = \frac{1}{1-\rho^{2}}[(\frac{x_{1}-\mu_{1}}{\sigma_{1}})^{2} - 2\rho(\frac{x_{1}-\mu_{1}}{\sigma_{1}})(\frac{x_{2}-\mu_{2}}{\sigma_{2}}) + (\frac{x_{2}-\mu_{2}}{\sigma_{2}})^{2}]$.
+
+\section*{7. Case Study: Smart City Traffic + Weather System (Ahmedabad)}
+\subsection*{7.1 System Definition}
+Design of an intelligent system predicting traffic congestion using transportation and climate variables. \\
+Define a random vector $\underline{X}$ of size $N=5$: \\
+$X_{1}$: Traffic flow (vehicles/min), mean = 120. \\
+$X_{2}$: Average vehicle speed (km/h), mean = 35. \\
+$X_{3}$: Rainfall intensity (mm/hr), mean = 2. \\
+$X_{4}$: Temperature ($^\circ$C), mean = 32. \\
+$X_{5}$: Air pollution index (AQI), mean = 180.
+
+\subsection*{7.2 Dependencies (Covariance Map)}
+The covariance matrix acts as the dependency map of the city. By definition and intuition: \\
+$Cov(X_{1}, X_{3}) > 0$: More rain implies more congestion (traffic increases). \\
+$Cov(X_{2}, X_{3}) < 0$: More rain implies lower speed. \\
+$Cov(X_{1}, X_{5}) > 0$: More traffic implies higher pollution. \\
+$Cov(X_{4}, X_{5}) < 0$: Higher temperature may cause pollution to disperse.
+
+\subsection*{7.3 Probabilistic Modeling}
+Assume the entire system follows a Joint Gaussian Distribution: $\underline{X} \sim \mathcal{N}(\mu, \Sigma)$. \\
+Gaussian assumption is used due to the Central Limit Theorem (aggregation of many small effects) and because sensor noise is often Gaussian. \\
+This model allows for easier analytics via closed-form solutions.
+
+\subsection*{7.4 Transformation into Congestion Index}
+Suppose the city defines a derived metric, the Congestion Index, via linear transformation: $Y = 0.6X_{1} - 0.4X_{2} + 0.8X_{3}$. \\
+Since the input is Gaussian, the linear transformation $Y$ is also Gaussian. \\
+The mean of $Y$ is given by $E[Y]=a^{T}\mu$, and the variance is $Var(Y)=a^{T}\Sigma a$.
+
+\section*{8. Homework Assignments}
+\subsection*{8.1 Finding the Mean Vector}
+Problem Statement: Given a random vector $\underline{X}$ with matrices $C_{XX} = \begin{bmatrix} 5 & -1 & 2 \\ -1 & 5 & -2 \\ 2 & -2 & 8 \end{bmatrix}$ and $R_{XX} = \begin{bmatrix} 6 & 1 & 1 \\ 1 & 9 & -4 \\ 1 & -4 & 9 \end{bmatrix}$, find the mean vector $\underline{\mu}_{X}$. 
+
+\noindent
+Hint: Use the relationship $C_{XX}=R_{XX}-\underline{\mu}_{X}\underline{\mu}_{X}^{T}$ and rearrange to solve for the outer product: $\underline{\mu}_{X}\underline{\mu}_{X}^{T} = R_{XX} - C_{XX}$. Identify elements of $\underline{\mu}_{X}$ from the diagonal of the result.
+
+\subsection*{8.2 Variance Proof}
+Homework: Prove the following variance property: $Var[X+Y] = Var[X] + Var[Y] + 2Cov(X,Y)$.
+
+\end{document}
