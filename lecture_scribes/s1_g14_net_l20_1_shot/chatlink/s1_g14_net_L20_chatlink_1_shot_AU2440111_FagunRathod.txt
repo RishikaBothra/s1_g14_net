@@ -1,0 +1,5 @@
+Gemini Chat links for Lecture 20
+
+Scribe formation : https://gemini.google.com/share/150cbddbc160
+
+Latex Code Generation: https://gemini.google.com/share/2be560e85266

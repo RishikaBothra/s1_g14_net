@@ -1,0 +1,151 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+
+\title{
+    \textbf{CSE400: Fundamentals of Probability in Computing} \\
+    \large Lecture 20: Linear Transformations and Expectations of Multiple RVs \\
+    \normalsize Course Instructor: Dhaval Patel, PhD
+}
+\author{Scribe Prepared by: Vansh Lilani (ID: AU2320146)}
+\date{March 19, 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Statistical Representation of Random Vectors}
+For multiple random variables $X_1, X_2, \dots, X_N$, we utilize a compact vector representation to manage their interdependencies.
+
+\subsection{Random Vector Definition}
+A random vector $\underline{X}$ is a column vector containing $N$ random variables:
+\[
+\underline{X} = \begin{bmatrix} X_1 \\ X_2 \\ \vdots \\ X_N \end{bmatrix} \text{}
+\]
+
+\subsection{Mean Vector}
+The mean vector $\underline{\mu}_X$ represents the average value of the random vector, where each element corresponds to the expected value of an individual random variable:
+\[
+\underline{\mu}_X = E[\underline{X}] = \begin{bmatrix} E[X_1] \\ E[X_2] \\ \vdots \\ E[X_N] \end{bmatrix} \text{}
+\]
+
+\subsection{Correlation Matrix}
+The correlation matrix $R_{XX}$ captures the correlation between multiple random variables.
+
+\textbf{Definition:} $R_{XX} = E[\underline{X}\underline{X}^T]$.
+
+\textbf{Element Representation:} For $i, j \le N$, the element $R_{XX}(i, j) = E[X_iX_j]$.
+
+\textbf{Matrix Structure:}
+\[
+R_{XX} = \begin{bmatrix} 
+E[X_1X_1] & E[X_1X_2] & \dots & E[X_1X_N] \\ 
+E[X_2X_1] & E[X_2X_2] & \dots & E[X_2X_N] \\ 
+\vdots & \vdots & \ddots & \vdots \\ 
+E[X_NX_1] & E[X_NX_2] & \dots & E[X_NX_N] 
+\end{bmatrix}_{N \times N} \text{}
+\]
+
+\textbf{Property:} $R_{XX}$ is a symmetric matrix.
+
+\subsection{Covariance Matrix}
+The covariance matrix $C_{XX}$ serves as a "relationship map" for the random vector.
+
+\textbf{Definition:} $C_{XX} = E[(\underline{X} - \underline{\mu}_X)(\underline{X} - \underline{\mu}_X)^T]$.
+
+\textbf{Practical Structure:}
+\[
+C_{XX} = \begin{bmatrix} 
+Var(X_1) & Cov(X_1, X_2) & \dots \\ 
+Cov(X_2, X_1) & Var(X_2) & \dots \\ 
+\vdots & \vdots & \ddots 
+\end{bmatrix} \text{}
+\]
+
+\textbf{Property:} Due to the fact that $Cov(X_i, X_j) = Cov(X_j, X_i)$, $C_{XX}$ is symmetric.
+
+\section{Linear Transformation of Random Vectors}
+We consider a linear model where an input random vector $\underline{X}$ is transformed into an output vector $\underline{Y}$.
+
+\subsection{The Linear Model}
+The transformation is defined as:
+\[
+\underline{Y} = \underline{A}\underline{X} + \underline{b} \text{}
+\]
+
+\begin{itemize}
+    \item $\underline{A}$: Transformation matrix (scales and rotates data).
+    \item $\underline{b}$: Constant vector (shifts/translates the center).
+    \item $\underline{X}$: Input random vector.
+\end{itemize}
+
+For $N$-dimensional vectors, this expands to:
+\begin{align*}
+    Y_1 &= a_{11}X_1 + a_{12}X_2 + \dots + a_{1N}X_N + b_1 \\
+    &\vdots \\
+    Y_N &= a_{N1}X_1 + a_{N2}X_2 + \dots + a_{NN}X_N + b_N
+\end{align*}
+
+\section{Properties of Transformed Vectors}
+When $\underline{Y} = \underline{A}\underline{X} + \underline{b}$, the statistical properties of $\underline{Y}$ are derived as follows:
+
+\subsection{Mean of Transformed Vector ($\underline{\mu}_Y$)}
+\textbf{Derivation:}
+\begin{enumerate}
+    \item Substitute $\underline{Y} = \underline{A}\underline{X} + \underline{b}$ into the expectation: $\underline{\mu}_Y = E[\underline{A}\underline{X} + \underline{b}]$.
+    \item Apply linearity of expectation: $E[\underline{A}\underline{X}] + E[\underline{b}]$.
+    \item \textbf{Result:} $\underline{\mu}_Y = \underline{A}\underline{\mu}_X + \underline{b}$.
+\end{enumerate}
+
+\subsection{Covariance of Transformed Vector ($C_{YY}$)}
+\textbf{Key Observation:} Deviation from the mean is independent of shift $\underline{b}$:
+\[
+\underline{Y} - \underline{\mu}_Y = (\underline{A}\underline{X} + \underline{b}) - (\underline{A}\underline{\mu}_X + \underline{b}) = \underline{A}(\underline{X} - \underline{\mu}_X)
+\]
+\textbf{Derivation:}
+\begin{enumerate}
+    \item $C_{YY} = E[(\underline{Y} - \underline{\mu}_Y)(\underline{Y} - \underline{\mu}_Y)^T]$.
+    \item Substitute the observation: $C_{YY} = E[\underline{A}(\underline{X} - \underline{\mu}_X)(\underline{X} - \underline{\mu}_X)^T\underline{A}^T]$.
+    \item \textbf{Simplified Result:} $C_{YY} = \underline{A}C_{XX}\underline{A}^T$.
+\end{enumerate}
+
+\subsection{Correlation of Transformed Vector ($R_{YY}$)}
+\textbf{Derivation:}
+\begin{enumerate}
+    \item $R_{YY} = E[\underline{Y}\underline{Y}^T] = E[(\underline{A}\underline{X} + \underline{b})(\underline{A}\underline{X} + \underline{b})^T]$.
+    \item Expansion of terms: $R_{YY} = E[\underline{A}\underline{X}\underline{X}^T\underline{A}^T + \underline{A}\underline{X}\underline{b}^T + \underline{b}\underline{X}^T\underline{A}^T + \underline{b}\underline{b}^T]$.
+    \item Applying expectation: $R_{YY} = \underline{A}E[\underline{X}\underline{X}^T]\underline{A}^T + \underline{A}E[\underline{X}]\underline{b}^T + \underline{b}E[\underline{X}^T]\underline{A}^T + \underline{b}\underline{b}^T$.
+    \item \textbf{Final Result:} $R_{YY} = \underline{A}R_{XX}\underline{A}^T + \underline{A}\underline{\mu}_X\underline{b}^T + \underline{b}\underline{\mu}_X^T\underline{A}^T + \underline{b}\underline{b}^T$.
+\end{enumerate}
+
+\section{Numerical Example}
+Given: $\underline{Y} = \underline{A}\underline{X}$ where:
+\[
+\underline{\mu}_X = \begin{bmatrix} 2 \\ -1 \\ 1 \end{bmatrix}, \underline{A} = \begin{bmatrix} 1 & 0 & -1 \\ 0 & -1 & 1 \\ -1 & 1 & 0 \end{bmatrix}, R_{XX} = \begin{bmatrix} 13 & 2 & 3 \\ 2 & 10 & 3 \\ 3 & 3 & 10 \end{bmatrix}
+\]
+
+\textbf{Solution (a): Mean Vector of $\underline{Y}$} \\
+Using $\underline{\mu}_Y = \underline{A}\underline{\mu}_X$:
+\[
+\underline{\mu}_Y = \begin{bmatrix} 1 & 0 & -1 \\ 0 & -1 & 1 \\ -1 & 1 & 0 \end{bmatrix} \begin{bmatrix} 2 \\ -1 \\ 1 \end{bmatrix} = \begin{bmatrix} (1)(2) + (0)(-1) + (-1)(1) \\ (0)(2) + (-1)(-1) + (1)(1) \\ (-1)(2) + (1)(-1) + (0)(1) \end{bmatrix} = \begin{bmatrix} 1 \\ 2 \\ -3 \end{bmatrix}
+\]
+
+\section{Case Study: Smart City Traffic \& Weather (Ahmedabad)}
+We model a city's congestion using five random variables: Rainfall, Temperature, Traffic Volume, Speed, and Pollution.
+
+\textbf{Assumption:} The entire system behaves as a Joint Gaussian Distribution, defined by its Mean (typical conditions) and Covariance (interdependencies).
+
+\textbf{Inferences from Covariance Matrix:} 
+\begin{itemize}
+    \item $\uparrow$ Rainfall $\implies$ $\uparrow$ Traffic (Congestion).
+    \item $\uparrow$ Rainfall $\implies$ $\downarrow$ Speed.
+    \item $\uparrow$ Traffic $\implies$ $\uparrow$ Pollution.
+    \item $\uparrow$ Temperature $\implies$ Pollution disperses.
+\end{itemize}
+
+\textbf{Transformation:} A city defined "Congestion Index" is a linear transformation of these variables, allowing for predictive modeling of city conditions.
+
+\end{document}

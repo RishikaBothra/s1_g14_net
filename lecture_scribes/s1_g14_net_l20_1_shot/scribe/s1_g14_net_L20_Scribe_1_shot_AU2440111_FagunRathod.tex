@@ -1,0 +1,173 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{geometry}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{array}
+
+\geometry{margin=1in}
+
+\title{Lecture Scribe: CSE 400 Lecture 20 \\ \large Topic: Linear Transformations and Expectations of Multiple RVs}
+\author{Scribe: Fagun Rathod - AU2440111}
+\date{March 25, 2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Random Vector Representation}
+\subsection{Definitions and Notation}
+\begin{itemize}
+    \item \textbf{Random Vector:} For random variables $X_{1}, X_{2}, \dots, X_{N}$, they are represented as a vector $\underline{X}$.
+    \item \textbf{Vector Form:} 
+    \[
+    \underline{X} = \begin{bmatrix} X_{1} \\ X_{2} \\ \vdots \\ X_{N} \end{bmatrix}
+    \]
+    \item \textbf{Purpose:} Provides a compact representation of multiple random variables.
+\end{itemize}
+
+\hr
+\section{Statistical Representation: Mean Vector}
+\subsection{Definitions and Notation}
+\begin{itemize}
+    \item \textbf{Mean Vector Definition:} The mean vector of $\underline{X}$ is $\underline{\mu}_{X} = E[\underline{X}]$.
+    \item \textbf{Notation:} 
+    \[
+    \underline{\mu}_{X} = \begin{bmatrix} E[X_{1}] \\ E[X_{2}] \\ \vdots \\ E[X_{N}] \end{bmatrix}
+    \]
+\end{itemize}
+
+\subsection{Assumptions / Conditions}
+\begin{itemize}
+    \item Each element in the mean vector corresponds to the mean of one individual random variable.
+    \item It represents the average value of the random vector.
+\end{itemize}
+
+\section{Statistical Representation: Correlation Matrix}
+\subsection{Definitions and Notation}
+\begin{itemize}
+    \item \textbf{Correlation Matrix ($R_{XX}$):} Defined as $R_{XX} = E[\underline{X}\underline{X}^{T}]$.
+    \item \textbf{Element Definition:} $R_{XX}(i,j) = E[X_{i}X_{j}]$ for $i, j \le N$.
+    \item \textbf{Matrix Structure:}
+    \[
+    R_{XX} = \begin{bmatrix} 
+    E[X_{1}X_{1}] & E[X_{1}X_{2}] & \dots & E[X_{1}X_{N}] \\ 
+    E[X_{2}X_{1}] & \dots & \dots & E[X_{2}X_{N}] \\ 
+    \vdots & \vdots & \vdots & \vdots \\ 
+    E[X_{N}X_{1}] & E[X_{N}X_{2}] & \dots & E[X_{N}X_{N}] 
+    \end{bmatrix}_{N \times N}
+    \]
+\end{itemize}
+
+\subsection{Assumptions / Conditions}
+\begin{itemize}
+    \item $R_{XX}$ is a symmetric matrix.
+\end{itemize}
+
+\section{Statistical Representation: Covariance Matrix}
+\subsection{Definitions and Notation}
+\begin{itemize}
+    \item \textbf{Covariance Matrix ($C_{XX}$):} For a random vector $\underline{X}$, $C_{XX} = E[(\underline{X}-\underline{\mu}_{X})(\underline{X}-\underline{\mu}_{X})^{T}]$.
+    \item \textbf{Practical Structure:}
+    \[
+    C_{XX} = \begin{bmatrix} 
+    Var(X_{1}) & Cov(X_{1},X_{2}) & \dots \\ 
+    Cov(X_{2},X_{1}) & Var(X_{2}) & \dots \\ 
+    \vdots & \vdots & \ddots 
+    \end{bmatrix}
+    \]
+\end{itemize}
+
+\subsection{Assumptions / Conditions}
+\begin{itemize}
+    \item \textbf{Symmetry:} $Cov(X_{i},X_{j}) = Cov(X_{j},X_{i})$, making the matrix a "mirror" of itself.
+\end{itemize}
+
+\section{Linear Transformations of Random Vectors}
+\subsection{Definitions and Notation}
+\textbf{Linear Model:} $\underline{Y} = \underline{A}\underline{X} + \underline{b}$
+\begin{itemize}
+    \item $\underline{A}$: Transformation matrix (scales and rotates data).
+    \item $\underline{b}$: Constant vector (shifts/translates the center).
+    \item $\underline{X}$: Input random vector.
+\end{itemize}
+
+\subsection{Main Results / Theorems}
+\begin{table}[h]
+\centering
+\begin{tabular}{ll}
+\toprule
+\textbf{Property} & \textbf{Transformed Result} \\ \midrule
+\textbf{Mean} & $\underline{\mu}_{Y} = \underline{A}\underline{\mu}_{X} + \underline{b}$ \\
+\textbf{Covariance} & $C_{YY} = \underline{A}C_{XX}\underline{A}^{T}$ \\
+\textbf{Correlation} & $R_{YY} = \underline{A}R_{XX}\underline{A}^{T} + \underline{A}\underline{\mu}_{X}\underline{b}^{T} + \underline{b}\underline{\mu}_{X}^{T}\underline{A}^{T} + \underline{b}\underline{b}^{T}$ \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Proofs / Derivations}
+\subsubsection*{Mean Transformation Derivation}
+\begin{enumerate}
+    \item $\underline{\mu}_{Y} = E[\underline{Y}]$
+    \item Substitute $\underline{Y} = \underline{A}\underline{X} + \underline{b}$: $\underline{\mu}_{Y} = E[\underline{A}\underline{X} + \underline{b}]$
+    \item Apply linearity: $E[\underline{A}\underline{X}] + E[\underline{b}]$
+    \item Result: $\underline{\mu}_{Y} = \underline{A}\underline{\mu}_{X} + \underline{b}$
+\end{enumerate}
+
+\subsubsection*{Correlation Matrix Transformation Derivation}
+\begin{enumerate}
+    \item $R_{YY} = E[\underline{Y}\underline{Y}^{T}] = E[(\underline{A}\underline{X} + \underline{b})(\underline{A}\underline{X} + \underline{b})^{T}]$
+    \item Expansion: $R_{YY} = E[\underline{A}\underline{X}\underline{X}^{T}\underline{A}^{T} + \underline{A}\underline{X}\underline{b}^{T} + \underline{b}\underline{X}^{T}\underline{A}^{T} + \underline{b}\underline{b}^{T}]$
+    \item Applying Expectation: $R_{YY} = \underline{A}E[\underline{X}\underline{X}^{T}]\underline{A}^{T} + \underline{A}E[\underline{X}]\underline{b}^{T} + \underline{b}E[\underline{X}^{T}]\underline{A}^{T} + \underline{b}\underline{b}^{T}$
+    \item Result: $R_{YY} = \underline{A}R_{XX}\underline{A}^{T} + \underline{A}\underline{\mu}_{X}\underline{b}^{T} + \underline{b}\underline{\mu}_{X}^{T}\underline{A}^{T} + \underline{b}\underline{b}^{T}$
+\end{enumerate}
+
+\subsection{Worked Examples}
+\subsubsection*{Example 1: Numerical Linear Transformation}
+\textbf{Given:} $\underline{Y} = \underline{A}\underline{X}$ where:
+\[
+\underline{\mu}_{X} = \begin{bmatrix} 2 \\ -1 \\ 1 \end{bmatrix}, \quad \underline{A} = \begin{bmatrix} 1 & 0 & -1 \\ 0 & -1 & 1 \\ -1 & 1 & 0 \end{bmatrix}, \quad \underline{R}_{XX} = \begin{bmatrix} 13 & 2 & 3 \\ 2 & 10 & 3 \\ 3 & 3 & 10 \end{bmatrix}
+\]
+
+\begin{itemize}
+    \item \textbf{(a) Mean vector of Y:}
+    \[
+    \underline{\mu}_{Y} = \underline{A}\underline{\mu}_{X} = \begin{bmatrix} 1 & 0 & -1 \\ 0 & -1 & 1 \\ -1 & 1 & 0 \end{bmatrix} \begin{bmatrix} 2 \\ -1 \\ 1 \end{bmatrix} = \begin{bmatrix} 1 \\ 2 \\ -3 \end{bmatrix}
+    \]
+    \item \textbf{(b) Correlation matrix of Y:}
+    $\underline{R}_{YY} = \underline{A}\underline{R}_{XX}\underline{A}^{T}$
+    \[
+    \text{Step 1: } \underline{A}\underline{R}_{XX} = \begin{bmatrix} 10 & -1 & -7 \\ 1 & -7 & 7 \\ -11 & 8 & 0 \end{bmatrix}
+    \]
+    \[
+    \text{Step 2: } \underline{R}_{YY} = \begin{bmatrix} 17 & -6 & -11 \\ -6 & 14 & -8 \\ -11 & -8 & 19 \end{bmatrix}
+    \]
+    \item \textbf{(c) Covariance matrix of Y:}
+    $\underline{C}_{YY} = \underline{R}_{YY} - \underline{\mu}_{Y}\underline{\mu}_{Y}^{T}$
+    \[
+    \underline{\mu}_{Y}\underline{\mu}_{Y}^{T} = \begin{bmatrix} 1 \\ 2 \\ -3 \end{bmatrix} \begin{bmatrix} 1 & 2 & -3 \end{bmatrix} = \begin{bmatrix} 1 & 2 & -3 \\ 2 & 4 & -6 \\ -3 & -6 & 9 \end{bmatrix}
+    \]
+    \[
+    \underline{C}_{YY} = \begin{bmatrix} 16 & -8 & -8 \\ -8 & 10 & -2 \\ -8 & -2 & 10 \end{bmatrix}
+    \]
+\end{itemize}
+
+\section{Multivariate Gaussian Distribution}
+\subsection{Definitions and Notation}
+\begin{itemize}
+    \item \textbf{Univariate (1D):} 
+    \[ f_{X}(x) = \frac{1}{\sqrt{2\pi\sigma^{2}}} \exp\left(-\frac{(x-\mu)^{2}}{2\sigma^{2}}\right) \]
+    \item \textbf{Joint Gaussian (2D):}
+    \[ f_{XY}(x,y) = \frac{\exp\left\{-\frac{1}{2(1-\rho_{XY}^{2})} \left[ \left(\frac{x-\mu_{X}}{\sigma_{X}}\right)^{2} - 2\rho_{XY} \frac{(x-\mu_{X})(y-\mu_{Y})}{\sigma_{X}\sigma_{Y}} + \left(\frac{y-\mu_{Y}}{\sigma_{Y}}\right)^{2} \right] \right\}}{2\pi\sigma_{X}\sigma_{Y}\sqrt{1-\rho_{XY}^{2}}} \]
+    \item \textbf{N-Dimensional Vector PDF:}
+    \[ f_{\underline{X}}(\bm{x}) = \frac{1}{\sqrt{(2\pi)^{N}\det(C_{XX})}} \exp\left(-\frac{1}{2}(\bm{x}-\underline{\mu}_{X})^{T}C_{XX}^{-1}(\bm{x}-\underline{\mu}_{X})\right) \]
+\end{itemize}
+
+\subsection{Main Results / Theorems}
+\begin{itemize}
+    \item \textbf{Uncorrelated Gaussian RVs:} If jointly Gaussian RVs are mutually uncorrelated ($Cov(X_{i},X_{j})=0$), the covariance matrix $C_{XX}$ is diagonal.
+    \item \textbf{Factorization:} The joint PDF factorizes: 
+    \[ f_{\underline{X}}(\underline{x}) = \prod_{n=1}^{N} \frac{1}{\sqrt{2\pi\sigma_{n}^{2}}} \exp\left(-\frac{(x_{n}-\mu_{n})^{2}}{2\sigma_{n}^{2}}\right) \]
+\end{itemize}
+
+\end{document}
