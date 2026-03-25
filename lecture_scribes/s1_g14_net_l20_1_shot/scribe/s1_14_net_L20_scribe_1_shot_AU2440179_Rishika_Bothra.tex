@@ -1,0 +1,88 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+% Custom command for vectors to match your underline notation or use bold
+\renewcommand{\vec}[1]{\underline{#1}}
+
+\begin{document}
+
+\section*{Topic: Statistical Representation of Random Vectors}
+
+\textbf{Definition:} For random variables $X_{1}, X_{2}, \dots, X_{N}$, we represent them as a random vector $\vec{X} = [X_1, X_2, \dots, X_N]^T$. 
+
+\begin{itemize}
+    \item \textbf{Mean Vector:} Represents the average value of the random vector:
+    \[ \vec{\mu}_{X} = E[\vec{X}] = [E[X_1], E[X_2], \dots, E[X_N]]^T \]
+    
+    \item \textbf{Correlation Matrix:} A symmetric matrix $R_{XX} = E[\vec{X}\vec{X}^{T}]$ where elements are defined as:
+    \[ R_{XX}(i,j) = E[X_{i}X_{j}] \quad \text{for } i, j \le N \]
+    
+    \item \textbf{Covariance Matrix:} Defined as the expected outer product of the deviations from the mean:
+    \[ C_{XX} = E[(\vec{X}-\vec{\mu}_{X})(\vec{X}-\vec{\mu}_{X})^{T}] \]
+    It acts as a symmetric "mirror" mapping dependencies where $Cov(X_{i},X_{j}) = Cov(X_{j},X_{i})$.
+\end{itemize}
+
+\hr
+\section*{Topic: Linear Transformation of Random Vectors}
+
+\textbf{Definition:} A linear transformation is defined by the model:
+\[ \vec{Y} = \vec{A}\vec{X} + \vec{b} \]
+Where $\vec{A}$ is the transformation matrix (scaling/rotation), $\vec{b}$ is a constant vector (shift/translation), and $\vec{X}$ is the input random vector.
+
+\subsection*{Key Results}
+\begin{itemize}
+    \item \textbf{Mean Transformation:} $\vec{\mu}_{Y} = \vec{A}\vec{\mu}_{X} + \vec{b}$
+    \item \textbf{Covariance Transformation:} $C_{YY} = \vec{A}C_{XX}\vec{A}^{T}$
+    \item \textbf{Correlation Transformation:} $R_{YY} = \vec{A}R_{XX}\vec{A}^{T} + \vec{A}\vec{\mu}_{X}\vec{b}^{T} + \vec{b}\vec{\mu}_{X}^{T}\vec{A}^{T} + \vec{b}\vec{b}^{T}$
+\end{itemize}
+
+\subsection*{Derivations}
+\textbf{Proof: Covariance Matrix Transformation}
+\begin{enumerate}
+    \item Observe that the deviation from the mean is independent of the shift $\vec{b}$:
+    \[ \vec{Y} - \vec{\mu}_{Y} = (\vec{A}\vec{X} + \vec{b}) - (\vec{A}\vec{\mu}_{X} + \vec{b}) = \vec{A}(\vec{X} - \vec{\mu}_{X}) \]
+    \item Substitute into the covariance definition:
+    \[ C_{YY} = E[(\vec{Y} - \vec{\mu}_{Y})(\vec{Y} - \vec{\mu}_{Y})^T] = E[\vec{A}(\vec{X} - \vec{\mu}_{X})(\vec{X} - \vec{\mu}_{X})^T \vec{A}^T] \]
+    \item Factor out the constant matrix $\vec{A}$:
+    \[ C_{YY} = \vec{A} E[(\vec{X} - \vec{\mu}_{X})(\vec{X} - \vec{\mu}_{X})^T] \vec{A}^T = \vec{A}C_{XX}\vec{A}^{T} \]
+\end{enumerate}
+\textit{Conclusion: The shift $\vec{b}$ does not affect the covariance (spread).}
+
+\hr
+\section*{Topic: Gaussian Distributions: 1D and Multivariate}
+
+\begin{itemize}
+    \item \textbf{Univariate Gaussian (1D):} 
+    \[ f_{X}(x) = \frac{1}{\sqrt{2\pi\sigma^{2}}} \exp\left(-\frac{(x-\mu)^{2}}{2\sigma^{2}}\right) \]
+    
+    \item \textbf{Multivariate Gaussian PDF (N-dimensional):} 
+    \[ f_{\vec{X}}(\vec{x}) = \frac{1}{\sqrt{(2\pi)^{N} \det(C_{XX})}} \exp\left(-\frac{1}{2}(\vec{x}-\vec{\mu}_{X})^{T} C_{XX}^{-1} (\vec{x}-\vec{\mu}_{X})\right) \]
+\end{itemize}
+
+
+
+\textbf{Example: Uncorrelated Gaussian Random Variables} \\
+If variables are mutually uncorrelated, $Cov(X_i, X_j) = 0$ for $i \neq j$. $C_{XX}$ becomes a diagonal matrix, and the joint PDF factorizes:
+\[ f_{\vec{X}}(\vec{x}) = \prod_{n=1}^{N} \frac{1}{\sqrt{2\pi\sigma_n^2}} \exp\left(-\frac{(x_n - \mu_n)^2}{2\sigma_n^2}\right) \]
+
+\hr
+\section*{Case Study: Smart City Traffic \& Weather System}
+
+\textbf{Context:} Predicting traffic congestion in Ahmedabad using an $N$-dimensional random vector $\vec{X}$ (flow, speed, rainfall, temp, AQI).
+\textbf{Model:} $\vec{X} \sim \mathcal{N}(\vec{\mu}, \Sigma)$. 
+
+\textbf{Linear Transformation Example:} \\
+Define a \textbf{Congestion Index} $Y = \vec{a}^T \vec{X} = 0.6X_1 - 0.4X_2 + 0.8X_3$.
+Since $\vec{X}$ is Gaussian and $Y$ is a linear transformation:
+\begin{itemize}
+    \item $Y$ is also Gaussian: $Y \sim \mathcal{N}(\mu_Y, \sigma_Y^2)$
+    \item $\mu_Y = \vec{a}^T \vec{\mu}$
+    \item $\sigma_Y^2 = \vec{a}^T \Sigma \vec{a}$
+\end{itemize}
+
+\end{document}
