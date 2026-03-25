@@ -1,0 +1,108 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+
+\begin{document}
+
+\section*{Lecture 20: Linear Transformations and Expectations of Multiple RVs}
+
+\subsection*{1. Definitions and Statistical Representations}
+
+\begin{itemize}
+    \item \textbf{Random Vector:} For random variables $X_1, X_2, \dots, X_N$, they are represented as a vector denoted by $\underline{X}$. This provides a compact representation of multiple random variables, structured as $\underline{X} = [X_1, X_2, \dots, X_N]^T$.
+    \item \textbf{Mean Vector ($\underline{\mu}_X$):} The expected value of a random vector, defined as $\underline{\mu}_X = E[\underline{X}]$. It represents the average value of the random vector, where each element corresponds to the mean of one individual random variable.
+    \item \textbf{Correlation Matrix ($R_{XX}$):} Defined as $R_{XX} = E[\underline{X}\underline{X}^T]$. Each element within the matrix is calculated as $R_{XX}(i, j) = E[X_iX_j]$. $R_{XX}$ is a symmetric matrix.
+    \item \textbf{Covariance Matrix ($C_{XX}$):} Acts as the "relationship map" of random vectors. The mathematical definition is $C_{XX} = E[(\underline{X} - \underline{\mu}_X)(\underline{X} - \underline{\mu}_X)^T]$. The matrix is symmetric, meaning $Cov(X_i, X_j) = Cov(X_j, X_i)$.
+    \item \textbf{Relationship between Covariance and Correlation:} $C_{XX} = R_{XX} - \underline{\mu}_X\underline{\mu}_X^T$.
+\end{itemize}
+
+\subsection*{2. Linear Transformations}
+
+\begin{itemize}
+    \item \textbf{The Linear Model:} Consider the transformation $\underline{Y} = \underline{A}\underline{X} + \underline{b}$.
+    \begin{itemize}
+        \item $\underline{A}$ is the transformation matrix (scales and rotates the data).
+        \item $\underline{b}$ is the constant vector (shifts/translates the center).
+        \item $\underline{X}$ is the input random vector.
+    \end{itemize}
+    \item \textbf{Transformation Properties:} If $\underline{Y} = \underline{A}\underline{X} + \underline{b}$, the mapping properties are:
+    \begin{itemize}
+        \item \textbf{Mean:} $\underline{\mu}_Y = \underline{A}\underline{\mu}_X + \underline{b}$.
+        \item \textbf{Covariance:} $C_{YY} = \underline{A}C_{XX}\underline{A}^T$.
+        \item \textbf{Correlation:} $R_{YY} = \underline{A}R_{XX}\underline{A}^T + \underline{A}\underline{\mu}_X\underline{b}^T + \underline{b}\underline{\mu}_X^T\underline{A}^T + \underline{b}\underline{b}^T$.
+    \end{itemize}
+\end{itemize}
+
+\subsection*{3. Multivariate Gaussian Distributions}
+
+\begin{itemize}
+    \item \textbf{1D Univariate Gaussian:} For a single RV $X$, the PDF is $f_X(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)$.
+    \item \textbf{N-dimensional Multivariate Gaussian:} For a vector $\underline{X} = [X_1, X_2, \dots, X_N]^T$, the general vector PDF is $f_{\underline{X}}(x) = \frac{1}{\sqrt{(2\pi)^N \det(C_{XX})}} \exp\left(-\frac{1}{2}(x - \underline{\mu}_X)^T C_{XX}^{-1}(x - \underline{\mu}_X)\right)$.
+    \begin{itemize}
+        \item $\underline{\mu}_X$ is the mean vector ($N \times 1$).
+        \item $C_{XX}$ is the covariance matrix ($N \times N$).
+    \end{itemize}
+\end{itemize}
+
+\subsection*{4. Derivations and Proofs}
+
+\textbf{Derivation 1: Mean of Transformed Vector}
+\begin{itemize}
+    \item \textbf{Step 1:} Start with the definition $\underline{\mu}_Y = E[\underline{Y}]$.
+    \item \textbf{Step 2:} Substitute the linear equation into the expectation: $E[\underline{A}\underline{X} + \underline{b}]$.
+    \item \textbf{Step 3:} Apply linearity of expectation to separate terms: $E[\underline{A}\underline{X}] + E[\underline{b}]$.
+    \item \textbf{Result:} $\underline{\mu}_Y = \underline{A}\underline{\mu}_X + \underline{b}$.
+\end{itemize}
+
+\textbf{Derivation 2: Covariance Matrix Transformation}
+\begin{itemize}
+    \item \textbf{Step 1:} Observe that the deviation from the mean is independent of the shift $\underline{b}$: $\underline{Y} - \underline{\mu}_Y = (\underline{A}\underline{X} + \underline{b}) - (\underline{A}\underline{\mu}_X + \underline{b}) = \underline{A}(\underline{X} - \underline{\mu}_X)$.
+    \item \textbf{Step 2:} Substitute this into the definition of covariance: $C_{YY} = E[(\underline{Y} - \underline{\mu}_Y)(\underline{Y} - \underline{\mu}_Y)^T]$.
+    \item \textbf{Step 3:} Expand the terms: $C_{YY} = E[\underline{A}(\underline{X} - \underline{\mu}_X)(\underline{X} - \underline{\mu}_X)^T\underline{A}^T]$.
+    \item \textbf{Result:} Simplified to $C_{YY} = \underline{A}C_{XX}\underline{A}^T$.
+\end{itemize}
+
+\textbf{Proof: Uncorrelated Gaussian Random Variables}
+\begin{itemize}
+    \item \textbf{Statement:} The joint Gaussian PDF for a vector of uncorrelated random variables factorizes into the product of individual Gaussian PDFs.
+    \item \textbf{Step 1:} For mutually uncorrelated Gaussian random variables, $Cov(X_i, X_j) = 0$ for all $i \neq j$.
+    \item \textbf{Step 2:} The covariance matrix $C_{XX}$ simplifies to a diagonal matrix, meaning its inverse $C_{XX}^{-1}$ is also diagonal with elements $\sigma_n^{-2}$.
+    \item \textbf{Step 3:} Substituting the inverse back into the density function exponent yields $\exp\left(-\frac{1}{2} \sum_{n=1}^N \left(\frac{x_n - \mu_n}{\sigma_n}\right)^2\right)$.
+    \item \textbf{Result:} The joint PDF factorizes into $\prod_{n=1}^N \frac{1}{\sqrt{2\pi\sigma_n^2}} \exp\left(-\frac{(x_n - \mu_n)^2}{2\sigma_n^2}\right)$.
+\end{itemize}
+
+\subsection*{5. Worked Examples}
+
+\textbf{Example 1: Numerical Linear Transformation}
+\begin{itemize}
+    \item \textbf{Problem:} Given $\underline{Y} = \underline{A}\underline{X}$ where 
+    $\underline{\mu}_X = \begin{bmatrix} 2 \\ -1 \\ 1 \end{bmatrix}$, 
+    $\underline{A} = \begin{bmatrix} 1 & 0 & -1 \\ 0 & -1 & 1 \\ -1 & 1 & 0 \end{bmatrix}$, and 
+    $R_{XX} = \begin{bmatrix} 13 & 2 & 3 \\ 2 & 10 & 3 \\ 3 & 3 & 10 \end{bmatrix}$. 
+    Calculate the mean vector, correlation matrix, and covariance matrix of $\underline{Y}$.
+    
+    \item \textbf{Solution (Mean Vector):} Using $\underline{\mu}_Y = \underline{A}\underline{\mu}_X$, we multiply the matrices to get 
+    $\underline{\mu}_Y = \begin{bmatrix} 1 \\ 2 \\ -3 \end{bmatrix}$.
+    
+    \item \textbf{Solution (Correlation Matrix):} Using $R_{YY} = \underline{A}R_{XX}\underline{A}^T$. First, compute 
+    $\underline{A}R_{XX} = \begin{bmatrix} 10 & -1 & -7 \\ 1 & -7 & 7 \\ -11 & 8 & 0 \end{bmatrix}$. 
+    Next, multiply by $\underline{A}^T$ to get 
+    $R_{YY} = \begin{bmatrix} 17 & -6 & -11 \\ -6 & 14 & -8 \\ -11 & -8 & 19 \end{bmatrix}$.
+    
+    \item \textbf{Solution (Covariance Matrix):} Using $C_{YY} = R_{YY} - \underline{\mu}_Y\underline{\mu}_Y^T$. Find the outer product 
+    $\underline{\mu}_Y\underline{\mu}_Y^T = \begin{bmatrix} 1 & 2 & -3 \\ 2 & 4 & -6 \\ -3 & -6 & 9 \end{bmatrix}$. 
+    Subtract this from $R_{YY}$ to find 
+    $C_{YY} = \begin{bmatrix} 16 & -8 & -8 \\ -8 & 10 & -2 \\ -8 & -2 & 10 \end{bmatrix}$.
+\end{itemize}
+
+\textbf{Example 2: Smart City Traffic Case Study}
+\begin{itemize}
+    \item \textbf{Scenario:} Designing a system in Ahmedabad predicting traffic congestion using transportation and climate variables.
+    \item \textbf{Definition:} Define a random vector $X = [X_1, X_2, X_3, X_4, X_5]^T$, representing Traffic flow, Average vehicle speed, Rainfall intensity, Temperature, and Air pollution index (AQI).
+    \item \textbf{Transformation:} The city defines a Congestion Index as a linear transformation $Y = 0.6X_1 - 0.4X_2 + 0.8X_3$.
+    \item \textbf{Inference:} Assuming $X \sim \mathcal{N}(\mu, \Sigma)$, because $Y = a^T X$ is a linear transformation, $Y$ is also Gaussian.
+\end{itemize}
+
+\end{document}
