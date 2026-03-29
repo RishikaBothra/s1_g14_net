@@ -1,0 +1,201 @@
+\documentclass[11pt]{article}
+
+% ===================== PACKAGES =====================
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{tabularx}
+
+% ===================== HEADER & FOOTER =====================
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{CSE400: Fundamentals of Probability in Computing}
+\rhead{Milestone 4 Scribe}
+\cfoot{\thepage}
+
+% ===================== CUSTOM COMMANDS =====================
+\newcommand{\scribequestion}[1]{
+    \vspace{0.5cm}
+    \noindent\textbf{\large #1}
+    \vspace{0.2cm}
+}
+
+\newcommand{\subquestion}[1]{
+    \vspace{0.3cm}
+    \noindent\textbf{#1}
+    \vspace{0.1cm}
+}
+
+\newcommand{\highlight}[1]{\textit{#1}}
+
+% ===================== TITLE =====================
+\title{
+    \normalsize School of Engineering and Applied Science (SEAS), Ahmedabad University \\
+    \vspace{0.2cm}
+    \textbf{CSE400: Fundamentals of Probability in Computing}\\
+    \Large Milestone 4 Scribe\\
+    \large \textit{Handover Probability in Drone Cellular Networks}
+}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\vspace{-2cm}
+\begin{center}
+    \begin{tabular}{ll}
+        \textbf{Group:} & {s1 g14 net\hspace{3in}}
+    \end{tabular}
+\end{center}
+
+\hrule
+\vspace{0.5cm}
+
+\begin{enumerate}[label=\textbf{Scribe Question \arabic*:}, leftmargin=*, itemsep=1.5em]
+
+% ---------------- SCRIBE QUESTION 1 ----------------
+\item \textbf{Baseline System and Motivation for Randomization}
+
+\subquestion{What was the deterministic baseline?}
+
+In Milestone 3, we built a simulation of a drone cellular network where UAVs act as flying base
+stations serving a single stationary user on the ground. The drones' starting positions were placed
+using a Poisson Point Process at a fixed density, and each drone then travels in a straight line at a
+random angle.
+
+The system always connects the user to whatever drone happens to be physically closest at that
+moment --- this is the nearest-neighbor association policy:
+\[
+x^*(t) = \arg\min_i \|x_i(t)\|
+\]
+A handover gets recorded every time the identity of that closest drone changes. We looked at two
+movement scenarios: SSM, where every drone flies at the same fixed speed, and DSM, where each
+drone is assigned its own speed sampled from either a Rayleigh or Uniform distribution. Every
+parameter in M3 was held constant, matching the values confirmed in the paper and slides:
+
+\vspace{0.3cm}
+\begin{center}
+\begin{tabular}{ll}
+    \toprule
+    \textbf{Parameter} & \textbf{M3 Fixed Value} \\
+    \midrule
+    Drone density $\lambda_0$ & $1.0$ DBS/km$^2$ $= 1 \times 10^{-6}$ /m$^2$ \\
+    Speed (SSM) & $45$ km/h ($12.5$ m/s) \\
+    Exclusion radius $u_0$ & $500$ m \\
+    Time window $T$ & $400$ s \\
+    Monte Carlo runs & $1{,}00{,}000$ simulations \\
+    \bottomrule
+\end{tabular}
+\end{center}
+\vspace{0.3cm}
+
+\subquestion{Why introduce randomization?}
+
+Running everything at one fixed set of values only tells us the theory holds for that single scenario.
+In practice, drone networks look different every time they're deployed --- the number of drones, their
+speeds, and the distances involved all vary. When we instead draw parameters randomly each run,
+every simulation becomes its own independent test. If the theoretical predictions still hold up across
+all of those varied runs, we can be confident the results genuinely generalize rather than being a
+coincidence of one carefully chosen configuration.
+
+% ---------------- SCRIBE QUESTION 2 ----------------
+\newpage
+\item \textbf{Randomized Algorithm Design}
+
+\subquestion{What component now involves randomness?}
+
+We built a new central module called \textbf{randomised\_config.py} that executes at the very
+beginning of each simulation. Rather than loading hard-coded constants, it samples five key physical
+parameters fresh from Uniform distributions every run. Everything else --- the nearest-neighbor
+connection rule, the handover detection logic, and how the drones move --- stays exactly the same
+as it was in M3.
+
+\subquestion{What distributions are used?}
+
+\vspace{0.3cm}
+\begin{center}
+\begin{tabular}{lll}
+    \toprule
+    \textbf{Parameter} & \textbf{Distribution} & \textbf{Range (from code)} \\
+    \midrule
+    Drone density $\lambda_0$ & Uniform & $5\times10^{-7}$ to $2\times10^{-6}$ UAVs/m$^2$ \\
+    Mean speed $v^{\text{Mean}}$ & Uniform & $30$ to $60$ km/h \\
+    Speed spread $v^{\text{Diff}}$ & Uniform & $20$ to $120$ km/h \\
+    Exclusion radius $u_0$ & Uniform & $300$ to $800$ m \\
+    Time window $T$ & Uniform (integer) & $200$ to $400$ s \\
+    \bottomrule
+\end{tabular}
+\end{center}
+\vspace{0.3cm}
+
+The specific values that were actually drawn for the run used to produce our graphs ---
+verified against the saved JSON file, were:
+
+\vspace{0.3cm}
+\begin{center}
+\begin{tabular}{lll}
+    \toprule
+    \textbf{Parameter} & \textbf{M3 Deterministic (Fixed)} & \textbf{M4 Randomized (Actual Draw)} \\
+    \midrule
+    $\lambda_0$ & $1.00 \times 10^{-6}$ /m$^2$ & $1.44 \times 10^{-6}$ /m$^2$ \\
+    Mean speed   & $45.0$ km/h & $53.1$ km/h \\
+    $u_0$        & $500$ m & $335.8$ m \\
+    $T$          & $400$ s & $272$ s \\
+    Simulations  & $1{,}00{,}000$ & $10{,}000$ \\
+    \bottomrule
+\end{tabular}
+\end{center}
+\vspace{0.3cm}
+
+\subquestion{How does it differ from the deterministic baseline?}
+
+In M3, the exact same numbers fed into every single run. In M4, each run is genuinely a fresh
+experiment with its own parameter set. To keep the comparison fair, a \textbf{save-and-load system}
+is used: the sampled values are written to a JSON file immediately, and every theory script then reads
+from that same file, so the simulation and the theoretical calculations are always working from
+identical inputs.
+
+% ---------------- SCRIBE QUESTION 3 ----------------
+\newpage
+\item \textbf{Probabilistic Reasoning Behind the Algorithm}
+
+\subquestion{How does randomness help address uncertainty?}
+
+In a real-world drone network, nothing stays fixed --- drone counts, speeds, and deployment distances
+all shift from one situation to the next. If we only ever test at one specific configuration, the most we
+can conclude is that the theory works there. By sampling parameters from distributions, each run
+probes the theory at a completely different operating point. Agreement across all of those varied
+conditions is a much stronger form of validation.
+
+\subquestion{What probabilistic models support this design?}
+
+\begin{itemize}[leftmargin=*, itemsep=0.3em]
+    \item \textbf{PPP for drone deployment:} The paper's derivations hold for any density $\lambda_0$,
+          so randomizing it simply tests the same theory at a different point rather than violating
+          any assumption.
+
+    \item \textbf{Displacement Theorem (Lemma 1):} This result guarantees that drones remain
+          Poisson-distributed at every instant regardless of how they move, for any $\lambda_0$ ---
+          our randomized value still falls within that guarantee.
+
+    \item \textbf{Speed PDF for DSM (Lemma 3):} Lemma 3 applies to any valid speed distribution
+          $f_v(v)$, so choosing a different Rayleigh sigma $\sigma$ just plugs a different valid
+          distribution into the same formula without breaking anything.
+
+    \item \textbf{Exclusion radius $u_0$:} Varying $u_0$ across the $300$--$800$ m range captures
+          the reality that drones don't always land at the same distance from a user.
+\end{itemize}
+
+\subquestion{Why is this expected to improve the analysis?}
+
+The randomized approach doesn't change the underlying handover physics. What it does is make our
+conclusions far more defensible. A finding that holds across many independently drawn parameter
+settings is substantially more convincing than one that was only ever verified at a single
+hand-picked configuration.
+
