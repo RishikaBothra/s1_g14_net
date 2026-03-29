@@ -199,3 +199,382 @@ conclusions far more defensible. A finding that holds across many independently 
 settings is substantially more convincing than one that was only ever verified at a single
 hand-picked configuration.
 
+% ---------------- SCRIBE QUESTION 4 ----------------
+\newpage
+\item \textbf{Implementation Within the Simulation Pipeline}
+
+\subquestion{What changes were made to the code?}
+
+The only new file created in this instance of the code is \texttt{randomised\_config.py}. It has three
+functions: \texttt{sample\_params()}, which randomizes and gets all five parameter values;
+\texttt{save\_params()}, which saves the five parameters to a JSON file; and \texttt{load\_params()},
+which loads the five parameters back from the JSON file. All simulation and theory scripts call
+\texttt{load\_params()} so that they will all use the same sampling of parameters.
+
+The updated pipeline is as follows:
+
+\begin{itemize}[leftmargin=*, itemsep=0.3em]
+    \item \textbf{Step 1:} Call \texttt{sample\_params()} in the \texttt{handover\_dbs\_simulation.py}
+          script. Samples the five parameters, drawn from their distributions.
+
+    \item \textbf{Step 2:} Displays the five parameters just sampled. All those parameters are saved
+          in \texttt{Data/handover\_run\_params.json}.
+
+    \item \textbf{Step 3:} $10{,}000$ Monte Carlo simulations are run using the sampled values for
+          $\lambda_0$, $V_{\min}$, $V_{\max}$, and $T$; where the parameter $\lambda_0$ is sampled
+          using random values.
+
+    \item \textbf{Step 4:} All theory scripts that simulate constant velocity, the Rayleigh lower bound
+          and the Uniform lower bound will call \texttt{load\_params()} and retrieve their parameters
+          using the same JSON file.
+
+    \item \textbf{Step 5:} The script \texttt{plot\_handover.py} loads all the result \texttt{.npy}
+          files and generates the final comparative plot.
+\end{itemize}
+
+\subquestion{How is randomness generated inside each realization?}
+
+\begin{itemize}[leftmargin=*, itemsep=0.3em]
+    \item Number of drones: $N \sim \text{Poisson}(\lambda_0 \times \pi \times R^2)$, $R = 30$ km.
+    \item Starting positions: $r = R \times \sqrt{U}$, $U \sim \text{Uniform}(0,1)$;
+          angle $\theta \sim \text{Uniform}(0, 2\pi)$.
+    \item Movement direction: $\varphi \sim \text{Uniform}(0, 2\pi)$ per drone.
+    \item DSM speeds: $v \sim \text{Uniform}(0,\ 107.5\ \text{km/h})$ per drone for this run.
+    \item SSM speed: all drones share the same constant $v_{\text{Mean}} = 53.1$ km/h for this run.
+\end{itemize}
+
+\subquestion{Does everything else in the pipeline remain unchanged?}
+
+Yes, all other aspects regarding the nearest-neighbor decision process, how to detect when a user is
+handed over, how to keep a drone moving straight, and the Monte Carlo loop remain unchanged from
+M3 with regard to their mechanics; however, instead of being hard-coded, the 5 input parameters
+will now be randomly drawn from the input generation distribution.
+
+% ---------------- SCRIBE QUESTION 5 ----------------
+\newpage
+\item \textbf{Evaluation Metrics and Comparative Results}
+
+\subquestion{Why are these metrics appropriate for this problem domain?}
+
+We used 4 metrics that connect to each other in order to gauge if the randomized DSM is superior to
+the deterministic SSM system. Both M3 and M4, which evaluate the two systems, utilize the same
+nearest-neighbour rule as well as the same simulation process; only the set of parameters would
+differ between M3 and M4.
+
+The four metrics we created are:
+\begin{enumerate}[leftmargin=*, itemsep=0.2em]
+    \item Handover Probability $P[H(t)]$ --- the foundation metric of the domain
+    \item Expected Communication Cost --- resource utilization metric
+    \item Accumulated Latency (Service Interruption) --- user experience metric
+    \item Connection Stability $CS(t) = 1 - P[H(t)]$ --- stability metric
+\end{enumerate}
+
+Confirmed parameter values used in each approach:
+
+\vspace{0.3cm}
+\begin{center}
+\begin{tabular}{lll}
+    \toprule
+    \textbf{Parameter} & \textbf{M3 Deterministic (paper + PPT)} & \textbf{M4 Randomized (saved JSON)} \\
+    \midrule
+    $\lambda_0$ & $1.00$/km$^2$ ($1\times10^{-6}$/m$^2$) & $1.44$/km$^2$ ($1.44\times10^{-6}$/m$^2$) \\
+    Speed       & $45$ km/h (fixed every run) & $53.1$ km/h (drawn randomly this run) \\
+    $u_0$       & $500$ m & $335.8$ m \\
+    $T$         & $400$ s & $272$ s \\
+    Simulations & $1{,}00{,}000$ & $10{,}000$ \\
+    \bottomrule
+\end{tabular}
+\end{center}
+\vspace{0.3cm}
+
+\subquestion{Metric 1: Handover Probability $P[H(t)]$ --- Foundational Domain-Specific Measure}
+
+\textbf{What it is:} The likelihood that a ground user will have had to switch to a different drone
+connection at least once by time $t$. This is the primary metric for the project as a whole and is
+based upon Theorem 2 (SSM) and Theorem 3 (DSM) as defined in the Theoretical Paper.
+
+\textbf{Why it is appropriate:} Handover Probability is a direct measure of the stability of the
+connection between a user and the drone cellular network. All other metrics that have been defined
+will be based upon this metric. A lower $P[H(t)]$ will necessarily be better than a higher $P[H(t)]$,
+since it indicates that a user has maintained their original connection to their drone longer than
+alternative connections.
+
+\textbf{From the M3 Handover Simulation (Deterministic, 100,000 simulations):} From the results
+obtained from running the simulation with 100,000 runs, the 3 deterministic curves (Rayleigh,
+Constant, and Uniform 40) have a common characteristic in that they increase steeply from 0. The
+simulation points from the 100,000 runs fall on top of the theoretical traces for all of the curves from
+0 through 300 m/s. Constant speed and Uniform 40 had both reached a value of $P[H] \approx 0.97$
+by $u_x = 150$ m. Rayleigh lagged well behind, achieving its approximate maximum
+(i.e.\ $\approx 1.0$) by $u_x = 300$ m. These two measures demonstrate that there is an extremely
+close correspondence between the Theoretical and Simulation results at the same fixed deterministic
+variables.
+
+\highlight{Regarding the transfer of probability from the M4 graph (Randomized, SSM vs DSM) in
+terms of time $t$: From the M4 graph above, the x-axis is a function of time ($t$). SSM and DSM both
+start at approximately 0.05 at $t=0$ and remain similarly close until approximately 40 s. At this point,
+however, SSM increases rapidly compared to DSM which continues to develop slowly. In addition,
+the Mean Squared Error (MSE) between the simulated and theoretical lower bound to that of DSM is
+only $6.2 \times 10^{-6}$ which indicates that the theory remains valid under both initialized
+iterations.}
+
+\vspace{0.3cm}
+\begin{center}
+\begin{tabular}{llll}
+    \toprule
+    \textbf{Threshold} & \textbf{M3 Det.\ SSM (approx.)} & \textbf{M4 Ran.\ SSM} & \textbf{M4 Ran.\ DSM} \\
+    \midrule
+    $t_{50\%}$ (50\% HO) & $38$ s & $25$ s & $24$ s \\
+    $t_{90\%}$ (90\% HO) & $69$ s & $60$ s & $104$ s \\
+    $t_{99\%}$ (99\% HO) & $97$ s & $91$ s & Never in $272$ s \\
+    \bottomrule
+\end{tabular}
+\end{center}
+\vspace{0.3cm}
+
+\highlight{\textbf{Significant Finding:} DSM reaches a 90\% (0.9) handover probability by $t=104$ s
+and SSM achieves the same level of handover by $t=60$ s, a 44-second difference in active
+real-time connection duration. Additionally, SSM achieves 99\% (0.99) by 91 s while DSM does not
+achieve 99\% (0.99) during the complete simulation period; consequently, Randomized DSM users
+remain associated with their original UAV devices longer than Deterministic SSM users.}
+
+\subquestion{Metric 2: Expected Communication Cost --- Resource Utilization Metric}
+
+\textbf{What This Is:} In a cellular drone network, whenever a user hands over from one drone to
+another, control signals (i.e., messages for authenticating the user, requesting resource allocations,
+and transferring sessions, also known as signaling overhead) have to be exchanged between the user,
+old drone, and new drone before the handover can take place. Therefore, Handover Probability can
+serve as a direct representation of this cost (i.e., the lower $P[H(t)]$, the lower the overhead of
+signaling and the greater the total amount of bandwidth available for actual user data).
+
+\textbf{Why This Is Appropriate:} As indicated on the M4 rubric, the utilization of all resources
+(e.g., network) is a valid metric. In a cellular drone network, control signals (e.g., signaling overhead)
+use bandwidth that could otherwise be used for user data. Therefore, a strategy that reduces
+handovers will have a more resource-efficient environment.
+
+\textbf{How We Measure This:} The communication cost savings will be defined as a ratio of the
+number of users that do not trigger signaling for a handover in a DSM compared to an SSM:
+\[
+\text{Cost Saving}(t) = P_{\text{SSM}}(t) - P_{\text{DSM}}(t)
+\]
+
+\vspace{0.3cm}
+\begin{center}
+\begin{tabular}{llll}
+    \toprule
+    \textbf{Time $t$} & \textbf{SSM Cost $P_{\text{SSM}}$} & \textbf{DSM Cost $P_{\text{DSM}}$} & \textbf{Cost Saving (SSM$-$DSM)} \\
+    \midrule
+    $t = 30$ s  & $0.582$ & $0.597$ & $-0.015$ (early on, nearly equal) \\
+    $t = 50$ s  & $0.828$ & $0.771$ & $+0.057$ (5.7\% fewer handovers in DSM) \\
+    $t = 60$ s  & $0.903$ & $0.820$ & $+0.083$ (8.3\% saving) \\
+    $t = 88$ s  & $0.987$ & $0.879$ & $+0.108$ (10.8\% saving --- peak) \\
+    $t = 100$ s & $1.000$ & $0.895$ & $+0.101$ (10.1\% saving) \\
+    $t = 150$ s & $1.000$ & $0.930$ & $+0.070$ (7.0\% saving) \\
+    $t = 200$ s & $1.000$ & $0.949$ & $+0.051$ (5.1\% saving) \\
+    \bottomrule
+\end{tabular}
+\end{center}
+\vspace{0.3cm}
+
+\textbf{Observation:} The maximum possible savings found in communicating was 10.8\% at
+$t \approx 88$ s into the test. This means that, at the time where communication efficiency was
+maximized, SSM users were generating 10.8\% more unnecessary handover control signals than DSM
+users. The randomized approach to DSM has a demonstratively greater efficiency than M3. The M3
+deterministic setting showed that all three graphs converged very quickly and there is very little
+visible separation. However, M4 randomized demonstrates that there is a definitive and significant
+communication cost efficiency (i.e.\ DSM) under a variety of different parameter conditions.
+
+\subquestion{Metric 3: Accumulated Latency (Service Interruption) --- User Experience Metric}
+
+\textbf{What it is:} \highlight{A handover is typically not instantaneous in nature. However, a user
+will always experience a slight data interruption during any type of real 5G network handover due to
+the requirement for re-authentication with the new base station. This process typically takes
+$30$--$50$ ms to complete and has been given a midpoint of $40$ ms for all handover events in our
+study. Thus the expected service interruptions at various time intervals.}
+\[
+\text{Expected Latency}(t) = P[H(t)] \times 40\ \text{ms}
+\]
+
+\textbf{Why it is appropriate:} \highlight{The reason this is valid is because latency is defined in
+the M4 rubric as a valid metric when dealing with real-time applications such as video calls, remote
+control of drones, and/or streaming from sensors. Therefore even 40 ms of service interruption in
+between two connections is significant enough to warrant a reduction in total service interruption by
+reducing the amount of time between handovers through effective handover strategy.}
+
+\vspace{0.3cm}
+\begin{center}
+\begin{tabular}{llll}
+    \toprule
+    \textbf{Time $t$} & \textbf{SSM Latency} & \textbf{DSM Latency} & \textbf{Latency Saved by DSM} \\
+    \midrule
+    $t = 30$ s  & $23.3$ ms & $23.9$ ms & $-0.6$ ms (nearly equal early) \\
+    $t = 50$ s  & $33.1$ ms & $30.8$ ms & $+2.3$ ms saved \\
+    $t = 60$ s  & $36.1$ ms & $32.8$ ms & $+3.3$ ms saved \\
+    $t = 88$ s  & $39.5$ ms & $35.2$ ms & $+4.3$ ms saved (peak) \\
+    $t = 100$ s & $39.8$ ms & $35.8$ ms & $+4.0$ ms saved \\
+    $t = 150$ s & $40.0$ ms & $37.2$ ms & $+2.8$ ms saved \\
+    $t = 200$ s & $40.0$ ms & $38.0$ ms & $+2.0$ ms saved \\
+    \bottomrule
+\end{tabular}
+\end{center}
+\vspace{0.3cm}
+
+\textbf{Key finding:} \highlight{The key finding was that at the end of $t = 88$ s, a DSM will have
+seen an overall reduction in total service interruptions of 4.3 ms versus SSM users. By the end of
+$t = 100$ s, DSM will have only seen their total service interruption end at 35.8 ms, whereas SSM
+will have amassed the entire 40 ms ($P[H] \approx 1.0$), causing a fluctuation in service delivery
+between the two types of users. All these results suggest that a smoother and lower-latency user
+experience will prevail for DSM users during this period of analysis compared to SSM.}
+
+\subquestion{Metric 4: Connection Stability $CS(t) = 1 - P[H(t)]$ --- Stability Metric}
+
+\textbf{What it is:} Connection Stability is defined as the percentage of users that have not
+experienced a handover (switchover) at time $t$, calculated by the formula:
+$\text{Connection Stability} = 1 - \text{Handover Rate (Probability)}$.
+Higher values of Connection Stability indicate that more users are still on their original and
+uninterrupted connections.
+
+\textbf{Why it is appropriate:} \highlight{This measure converts Handover Rate (Probability) into
+something that is of direct interest to network operators: how many users in their network are
+currently using a stable connection? Thus allowing comparison of SSM (Single Site Management)
+with DSM (Dynamic Subscriber Management) easily and intuitively.}
+
+\vspace{0.3cm}
+\begin{center}
+\begin{tabular}{llll}
+    \toprule
+    \textbf{Time $t$} & \textbf{M4 SSM $CS(t)$} & \textbf{M4 DSM $CS(t)$} & \textbf{DSM Advantage} \\
+    \midrule
+    $t = 30$ s  & $41.8\%$ & $40.3\%$ & Nearly equal \\
+    $t = 50$ s  & $17.2\%$ & $22.9\%$ & DSM better by $5.7\%$ \\
+    $t = 60$ s  & $9.7\%$  & $18.0\%$ & DSM better by $8.3\%$ \\
+    $t = 88$ s  & $1.3\%$  & $12.1\%$ & DSM better by $10.8\%$ \\
+    $t = 100$ s & $0.4\%$  & $10.5\%$ & DSM better by $10.1\%$ \\
+    $t = 150$ s & $0.0\%$  & $7.0\%$  & DSM better by $7.0\%$ \\
+    $t = 200$ s & $0.0\%$  & $5.1\%$  & DSM better by $5.1\%$ \\
+    \bottomrule
+\end{tabular}
+\end{center}
+\vspace{0.3cm}
+
+\textbf{Key finding:} At $t=100$ s, $0.4\%$ of users using Simple Subscription Manual (SSM)
+maintained an unbroken connection, while $10.5\%$ of users using Dynamic Subscription Management
+(DSM) maintained an unbroken connection. At $t=200$ s, there are $5.1\%$ of DSM users with zero
+handovers, compared to $0\%$ of SSM users. This major difference is reflected on the M4 Handover
+Probability graph, in which the green DSM line remains consistently below the red SSM line after
+approximately $t=40$ s, therefore the difference between these two lines represents the connection
+stability benefit that DSM provides over SSM at each given time.
+
+\subquestion{Interpretation: Why Does the Randomized DSM Perform Better?}
+
+In the SSM, all the drones are moving at one speed and have the same distance to their destination
+which causes all of them to drift together. Also, when another drone comes close enough to a user,
+they will take over the connection to that user which will require a hand-over. Hence users cannot be
+protected from any variation in the connections to the drones.
+
+In the DSM, each drone has been assigned a different speed from a continuous distribution and thus
+some drones will be travelling quickly while drifting away, and some will be travelling slower and
+remaining near their starting position. The user will always connect to the drone closest to him;
+therefore any drone that has randomly drawn a slow speed becomes a natural anchor as it remains
+closest to the user longer than any of the faster drones could possibly pass it. Therefore, this
+controlled randomness in the speed of the drones creates a natural stabilization to the location of
+the people and, thus the DSM has a much larger delay for handovers than the SSM.
+
+The proof of that property is encapsulated in Theorem 3 of the paper, and shows that the probability
+of a handover in the DSM is always less than that of the SSM as time approaches infinity. The results
+of both the SSM and DSM under the deterministic known parameters of M3 and the random
+parameters of M4 demonstrate this result is both strong and general.
+
+\subquestion{Summary of All Four Metrics}
+
+\vspace{0.3cm}
+\begin{center}
+\begin{tabular}{lllll}
+    \toprule
+    \textbf{Metric} & \textbf{M3 Det.\ SSM} & \textbf{M4 Ran.\ SSM} & \textbf{M4 Ran.\ DSM} & \textbf{Better?} \\
+    \midrule
+    $P[H(t)]$ at $t=100$ s        & $\approx 1.00$ & $1.00$  & $0.90$           & DSM \\
+    Comm.\ Cost Saving (peak)      & ---            & ---     & $10.8\%$ at $t=88$ s & DSM \\
+    Latency Saving (peak)          & ---            & ---     & $4.3$ ms at $t=88$ s & DSM \\
+    $CS(t)$ at $t=100$ s           & $\approx 0.7\%$ & $0.4\%$ & $10.5\%$        & DSM \\
+    $t_{90\%}$ (90\% HO)           & $69$ s         & $60$ s  & $104$ s          & DSM latest \\
+    Theory-sim match               & Very tight     & Good    & Good             & M3 (more runs) \\
+    \bottomrule
+\end{tabular}
+\end{center}
+\vspace{0.3cm}
+
+\textbf{Overall conclusion:} Across network-relevant metrics --- lower handover probability, lower
+communication cost, lower total latency, and higher temporal connection stability --- in every time
+(greater than or equal to 40 s). The randomized parameter configuration in M4 indicates that these
+benefits are applicable not only to the transient conditions examined in M3 and this paper, but also
+within a wide variety of potential deployments.
+
+% ---------------- SCRIBE QUESTION 6 ----------------
+\newpage
+\item \textbf{Insights and Remaining Challenges}
+
+\subquestion{What did we learn from this experiment?}
+
+\begin{itemize}[leftmargin=*, itemsep=0.4em]
+    \item \textbf{The theory works for randomized parameters too.} The theory had been validated
+          only with the paper's predetermined values in M3 and then again in M4 through the MSE
+          between the DSM simulation and the theoretical lower bound through a completely different
+          set of parameters to give an MSE of only $6.2 \times 10^{-6}$. This proves the generality
+          and robustness of the paper's formulas.
+
+    \item \textbf{Higher drone density speeds up handovers.} M4 drew $\lambda_0 = 1.44$/km$^2$
+          vs M3's $1.0$/km$^2$. This alone moved $t_{50\%}$ from 38 s to 25 s for SSM. More drones
+          eligible for one of them as the closest drone means that handovers can occur earlier and
+          this is shown in M2 as well. The more density of drones available, the more likely it is that
+          you will be switching drones.
+
+    \item \textbf{DSM performs better on all four metrics.} Lower probability of having a handover,
+          less communication costs, lower cumulative latencies and better connection stability some
+          $t > 40$ s. If the user requires a stable connection for extended periods of time, then using
+          variable-speed drones proves to be a better alternative.
+
+    \item \textbf{Both models behave similarly at early times.} Both the models behaved similarly
+          in the short time span ($t < 40$ s). The M3 and M4 graphs show that the SSM and DSM
+          curves begin pretty much close together, but it is not until about $t \approx 40$ seconds
+          that the curves significantly diverge. The advantage to the model selection for very short
+          lengths of time does not have much bearing on the total time a user will be using a
+          variable-speed model or a fixed-speed model.
+\end{itemize}
+
+\subquestion{When does the randomized method exceed or fall short of expectation?}
+
+\begin{itemize}[leftmargin=*, itemsep=0.4em]
+    \item The benefit of the randomized algorithm is that it examines the theory for many different
+          input parameter settings and establishes that the conclusions are not restricted to a single
+          input parameter setting, which could never be shown using only the deterministic baseline.
+
+    \item The disadvantage of the randomized method is that it creates a higher degree of noise
+          through fewer iterations; Using $1{,}000{,}000$ iterations in the M3 simulation provided
+          handover coordinate values that matched almost perfectly with theoretical values. The M4
+          simulation, which only used $10{,}000$ iterations, added a greater variance to the handover
+          coordinate values; Still, the agreement was reasonable overall.
+
+    \item One remaining limitation is that the simulation uses a circular area with a radius of 30 km,
+          whereas the mathematical model assumes an infinite plane. Drones that wander outside of
+          the predetermined limits decrease the effective density as time increases, creating a small
+          mismatch between the theoretical and simulated values that cannot be accounted for
+          mathematically.
+
+    \item A second limitation is that the lower bound for the DSM algorithm becomes looser as it
+          becomes larger (i.e., time). The dotted purple Rayleigh lower bound from the M4 Handover
+          Probability graph falls below the DSM simulation curve for large $t$. This lower bound was
+          based on neglecting the time correlation of drone positions. Finding a tighter lower bound
+          as $t$ increases remains an open issue in this paper.
+\end{itemize}
+
+\end{enumerate}
+
+\bigskip
+\hrule
+\vspace{0.2cm}
+\begin{center}
+\textbf{End of Milestone 4 Scribe}
+\end{center}
+
+\end{document}
+
